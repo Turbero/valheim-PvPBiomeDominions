@@ -78,22 +78,25 @@ if "$(ConfigurationName)" == "Debug" xcopy "$(TargetPath)" "$(SolutionDir)PvPBio
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationFile.cs" />
+    <Compile Include="Helpers\Marketplace_API.cs" />
+    <Compile Include="Helpers\ModCompat.cs" />
+    <Compile Include="Helpers\WardIsLove\WardIsLovePlugin.cs" />
+    <Compile Include="Helpers\WardIsLove\WardMonoscript.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="PvPBiomeDominions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PvPManagement\Helpers\Marketplace_API.cs" />
-    <Compile Include="PvPManagement\Helpers\ModCompat.cs" />
-    <Compile Include="PvPManagement\Helpers\WardIsLove\WardIsLovePlugin.cs" />
-    <Compile Include="PvPManagement\Helpers\WardIsLove\WardMonoscript.cs" />
     <Compile Include="PvPManagement\PvPPatch.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="Libs\ServerSync.dll" />
+    <Content Include="MODGEN\CHANGELOG.md" />
+    <Content Include="MODGEN\icon.png" />
+    <Content Include="MODGEN\manifest.json" />
+    <Content Include="MODGEN\README.md" />
     <Content Include="pdb2mdb.exe" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MODGEN\" />
     <Folder Include="PositionManagement\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
