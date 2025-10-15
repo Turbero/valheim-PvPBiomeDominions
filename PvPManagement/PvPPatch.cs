@@ -17,13 +17,11 @@ namespace PvPBiomeDominions.PvPManagement
             if (!ZNetScene.instance || !Game.instance | !Player.m_localPlayer || InventoryGui.instance) return;
 
             ConfigurationFile.PvPRule currentBiomeRule = ConfigurationFile.getCurrentBiomeRule();
-            
             if (currentBiomeRule == ConfigurationFile.PvPRule.Free)
             {
                 InventoryGui.instance.m_pvp.interactable = true;
                 return;
             }
-            InventoryGui.instance.m_pvp.interactable = false;
             
             try
             {
@@ -37,13 +35,8 @@ namespace PvPBiomeDominions.PvPManagement
                 if (isInsideTerritory) return;
                 if (_insideWard && ConfigurationFile.offPvPInWards.Value == ConfigurationFile.Toggle.On) return;
 
-                if (currentBiomeRule == ConfigurationFile.PvPRule.Pve)
-                {
-                    PvPEnforcer(InventoryGui.instance, false);
-                    return;
-                }
-
-                PvPEnforcer(InventoryGui.instance, true);
+                InventoryGui.instance.m_pvp.interactable = false;
+                PvPEnforcer(InventoryGui.instance, currentBiomeRule == ConfigurationFile.PvPRule.Pvp);
             }
             catch (Exception exception)
             {

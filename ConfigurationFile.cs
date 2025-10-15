@@ -49,11 +49,13 @@ namespace PvPBiomeDominions
         {
             Pve = 0,
             Pvp = 1,
-            Free = 1
+            Free = 2
         }
 
         public static PvPRule getCurrentBiomeRule()
         {
+            if (!EnvMan.instance) return PvPRule.Free;
+            
             Heightmap.Biome biome = EnvMan.instance.GetCurrentBiome();
             switch (biome)
             {
