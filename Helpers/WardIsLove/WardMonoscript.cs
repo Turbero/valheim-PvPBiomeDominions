@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace PvPBiomeDominions.PvPManagement.Helpers.WardIsLove
+namespace PvPBiomeDominions.Helpers.WardIsLove
 {
     public class WardMonoscript : ModCompat
     {

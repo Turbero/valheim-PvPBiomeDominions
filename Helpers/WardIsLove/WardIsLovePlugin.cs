@@ -2,7 +2,7 @@
 using BepInEx.Bootstrap;
 using BepInEx.Configuration;
 
-namespace PvPBiomeDominions.PvPManagement.Helpers.WardIsLove
+namespace PvPBiomeDominions.Helpers.WardIsLove
 {
     public class WardIsLovePlugin : ModCompat
     {

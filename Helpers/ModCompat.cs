@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PvPBiomeDominions.PvPManagement.Helpers {
+namespace PvPBiomeDominions.Helpers {
     public class ModCompat
     {
         protected static T InvokeMethod<T>(Type type, object instance, string methodName, object[] parameter)
