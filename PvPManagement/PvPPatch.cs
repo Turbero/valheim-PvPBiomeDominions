@@ -1,13 +1,13 @@
 ﻿using System;
 using HarmonyLib;
-using PvPBiomeDominions.PvPManagement.Helpers.WardIsLove;
+using PvPBiomeDominions.Helpers.WardIsLove;
 
 namespace PvPBiomeDominions.PvPManagement
 {
     [HarmonyPatch]
     static class PlayerUpdatePatch
     {
-        private static bool _insideWard;
+        private static bool isInsideWard;
 
         [HarmonyPatch(typeof(Player), "Update")]
         [HarmonyPatch(typeof(InventoryGui), "UpdateCharacterStats")]
@@ -16,8 +16,8 @@ namespace PvPBiomeDominions.PvPManagement
         {
             if (!ZNetScene.instance || !Game.instance | !Player.m_localPlayer || InventoryGui.instance) return;
 
-            ConfigurationFile.PvPRule currentBiomeRule = ConfigurationFile.getCurrentBiomeRule();
-            if (currentBiomeRule == ConfigurationFile.PvPRule.Free)
+            ConfigurationFile.PvPRule currentBiomeRule = ConfigurationFile.getCurrentBiomeRulePvPRule();
+            if (currentBiomeRule == ConfigurationFile.PvPRule.Any)
             {
                 InventoryGui.instance.m_pvp.interactable = true;
                 return;
@@ -25,7 +25,7 @@ namespace PvPBiomeDominions.PvPManagement
             
             try
             {
-                _insideWard = WardIsLovePlugin.IsLoaded()
+                isInsideWard = WardIsLovePlugin.IsLoaded()
                     ? WardMonoscript.InsideWard(Player.m_localPlayer.transform.position)
                     : PrivateArea.InsideFactionArea(Player.m_localPlayer.transform.position, Character.Faction.Players);
                 bool isInsideTerritory = Marketplace_API.IsInstalled() &&
@@ -33,10 +33,10 @@ namespace PvPBiomeDominions.PvPManagement
                                              Player.m_localPlayer.transform.position,
                                              Marketplace_API.TerritoryFlags.PveOnly, out _, out _, out _);
                 if (isInsideTerritory) return;
-                if (_insideWard && ConfigurationFile.offPvPInWards.Value == ConfigurationFile.Toggle.On) return;
+                if (isInsideWard && ConfigurationFile.pvpOffInWards.Value == ConfigurationFile.Toggle.On) return;
 
                 InventoryGui.instance.m_pvp.interactable = false;
-                PvPEnforcer(InventoryGui.instance, currentBiomeRule == ConfigurationFile.PvPRule.Pvp);
+                SetupPvP(InventoryGui.instance, currentBiomeRule == ConfigurationFile.PvPRule.Pvp);
             }
             catch (Exception exception)
             {
@@ -44,7 +44,7 @@ namespace PvPBiomeDominions.PvPManagement
             }
         }
         
-        private static void PvPEnforcer(InventoryGui invGUI, bool isPvPOn)
+        private static void SetupPvP(InventoryGui invGUI, bool isPvPOn)
         {
             Player.m_localPlayer.SetPVP(isPvPOn);
             invGUI.m_pvp.isOn = isPvPOn;

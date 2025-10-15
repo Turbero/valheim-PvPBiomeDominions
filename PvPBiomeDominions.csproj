@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>C:\Users\Turbero\AppData\Roaming\Thunderstore Mod Manager\DataFolder\Valheim\profiles\Default\BepInEx\plugins\turbero-PvPBiomeDominions</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -83,6 +83,7 @@ if "$(ConfigurationName)" == "Debug" xcopy "$(TargetPath)" "$(SolutionDir)PvPBio
     <Compile Include="Helpers\WardIsLove\WardIsLovePlugin.cs" />
     <Compile Include="Helpers\WardIsLove\WardMonoscript.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="PositionManagement\PositionPatch.cs" />
     <Compile Include="PvPBiomeDominions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PvPManagement\PvPPatch.cs" />
@@ -95,9 +96,6 @@ if "$(ConfigurationName)" == "Debug" xcopy "$(TargetPath)" "$(SolutionDir)PvPBio
     <Content Include="MODGEN\manifest.json" />
     <Content Include="MODGEN\README.md" />
     <Content Include="pdb2mdb.exe" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="PositionManagement\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
