@@ -15,7 +15,7 @@ namespace PvPBiomeDominions
         void Awake()
         {
             ConfigurationFile.LoadConfig(this);
-
+            
             harmony.PatchAll();
         }
 
