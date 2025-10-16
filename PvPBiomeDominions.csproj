@@ -96,6 +96,7 @@ if "$(ConfigurationName)" == "Debug" xcopy "$(TargetPath)" "$(SolutionDir)PvPBio
     <Content Include="MODGEN\manifest.json" />
     <Content Include="MODGEN\README.md" />
     <Content Include="pdb2mdb.exe" />
+    <Content Include="README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
