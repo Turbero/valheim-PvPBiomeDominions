@@ -4,9 +4,8 @@ using PvPBiomeDominions.Helpers.WardIsLove;
 namespace PvPBiomeDominions.PvPManagement
 {
     [HarmonyPatch]
-    static class PlayerUpdatePatch
+    public class PlayerUpdatePatch
     {
-        private static bool isInsideWard;
 
         [HarmonyPatch(typeof(Player), "Update")]
         [HarmonyPatch(typeof(InventoryGui), "UpdateCharacterStats")]
@@ -20,33 +19,33 @@ namespace PvPBiomeDominions.PvPManagement
             if (ConfigurationFile.pvpAdminExempt.Value == ConfigurationFile.Toggle.On && ConfigurationFile.ConfigSync.IsAdmin)
                 return;
             
-            // Apply insideWard rule first
-            isInsideWard = WardIsLovePlugin.IsInsideWard();
             bool isInsideTerritory = Marketplace_API.IsInstalled() && Marketplace_API.IsPointInsideTerritoryWithFlag(Player.m_localPlayer.transform.position, Marketplace_API.TerritoryFlags.PveOnly, out _, out _, out _);
             if (isInsideTerritory) return;
-            if (isInsideWard) {
-                var wardPvPRule = ConfigurationFile.pvpRuleInWards.Value;
-                if (wardPvPRule == ConfigurationFile.PvPRule.Any)
+            
+            // Apply insideWard rule first
+            bool isInsideWard = WardIsLovePlugin.IsInsideWard();
+            var wardPvPRule = ConfigurationFile.pvpRuleInWards.Value;
+            if (isInsideWard && wardPvPRule != ConfigurationFile.PvPWardRule.Biome) {
+                if (wardPvPRule == ConfigurationFile.PvPWardRule.Any)
                 {
                     InventoryGui.instance.m_pvp.interactable = true;
                     return;
                 }
                 InventoryGui.instance.m_pvp.interactable = false;
-                
-                SetupPvP(InventoryGui.instance, wardPvPRule == ConfigurationFile.PvPRule.Pvp);
+                SetupPvP(InventoryGui.instance, wardPvPRule == ConfigurationFile.PvPWardRule.Pvp);
                 return;
             }
             
             // Then check biome rule
-            ConfigurationFile.PvPRule currentBiomeRule = ConfigurationFile.getCurrentBiomeRulePvPRule();
-            if (currentBiomeRule == ConfigurationFile.PvPRule.Any)
+            ConfigurationFile.PvPBiomeRule currentBiomeBiomeRule = ConfigurationFile.getCurrentBiomeRulePvPRule();
+            if (currentBiomeBiomeRule == ConfigurationFile.PvPBiomeRule.Any)
             {
                 InventoryGui.instance.m_pvp.interactable = true;
                 return;
             }
             InventoryGui.instance.m_pvp.interactable = false;
 
-            SetupPvP(InventoryGui.instance, currentBiomeRule == ConfigurationFile.PvPRule.Pvp);
+            SetupPvP(InventoryGui.instance, currentBiomeBiomeRule == ConfigurationFile.PvPBiomeRule.Pvp);
         }
         
         private static void SetupPvP(InventoryGui invGUI, bool isPvPOn)
