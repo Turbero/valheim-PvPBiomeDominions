@@ -25,8 +25,8 @@ namespace PvPBiomeDominions.PvPManagement
             // Apply insideWard rule first
             bool isInsideWard = WardIsLovePlugin.IsInsideWard();
             var wardPvPRule = ConfigurationFile.pvpRuleInWards.Value;
-            if (isInsideWard && wardPvPRule != ConfigurationFile.PvPWardRule.Biome) {
-                if (wardPvPRule == ConfigurationFile.PvPWardRule.Any)
+            if (isInsideWard && wardPvPRule != ConfigurationFile.PvPWardRule.FollowBiomeRule) {
+                if (wardPvPRule == ConfigurationFile.PvPWardRule.PlayerChoose)
                 {
                     InventoryGui.instance.m_pvp.interactable = true;
                     return;
@@ -38,7 +38,7 @@ namespace PvPBiomeDominions.PvPManagement
             
             // Then check biome rule
             ConfigurationFile.PvPBiomeRule currentBiomeBiomeRule = ConfigurationFile.getCurrentBiomeRulePvPRule();
-            if (currentBiomeBiomeRule == ConfigurationFile.PvPBiomeRule.Any)
+            if (currentBiomeBiomeRule == ConfigurationFile.PvPBiomeRule.PlayerChoose)
             {
                 InventoryGui.instance.m_pvp.interactable = true;
                 return;

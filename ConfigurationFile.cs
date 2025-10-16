@@ -17,27 +17,27 @@ namespace PvPBiomeDominions
         {
             Pve = 0,
             Pvp = 1,
-            Any = 2
+            PlayerChoose = 2
         }
         public enum PvPWardRule
         {
             Pve = 0,
             Pvp = 1,
-            Any = 2,
-            Biome = 3
+            PlayerChoose = 2,
+            FollowBiomeRule = 3
         }
         public enum PositionSharingBiomeRule
         {
-            Hide = 0,
-            Show = 1,
-            Any = 2
+            HidePlayer = 0,
+            ShowPlayer = 1,
+            PlayerChoice = 2
         }
         public enum PositionSharingWardRule
         {
-            Hide = 0,
-            Show = 1,
-            Any = 2,
-            Biome = 3
+            HidePlayer = 0,
+            ShowPlayer = 1,
+            PlayerChoice = 2,
+            FollowBiomeRule = 3
         }
         
         private static ConfigEntry<bool> _serverConfigLocked = null;
@@ -56,34 +56,34 @@ namespace PvPBiomeDominions
         };
         
         //PVP Management
-        public static ConfigEntry<Toggle> pvpAdminExempt = null;
-        public static ConfigEntry<PvPWardRule> pvpRuleInWards = null;
-        public static ConfigEntry<PvPBiomeRule> pvpRuleInMeadows = null;
-        public static ConfigEntry<PvPBiomeRule> pvpRuleInBlackForest = null;
-        public static ConfigEntry<PvPBiomeRule> pvpRuleInSwamp = null;
-        public static ConfigEntry<PvPBiomeRule> pvpRuleInMountain = null;
-        public static ConfigEntry<PvPBiomeRule> pvpRuleInPlains = null;
-        public static ConfigEntry<PvPBiomeRule> pvpRuleInMistlands = null;
-        public static ConfigEntry<PvPBiomeRule> pvpRuleInAshlands = null;
-        public static ConfigEntry<PvPBiomeRule> pvpRuleInDeepNorth = null;
-        public static ConfigEntry<PvPBiomeRule> pvpRuleInOcean = null;
+        public static ConfigEntry<Toggle> pvpAdminExempt;
+        public static ConfigEntry<PvPWardRule> pvpRuleInWards;
+        private static ConfigEntry<PvPBiomeRule> pvpRuleInMeadows;
+        private static ConfigEntry<PvPBiomeRule> pvpRuleInBlackForest;
+        private static ConfigEntry<PvPBiomeRule> pvpRuleInSwamp;
+        private static ConfigEntry<PvPBiomeRule> pvpRuleInMountain;
+        private static ConfigEntry<PvPBiomeRule> pvpRuleInPlains;
+        private static ConfigEntry<PvPBiomeRule> pvpRuleInMistlands;
+        private static ConfigEntry<PvPBiomeRule> pvpRuleInAshlands;
+        private static ConfigEntry<PvPBiomeRule> pvpRuleInDeepNorth;
+        private static ConfigEntry<PvPBiomeRule> pvpRuleInOcean;
 
         //Position management
-        public static ConfigEntry<Toggle> positionAdminExempt = null;
-        public static ConfigEntry<PositionSharingWardRule> positionRuleInWards = null;
-        public static ConfigEntry<PositionSharingBiomeRule> positionRuleInMeadows = null;
-        public static ConfigEntry<PositionSharingBiomeRule> positionRuleInBlackForest = null;
-        public static ConfigEntry<PositionSharingBiomeRule> positionRuleInSwamp = null;
-        public static ConfigEntry<PositionSharingBiomeRule> positionRuleInMountain = null;
-        public static ConfigEntry<PositionSharingBiomeRule> positionRuleInPlains = null;
-        public static ConfigEntry<PositionSharingBiomeRule> positionRuleInMistlands = null;
-        public static ConfigEntry<PositionSharingBiomeRule> positionRuleInAshlands = null;
-        public static ConfigEntry<PositionSharingBiomeRule> positionRuleInDeepNorth = null;
-        public static ConfigEntry<PositionSharingBiomeRule> positionRuleInOcean = null;
+        public static ConfigEntry<Toggle> positionAdminExempt;
+        public static ConfigEntry<PositionSharingWardRule> positionRuleInWards;
+        private static ConfigEntry<PositionSharingBiomeRule> positionRuleInMeadows;
+        private static ConfigEntry<PositionSharingBiomeRule> positionRuleInBlackForest;
+        private static ConfigEntry<PositionSharingBiomeRule> positionRuleInSwamp;
+        private static ConfigEntry<PositionSharingBiomeRule> positionRuleInMountain;
+        private static ConfigEntry<PositionSharingBiomeRule> positionRuleInPlains;
+        private static ConfigEntry<PositionSharingBiomeRule> positionRuleInMistlands;
+        private static ConfigEntry<PositionSharingBiomeRule> positionRuleInAshlands;
+        private static ConfigEntry<PositionSharingBiomeRule> positionRuleInDeepNorth;
+        private static ConfigEntry<PositionSharingBiomeRule> positionRuleInOcean;
 
         public static PvPBiomeRule getCurrentBiomeRulePvPRule()
         {
-            if (!EnvMan.instance) return PvPBiomeRule.Any;
+            if (!EnvMan.instance) return PvPBiomeRule.PlayerChoose;
             
             Heightmap.Biome biome = EnvMan.instance.GetCurrentBiome();
             switch (biome)
@@ -99,12 +99,12 @@ namespace PvPBiomeDominions
                 case Heightmap.Biome.Ocean: return pvpRuleInOcean.Value;
             }
 
-            return PvPBiomeRule.Any;
+            return PvPBiomeRule.PlayerChoose;
         }
         
         public static PositionSharingBiomeRule getCurrentBiomeRulePosition()
         {
-            if (!EnvMan.instance) return PositionSharingBiomeRule.Any;
+            if (!EnvMan.instance) return PositionSharingBiomeRule.PlayerChoice;
             return getBiomeRulePosition(EnvMan.instance.GetCurrentBiome());
         }
         
@@ -112,7 +112,7 @@ namespace PvPBiomeDominions
         
         public static PositionSharingBiomeRule getBiomeRulePosition(Heightmap.Biome biome)
         {
-            if (!EnvMan.instance) return PositionSharingBiomeRule.Any;
+            if (!EnvMan.instance) return PositionSharingBiomeRule.PlayerChoice;
             
             switch (biome)
             {
@@ -127,7 +127,7 @@ namespace PvPBiomeDominions
                 case Heightmap.Biome.Ocean: return positionRuleInOcean.Value;
             }
 
-            return PositionSharingBiomeRule.Any;
+            return PositionSharingBiomeRule.PlayerChoice;
         }
 
         internal static void LoadConfig(BaseUnityPlugin plugin)
@@ -141,28 +141,28 @@ namespace PvPBiomeDominions
                 debug = config("1 - General", "DebugMode", false, "Enabling/Disabling the debugging in the console (default = false)", false);
                 
                 pvpAdminExempt = config("2 - PvP Settings", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the pvp biomes rules."));
-                pvpRuleInWards = config("2 - PvP Settings", "PvP Rule In Wards", PvPWardRule.Biome, new ConfigDescription("Set up the pvp rule inside wards, overriding biome rules if it's needed. Possible values: Pvp,Pve,Any,Biome"));
-                pvpRuleInMeadows = config("2 - PvP Settings", "Biome 1 - Meadows Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Meadows. Possible values: Pvp,Pve,Any."));
-                pvpRuleInBlackForest = config("2 - PvP Settings", "Biome 2 - Black Forest Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Black Forest. Possible values: Pvp,Pve,Any."));
-                pvpRuleInSwamp = config("2 - PvP Settings", "Biome 3 - Swamp Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Swamp. Possible values: Pvp,Pve,Any."));
-                pvpRuleInMountain = config("2 - PvP Settings", "Biome 4 - Mountain Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Mountain. Possible values: Pvp,Pve,Any."));
-                pvpRuleInPlains = config("2 - PvP Settings", "Biome 5 - Plains Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Plains. Possible values: Pvp,Pve,Any."));
-                pvpRuleInMistlands = config("2 - PvP Settings", "Biome 6 - Mistlands Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Mistlands. Possible values: Pvp,Pve,Any."));
-                pvpRuleInAshlands = config("2 - PvP Settings", "Biome 7 - Ashlands Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Ashlands. Possible values: Pvp,Pve,Any."));
-                pvpRuleInDeepNorth = config("2 - PvP Settings", "Biome 8 - Deep North Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Deep North. Possible values: Pvp,Pve,Any."));
-                pvpRuleInOcean = config("2 - PvP Settings", "Biome 9 - Ocean Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Ocean. Possible values: Pvp,Pve,Any."));
+                pvpRuleInWards = config("2 - PvP Settings", "PvP Rule In Wards (override biome)", PvPWardRule.FollowBiomeRule, new ConfigDescription("Set up the pvp rule inside wards, overriding biome rules if it's needed. Possible values: Pvp,Pve,PlayerChoice,FollowBiomeRule"));
+                pvpRuleInMeadows = config("2 - PvP Settings", "Biome 1 - Meadows Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Meadows. Possible values: Pvp,Pve,PlayerChoice."));
+                pvpRuleInBlackForest = config("2 - PvP Settings", "Biome 2 - Black Forest Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Black Forest. Possible values: Pvp,Pve,PlayerChoice."));
+                pvpRuleInSwamp = config("2 - PvP Settings", "Biome 3 - Swamp Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Swamp. Possible values: Pvp,Pve,PlayerChoice."));
+                pvpRuleInMountain = config("2 - PvP Settings", "Biome 4 - Mountain Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Mountain. Possible values: Pvp,Pve,PlayerChoice."));
+                pvpRuleInPlains = config("2 - PvP Settings", "Biome 5 - Plains Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Plains. Possible values: Pvp,Pve,PlayerChoice."));
+                pvpRuleInMistlands = config("2 - PvP Settings", "Biome 6 - Mistlands Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Mistlands. Possible values: Pvp,Pve,PlayerChoice."));
+                pvpRuleInAshlands = config("2 - PvP Settings", "Biome 7 - Ashlands Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Ashlands. Possible values: Pvp,Pve,PlayerChoice."));
+                pvpRuleInDeepNorth = config("2 - PvP Settings", "Biome 8 - Deep North Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Deep North. Possible values: Pvp,Pve,PlayerChoice."));
+                pvpRuleInOcean = config("2 - PvP Settings", "Biome 9 - Ocean Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Ocean. Possible values: Pvp,Pve,PlayerChoice."));
 
                 positionAdminExempt = config("3 - Map Position", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the 'Position Always On' rule.")); 
-                positionRuleInWards = config("3 - Map Position", "Position Rule In Wards", PositionSharingWardRule.Biome, new ConfigDescription("Set up the position sharing in wards, overriding biome rules if it's needed. Possible values: Pvp,Pve,Any,Biome"));
-                positionRuleInMeadows = config("3 - Map Position", "Biome 1 - Meadows Rule", PositionSharingBiomeRule.Show, new ConfigDescription("Set up the position sharing rule in Meadows. Possible values: Hide,Show,Any."));
-                positionRuleInBlackForest = config("3 - Map Position", "Biome 2 - Black Forest Rule", PositionSharingBiomeRule.Show, new ConfigDescription("Set up the position sharing in Black Forest. Possible values: Hide,Show,Any."));
-                positionRuleInSwamp = config("3 - Map Position", "Biome 3 - Swamp Rule", PositionSharingBiomeRule.Show, new ConfigDescription("Set up the position sharing in Swamp. Possible values: Hide,Show,Any."));
-                positionRuleInMountain = config("3 - Map Position", "Biome 4 - Mountain Rule", PositionSharingBiomeRule.Show, new ConfigDescription("Set up the position sharing in Mountain. Possible values: Hide,Show,Any."));
-                positionRuleInPlains = config("3 - Map Position", "Biome 5 - Plains Rule", PositionSharingBiomeRule.Show, new ConfigDescription("Set up the position sharing in Plains. Possible values: Hide,Show,Any."));
-                positionRuleInMistlands = config("3 - Map Position", "Biome 6 - Mistlands Rule", PositionSharingBiomeRule.Show, new ConfigDescription("Set up the position sharing in Mistlands. Possible values: Hide,Show,Any."));
-                positionRuleInAshlands = config("3 - Map Position", "Biome 7 - Ashlands Rule", PositionSharingBiomeRule.Show, new ConfigDescription("Set up the position sharing in Ashlands. Possible values: Hide,Show,Any."));
-                positionRuleInDeepNorth = config("3 - Map Position", "Biome 8 - Deep North Rule", PositionSharingBiomeRule.Show, new ConfigDescription("Set up the position sharing in Deep North. Possible values: Hide,Show,Any."));
-                positionRuleInOcean = config("3 - Map Position", "Biome 9 - Ocean Rule", PositionSharingBiomeRule.Show, new ConfigDescription("Set up the position sharing in Ocean. Possible values: Hide,Show,Any."));
+                positionRuleInWards = config("3 - Map Position", "Position Rule In Wards (override biome)", PositionSharingWardRule.FollowBiomeRule, new ConfigDescription("Set up the position sharing in wards, overriding biome rules if it's needed. Possible values: HidePlayer,ShowPlayer,PlayerChoice,FollowBiomeRule"));
+                positionRuleInMeadows = config("3 - Map Position", "Biome 1 - Meadows Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing rule in Meadows. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
+                positionRuleInBlackForest = config("3 - Map Position", "Biome 2 - Black Forest Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing in Black Forest. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
+                positionRuleInSwamp = config("3 - Map Position", "Biome 3 - Swamp Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing in Swamp. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
+                positionRuleInMountain = config("3 - Map Position", "Biome 4 - Mountain Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing in Mountain. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
+                positionRuleInPlains = config("3 - Map Position", "Biome 5 - Plains Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing in Plains. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
+                positionRuleInMistlands = config("3 - Map Position", "Biome 6 - Mistlands Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing in Mistlands. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
+                positionRuleInAshlands = config("3 - Map Position", "Biome 7 - Ashlands Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing in Ashlands. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
+                positionRuleInDeepNorth = config("3 - Map Position", "Biome 8 - Deep North Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing in Deep North. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
+                positionRuleInOcean = config("3 - Map Position", "Biome 9 - Ocean Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing in Ocean. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
 
                 SetupWatcher();
             }

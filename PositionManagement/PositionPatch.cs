@@ -15,21 +15,21 @@ namespace PvPBiomeDominions.PositionManagement
             // Ward rule first
             bool isInsideWard = WardIsLovePlugin.IsInsideWard();
             var wardPositionRule = ConfigurationFile.positionRuleInWards.Value;
-            if (isInsideWard && wardPositionRule != ConfigurationFile.PositionSharingWardRule.Biome)
+            if (isInsideWard && wardPositionRule != ConfigurationFile.PositionSharingWardRule.FollowBiomeRule)
             {
-                if (wardPositionRule == ConfigurationFile.PositionSharingWardRule.Any)
+                if (wardPositionRule == ConfigurationFile.PositionSharingWardRule.PlayerChoice)
                     return;
                 
-                ___m_publicReferencePosition = wardPositionRule == ConfigurationFile.PositionSharingWardRule.Show;
+                ___m_publicReferencePosition = wardPositionRule == ConfigurationFile.PositionSharingWardRule.ShowPlayer;
                 return;
             }
             
             // Then biome rule
             ConfigurationFile.PositionSharingBiomeRule biomePositionBiomeRule = ConfigurationFile.getCurrentBiomeRulePosition();
-            if (biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.Any)
+            if (biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.PlayerChoice)
                 return;
             
-            ___m_publicReferencePosition = biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.Show;
+            ___m_publicReferencePosition = biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.ShowPlayer;
         }
     }
 
@@ -45,12 +45,12 @@ namespace PvPBiomeDominions.PositionManagement
             // First ward rule
             bool isInsideWard = WardIsLovePlugin.IsInsideWard();
             var wardPositionRule = ConfigurationFile.positionRuleInWards.Value;
-            if (isInsideWard && wardPositionRule != ConfigurationFile.PositionSharingWardRule.Biome)
+            if (isInsideWard && wardPositionRule != ConfigurationFile.PositionSharingWardRule.FollowBiomeRule)
             {
-                if (wardPositionRule == ConfigurationFile.PositionSharingWardRule.Any)
+                if (wardPositionRule == ConfigurationFile.PositionSharingWardRule.PlayerChoice)
                     return;
                 
-                __instance.m_publicPosition.isOn = wardPositionRule == ConfigurationFile.PositionSharingWardRule.Show;
+                __instance.m_publicPosition.isOn = wardPositionRule == ConfigurationFile.PositionSharingWardRule.ShowPlayer;
                 return;
             }
 
@@ -65,10 +65,10 @@ namespace PvPBiomeDominions.PositionManagement
             
             Heightmap.Biome minimapBiome = (Heightmap.Biome) mBiome;
             ConfigurationFile.PositionSharingBiomeRule biomePositionBiomeRule = ConfigurationFile.getBiomeRulePosition(minimapBiome);
-            if (biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.Any)
+            if (biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.PlayerChoice)
                 return;
             
-            __instance.m_publicPosition.isOn = biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.Show;
+            __instance.m_publicPosition.isOn = biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.ShowPlayer;
         }
     }
 
@@ -83,21 +83,21 @@ namespace PvPBiomeDominions.PositionManagement
             // First ward rule
             bool isInsideWard = WardIsLovePlugin.IsInsideWard();
             var wardPositionRule = ConfigurationFile.positionRuleInWards.Value;
-            if (isInsideWard && wardPositionRule != ConfigurationFile.PositionSharingWardRule.Biome)
+            if (isInsideWard && wardPositionRule != ConfigurationFile.PositionSharingWardRule.FollowBiomeRule)
             {
-                if (wardPositionRule == ConfigurationFile.PositionSharingWardRule.Any)
+                if (wardPositionRule == ConfigurationFile.PositionSharingWardRule.PlayerChoice)
                     return;
                 
-                ZNet.instance.SetPublicReferencePosition(wardPositionRule == ConfigurationFile.PositionSharingWardRule.Show);
+                ZNet.instance.SetPublicReferencePosition(wardPositionRule == ConfigurationFile.PositionSharingWardRule.ShowPlayer);
                 return;
             }
 
             // Then biome rule
             ConfigurationFile.PositionSharingBiomeRule biomePositionBiomeRule = ConfigurationFile.getCurrentBiomeRulePosition();
-            if (biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.Any)
+            if (biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.PlayerChoice)
                 return;
             
-            ZNet.instance.SetPublicReferencePosition(biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.Show);
+            ZNet.instance.SetPublicReferencePosition(biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.ShowPlayer);
         }
     }
 }
