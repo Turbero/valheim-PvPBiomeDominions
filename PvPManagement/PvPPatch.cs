@@ -1,5 +1,4 @@
-﻿using System;
-using HarmonyLib;
+﻿using HarmonyLib;
 using PvPBiomeDominions.Helpers.WardIsLove;
 
 namespace PvPBiomeDominions.PvPManagement
@@ -14,34 +13,36 @@ namespace PvPBiomeDominions.PvPManagement
         [HarmonyPostfix]
         public static void Postfix(Player __instance)
         {
-            if (!ZNetScene.instance || !Game.instance | !Player.m_localPlayer || InventoryGui.instance) return;
-
+            if (!ZNetScene.instance) return;
+            if (Game.instance && !Player.m_localPlayer) return;
+            if (!InventoryGui.instance) return;
+            
             ConfigurationFile.PvPRule currentBiomeRule = ConfigurationFile.getCurrentBiomeRulePvPRule();
             if (currentBiomeRule == ConfigurationFile.PvPRule.Any)
             {
                 InventoryGui.instance.m_pvp.interactable = true;
                 return;
             }
+            InventoryGui.instance.m_pvp.interactable = false;
             
-            try
+            isInsideWard = WardIsLovePlugin.IsLoaded()
+                ? WardMonoscript.InsideWard(Player.m_localPlayer.transform.position)
+                : PrivateArea.InsideFactionArea(Player.m_localPlayer.transform.position, Character.Faction.Players);
+            bool isInsideTerritory = Marketplace_API.IsInstalled() && Marketplace_API.IsPointInsideTerritoryWithFlag(Player.m_localPlayer.transform.position, Marketplace_API.TerritoryFlags.PveOnly, out _, out _, out _);
+            if (isInsideTerritory) return;
+            if (isInsideWard && ConfigurationFile.pvpOffInWards.Value == ConfigurationFile.Toggle.On)
             {
-                isInsideWard = WardIsLovePlugin.IsLoaded()
-                    ? WardMonoscript.InsideWard(Player.m_localPlayer.transform.position)
-                    : PrivateArea.InsideFactionArea(Player.m_localPlayer.transform.position, Character.Faction.Players);
-                bool isInsideTerritory = Marketplace_API.IsInstalled() &&
-                                         Marketplace_API.IsPointInsideTerritoryWithFlag(
-                                             Player.m_localPlayer.transform.position,
-                                             Marketplace_API.TerritoryFlags.PveOnly, out _, out _, out _);
-                if (isInsideTerritory) return;
-                if (isInsideWard && ConfigurationFile.pvpOffInWards.Value == ConfigurationFile.Toggle.On) return;
-
-                InventoryGui.instance.m_pvp.interactable = false;
-                SetupPvP(InventoryGui.instance, currentBiomeRule == ConfigurationFile.PvPRule.Pvp);
+                InventoryGui.instance.m_pvp.interactable = true;
+                return;
             }
-            catch (Exception exception)
+            
+            if (currentBiomeRule == ConfigurationFile.PvPRule.Pve)
             {
-                Logger.LogError($"There was an error in setting the PvP {exception}");
+                SetupPvP(InventoryGui.instance, false);
+                return;
             }
+            
+            SetupPvP(InventoryGui.instance, true);
         }
         
         private static void SetupPvP(InventoryGui invGUI, bool isPvPOn)
