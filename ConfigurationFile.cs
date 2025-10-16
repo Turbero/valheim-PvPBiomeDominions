@@ -42,8 +42,8 @@ namespace PvPBiomeDominions
         };
         
         //PVP Management
-        public static ConfigEntry<Toggle> pvpOffInWards = null;
         public static ConfigEntry<Toggle> pvpAdminExempt = null;
+        public static ConfigEntry<PvPRule> pvpRuleInWards = null;
         public static ConfigEntry<PvPRule> pvpRuleInMeadows = null;
         public static ConfigEntry<PvPRule> pvpRuleInBlackForest = null;
         public static ConfigEntry<PvPRule> pvpRuleInSwamp = null;
@@ -55,8 +55,8 @@ namespace PvPBiomeDominions
         public static ConfigEntry<PvPRule> pvpRuleInOcean = null;
 
         //Position management
-        public static ConfigEntry<Toggle> positionAdminExempt;
-        public static ConfigEntry<Toggle> positionOffInWards;
+        public static ConfigEntry<Toggle> positionAdminExempt = null;
+        public static ConfigEntry<PositionSharingRule> positionRuleInWards = null;
         public static ConfigEntry<PositionSharingRule> positionRuleInMeadows = null;
         public static ConfigEntry<PositionSharingRule> positionRuleInBlackForest = null;
         public static ConfigEntry<PositionSharingRule> positionRuleInSwamp = null;
@@ -127,7 +127,7 @@ namespace PvPBiomeDominions
                 debug = config("1 - General", "DebugMode", false, "Enabling/Disabling the debugging in the console (default = false)", false);
                 
                 pvpAdminExempt = config("2 - PvP Settings", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the pvp biomes rules."));
-                pvpOffInWards = config("2 - PvP Settings", "Off In Wards", Toggle.Off, new ConfigDescription("If on, it will not force PvP inside wards."));
+                pvpRuleInWards = config("2 - PvP Settings", "Rule In Wards", PvPRule.Any, new ConfigDescription("Set up the pvp rule inside wards, overriding biome rules."));
                 pvpRuleInMeadows = config("2 - PvP Settings", "Biome 1 - Meadows Rule", PvPRule.Pvp, new ConfigDescription("Set up the pvp rule in Meadows. Possible values: Pvp,Pve,Any."));
                 pvpRuleInBlackForest = config("2 - PvP Settings", "Biome 2 - Black Forest Rule", PvPRule.Pvp, new ConfigDescription("Set up the pvp rule in Black Forest. Possible values: Pvp,Pve,Any."));
                 pvpRuleInSwamp = config("2 - PvP Settings", "Biome 3 - Swamp Rule", PvPRule.Pvp, new ConfigDescription("Set up the pvp rule in Swamp. Possible values: Pvp,Pve,Any."));
@@ -139,7 +139,7 @@ namespace PvPBiomeDominions
                 pvpRuleInOcean = config("2 - PvP Settings", "Biome 9 - Ocean Rule", PvPRule.Pvp, new ConfigDescription("Set up the pvp rule in Ocean. Possible values: Pvp,Pve,Any."));
 
                 positionAdminExempt = config("3 - Map Position", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the 'Position Always On' rule.")); 
-                positionOffInWards = config("3 - Map Position", "Off In Wards", Toggle.Off, new ConfigDescription("If on, hide position sharing in wards and force position sharing to be off while inside a ward."));
+                positionRuleInWards = config("3 - Map Position", "Rule In Wards", PositionSharingRule.Any, new ConfigDescription("Set up the position sharing in wards, overriding biome rules."));
                 positionRuleInMeadows = config("3 - Map Position", "Biome 1 - Meadows Rule", PositionSharingRule.Show, new ConfigDescription("Set up the position sharing rule in Meadows. Possible values: Hide,Show,Any."));
                 positionRuleInBlackForest = config("3 - Map Position", "Biome 2 - Black Forest Rule", PositionSharingRule.Show, new ConfigDescription("Set up the position sharing in Black Forest. Possible values: Hide,Show,Any."));
                 positionRuleInSwamp = config("3 - Map Position", "Biome 3 - Swamp Rule", PositionSharingRule.Show, new ConfigDescription("Set up the position sharing in Swamp. Possible values: Hide,Show,Any."));
