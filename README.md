@@ -1,7 +1,5 @@
 # PVP Biome Dominions
 
-Showcase link: https://www.youtube.com/watch?v=
-
 PVP Biome Dominions is a mod that allows creating rules for:
 - PVP control
 - Position sharing management
