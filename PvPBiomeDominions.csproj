@@ -9,10 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PvPBiomeDominions</RootNamespace>
     <AssemblyName>PvPBiomeDominions</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <LangVersion>9</LangVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -20,7 +19,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>C:\Users\Turbero\AppData\Roaming\Thunderstore Mod Manager\DataFolder\Valheim\profiles\Default\BepInEx\plugins\turbero-PvPBiomeDominions</OutputPath>
+    <OutputPath>..\..\..\AppData\Roaming\Thunderstore Mod Manager\DataFolder\Valheim\profiles\Default\BepInEx\plugins\turbero-PvPBiomeDominions\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -32,13 +31,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent>if "$(ConfigurationName)" == "Release" (powershell Compress-Archive -Path '$(SolutionDir)MODGEN\*' -DestinationPath '$(SolutionDir)MODGEN\$(ProjectName).zip' -Force)
-if "$(ConfigurationName)" == "Debug" del "$(TargetPath).mdb"
-if "$(ConfigurationName)" == "Debug" "$(SolutionDir)pdb2mdb.exe" "$(TargetPath)"
-if "$(ConfigurationName)" == "Debug" del "$(SolutionDir)PvPBiomeDominions\MODGEN\*.dll"
-if "$(ConfigurationName)" == "Debug" xcopy "$(TargetPath)" "$(SolutionDir)PvPBiomeDominions\MODGEN"</PostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -58,7 +50,7 @@ if "$(ConfigurationName)" == "Debug" xcopy "$(TargetPath)" "$(SolutionDir)PvPBio
     </Reference>
     <Reference Include="ServerSync, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libs\ServerSync.dll</HintPath>
+      <HintPath>..\..\Libs\External\ServerSync.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -90,21 +82,30 @@ if "$(ConfigurationName)" == "Debug" xcopy "$(TargetPath)" "$(SolutionDir)PvPBio
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PvPManagement\PvPPatch.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Content Include=".gitignore" />
-    <Content Include="ILRepack.targets" />
-    <Content Include="Libs\ServerSync.dll" />
-    <Content Include="MODGEN\CHANGELOG.md" />
-    <Content Include="MODGEN\icon.png" />
-    <Content Include="MODGEN\manifest.json" />
-    <Content Include="MODGEN\README.md" />
-    <Content Include="pdb2mdb.exe" />
-    <Content Include="README.md" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="Directory.Build.props" />
+    <None Include="ILRepack.config.props" />
+    <None Include="ILRepack.targets" />
+    <None Include="MODGEN\CHANGELOG.md" />
+    <None Include="MODGEN\manifest.json" />
+    <None Include="MODGEN\README.md" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Libs\ServerSync.dll" />
+    <Content Include="MODGEN\icon.png" />
+    <Content Include="pdb2mdb.exe" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Release" (powershell Compress-Archive -Path '$(SolutionDir)MODGEN\*' -DestinationPath '$(SolutionDir)MODGEN\$(ProjectName).zip' -Force)
+if "$(ConfigurationName)" == "Debug" del "$(TargetPath).mdb"
+if "$(ConfigurationName)" == "Debug" "$(SolutionDir)pdb2mdb.exe" "$(TargetPath)"
+if "$(ConfigurationName)" == "Debug" del "$(SolutionDir)MODGEN\*.dll"
+if "$(ConfigurationName)" == "Debug" xcopy "$(TargetPath)" "$(SolutionDir)MODGEN"
+</PostBuildEvent>
+  </PropertyGroup>
   <Import Project="packages\ILRepack.Lib.MSBuild.Task.2.0.44\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('packages\ILRepack.Lib.MSBuild.Task.2.0.44\build\ILRepack.Lib.MSBuild.Task.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
