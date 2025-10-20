@@ -81,6 +81,7 @@
     <Compile Include="PvPBiomeDominions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PvPManagement\PvPPatch.cs" />
+    <Compile Include="PvPManagement\TombStoneAlertsPatch.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
