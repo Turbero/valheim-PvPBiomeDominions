@@ -1,5 +1,6 @@
 using System.Reflection;
 using HarmonyLib;
+using PvPBiomeDominions.Helpers;
 using PvPBiomeDominions.Helpers.WardIsLove;
 
 namespace PvPBiomeDominions.PositionManagement
@@ -30,6 +31,9 @@ namespace PvPBiomeDominions.PositionManagement
                 return;
             
             ___m_publicReferencePosition = biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.ShowPlayer;
+            
+            if (___m_publicReferencePosition)
+                ImageManager.UpdateMapSelectorIcon();
         }
     }
 
@@ -69,6 +73,9 @@ namespace PvPBiomeDominions.PositionManagement
                 return;
             
             __instance.m_publicPosition.isOn = biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.ShowPlayer;
+            
+            if (__instance.m_publicPosition.isOn)
+                ImageManager.UpdateMapSelectorIcon();
         }
     }
 
@@ -98,6 +105,9 @@ namespace PvPBiomeDominions.PositionManagement
                 return;
             
             ZNet.instance.SetPublicReferencePosition(biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.ShowPlayer);
+            
+            if (ZNet.instance.IsReferencePositionPublic())
+                ImageManager.UpdateMapSelectorIcon();
         }
     }
 }
