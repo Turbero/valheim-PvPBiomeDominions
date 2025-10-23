@@ -171,7 +171,7 @@ namespace PvPBiomeDominions
                 positionRuleInDeepNorth = config("3 - Map Position", "Biome 8 - Deep North Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing in Deep North. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
                 positionRuleInOcean = config("3 - Map Position", "Biome 9 - Ocean Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing in Ocean. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
                 
-                pvpWackyEpicMMOLevelDifferenceLimit = config("4 - Mods integration", "Max Level Difference to damage in PvP areas", 7, new ConfigDescription("Limits the difference of levels between players to damage each other in pvp areas (default = 7)."));
+                pvpWackyEpicMMOLevelDifferenceLimit = config("4 - Mods integration", "Max Level Difference to damage in PvP areas", 100, new ConfigDescription("Limits the difference of levels between players to damage each other in pvp areas (default = 100)."));
 
                 SetupWatcher();
             }
