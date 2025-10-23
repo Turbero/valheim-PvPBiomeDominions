@@ -82,6 +82,9 @@ namespace PvPBiomeDominions
         private static ConfigEntry<PositionSharingBiomeRule> positionRuleInAshlands;
         private static ConfigEntry<PositionSharingBiomeRule> positionRuleInDeepNorth;
         private static ConfigEntry<PositionSharingBiomeRule> positionRuleInOcean;
+        
+        //Other mods integration
+        public static ConfigEntry<int> pvpWackyEpicMMOLevelDifferenceLimit;
 
         public static PvPBiomeRule getCurrentBiomeRulePvPRule()
         {
@@ -167,6 +170,8 @@ namespace PvPBiomeDominions
                 positionRuleInAshlands = config("3 - Map Position", "Biome 7 - Ashlands Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing in Ashlands. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
                 positionRuleInDeepNorth = config("3 - Map Position", "Biome 8 - Deep North Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing in Deep North. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
                 positionRuleInOcean = config("3 - Map Position", "Biome 9 - Ocean Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing in Ocean. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
+                
+                pvpWackyEpicMMOLevelDifferenceLimit = config("4 - Mods integration", "Max Level Difference to damage in PvP areas", 7, new ConfigDescription("Limits the difference of levels between players to damage each other in pvp areas (default = 7)."));
 
                 SetupWatcher();
             }

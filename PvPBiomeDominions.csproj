@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationFile.cs" />
+    <Compile Include="Helpers\GameManager.cs" />
     <Compile Include="Helpers\ImageManager.cs" />
     <Compile Include="Helpers\Marketplace_API.cs" />
     <Compile Include="Helpers\ModCompat.cs" />
