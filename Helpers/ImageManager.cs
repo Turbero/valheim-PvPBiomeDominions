@@ -7,9 +7,8 @@ namespace PvPBiomeDominions.Helpers
 {
     public class ImageManager
     {
-
-        private static Sprite spriteIconVanillaImage;
-        private static Sprite spriteBlueIconImage;
+        public static Sprite spriteIconVanillaImage;
+        public static Sprite spriteBlueIconImage;
         
         private static readonly string minimapLargeCheckMarkPath = "large/PublicPanel/PublicPosition/Background/Checkmark";
         
