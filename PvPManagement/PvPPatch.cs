@@ -65,7 +65,7 @@ namespace PvPBiomeDominions.PvPManagement
     {
         static bool Prefix(Character __instance, HitData hit)
         {
-            if (!GameManager.isWackyEpicMMOSystemInstalled())
+            if (!GameManager.isWackyEpicMMOSystemInstalled() || ConfigurationFile.pvpWackyEpicMMOLevelDifferenceLimitEnabled.Value == ConfigurationFile.Toggle.Off)
                 return true;
             
             if (__instance  != null && __instance.GetType() == typeof(Player))
@@ -88,7 +88,7 @@ namespace PvPBiomeDominions.PvPManagement
                     string attackedLevelStr = attackedKnownTexts["EpicMMOSystem_LevelSystem_Level"];
                     bool attackedHasLevel = int.TryParse(attackedLevelStr, out int attackedLevel);
 
-                    if (attackerHasLevel && attackedHasLevel && (attackedLevel - attackerLevel) > ConfigurationFile.pvpWackyEpicMMOLevelDifferenceLimit.Value)
+                    if (attackerHasLevel && attackedHasLevel && (attackedLevel - attackerLevel) > ConfigurationFile.pvpWackyEpicMMOLevelDifferenceLimitValue.Value)
                         return false;
                 }
             }

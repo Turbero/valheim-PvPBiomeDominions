@@ -84,7 +84,8 @@ namespace PvPBiomeDominions
         private static ConfigEntry<PositionSharingBiomeRule> positionRuleInOcean;
         
         //Other mods integration
-        public static ConfigEntry<int> pvpWackyEpicMMOLevelDifferenceLimit;
+        public static ConfigEntry<Toggle> pvpWackyEpicMMOLevelDifferenceLimitEnabled;
+        public static ConfigEntry<int> pvpWackyEpicMMOLevelDifferenceLimitValue;
 
         public static PvPBiomeRule getCurrentBiomeRulePvPRule()
         {
@@ -171,7 +172,8 @@ namespace PvPBiomeDominions
                 positionRuleInDeepNorth = config("3 - Map Position", "Biome 8 - Deep North Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing in Deep North. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
                 positionRuleInOcean = config("3 - Map Position", "Biome 9 - Ocean Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing in Ocean. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
                 
-                pvpWackyEpicMMOLevelDifferenceLimit = config("4 - Mods integration", "Max Level Difference to damage in PvP areas", 100, new ConfigDescription("Limits the difference of levels between players to damage each other in pvp areas (default = 100)."));
+                pvpWackyEpicMMOLevelDifferenceLimitEnabled = config("4 - Mods integration", "Max Level Difference to damage in PvP areas - Activation", Toggle.Off, new ConfigDescription("Activate the limits the difference of levels between players to damage each other in pvp areas."));
+                pvpWackyEpicMMOLevelDifferenceLimitValue = config("4 - Mods integration", "Max Level Difference to damage in PvP areas - Value", 100, new ConfigDescription("Limits the difference of levels between players to damage each other in pvp areas (default = 100)."));
 
                 SetupWatcher();
             }
