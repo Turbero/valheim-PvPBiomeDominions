@@ -4,10 +4,11 @@ using PvPBiomeDominions.Helpers;
 
 namespace PvPBiomeDominions.PvPManagement
 {
+    [HarmonyPatch(typeof(Character), "Damage")]
     [HarmonyPriority(Priority.VeryHigh)]
     public class PvPDamageCheckWackyEpicMMOPatch
     {
-        static bool Prefix(Character __instance, HitData hit)
+        static bool Prefix(HitData hit, Character __instance)
         {
             if (!GameManager.isWackyEpicMMOSystemInstalled() || ConfigurationFile.pvpWackyEpicMMOLevelDifferenceLimitEnabled.Value == ConfigurationFile.Toggle.Off)
                 return true;
@@ -20,7 +21,6 @@ namespace PvPBiomeDominions.PvPManagement
                     //Not autodamage
                     if (attacker.GetType() == typeof(Player) && (__instance as Player)?.GetPlayerName() == (attacker as Player)?.GetPlayerName())
                         return true;
-
                     
                     Player playerAttacker = attacker as Player;
                     Dictionary<string, string> attackerKnownTexts = (Dictionary<string, string>) GameManager.GetPrivateValue(playerAttacker, "m_knownTexts");
