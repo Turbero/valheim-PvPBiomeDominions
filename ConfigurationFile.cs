@@ -44,7 +44,7 @@ namespace PvPBiomeDominions
 
         public static ConfigEntry<bool> debug;
 
-        private static ConfigFile configFile;
+        public static ConfigFile configFile;
         private static readonly string ConfigFileName = PvPBiomeDominions.GUID + ".cfg";
         private static readonly string ConfigFileFullPath = Paths.ConfigPath + Path.DirectorySeparatorChar + ConfigFileName;
 
@@ -69,6 +69,7 @@ namespace PvPBiomeDominions
         private static ConfigEntry<PvPBiomeRule> pvpRuleInOcean;
         public static ConfigEntry<string> pvpTombstoneLootAlertMessage;
         public static ConfigEntry<string> pvpTombstoneDestroyAlertMessage;
+        public static ConfigEntry<int> pvpMinimapPlayersListRefresh;
 
         //Position management
         public static ConfigEntry<Toggle> positionAdminExempt;
@@ -86,6 +87,9 @@ namespace PvPBiomeDominions
         //Other mods integration
         public static ConfigEntry<Toggle> pvpWackyEpicMMOLevelDifferenceLimitEnabled;
         public static ConfigEntry<int> pvpWackyEpicMMOLevelDifferenceLimitValue;
+        
+        //Translations
+        public static ConfigEntry<string> playersListPanelButtonText;
 
         public static PvPBiomeRule getCurrentBiomeRulePvPRule()
         {
@@ -113,8 +117,6 @@ namespace PvPBiomeDominions
             if (!EnvMan.instance) return PositionSharingBiomeRule.PlayerChoice;
             return getBiomeRulePosition(EnvMan.instance.GetCurrentBiome());
         }
-        
-        
         
         public static PositionSharingBiomeRule getBiomeRulePosition(Heightmap.Biome biome)
         {
@@ -159,7 +161,8 @@ namespace PvPBiomeDominions
                 pvpRuleInOcean = config("2 - PvP Settings", "Biome 9 - Ocean Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Ocean. Possible values: Pvp,Pve,PlayerChoice."));
                 pvpTombstoneLootAlertMessage = config("2 - PvP Settings", "Tombstone Looting Alert Message", "<color=red>{0} is looting your tombstone!</color>", new ConfigDescription("Shows alert on tombstone owner screen when being looted by a different player"));
                 pvpTombstoneDestroyAlertMessage = config("2 - PvP Settings", "Tombstone Destroy Alert Message", "<color=red>{0} sacked and destroyed your tombstone!</color>", new ConfigDescription("Shows alert on tombstone owner screen when destroyed by a different player"));
-
+                pvpMinimapPlayersListRefresh = config("2 - PvP Settings", "Map Players List Refresh", 5, new ConfigDescription("Time in seconds to refresh the players list in the map."));
+                    
                 positionAdminExempt = config("3 - Map Position", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the 'Position Always On' rule.")); 
                 positionRuleInWards = config("3 - Map Position", "Position Rule In Wards (override biome)", PositionSharingWardRule.FollowBiomeRule, new ConfigDescription("Set up the position sharing in wards, overriding biome rules if it's needed. Possible values: HidePlayer,ShowPlayer,PlayerChoice,FollowBiomeRule"));
                 positionRuleInMeadows = config("3 - Map Position", "Biome 1 - Meadows Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing rule in Meadows. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
@@ -174,6 +177,8 @@ namespace PvPBiomeDominions
                 
                 pvpWackyEpicMMOLevelDifferenceLimitEnabled = config("4 - Mods integration", "Max Level Difference to damage in PvP areas - Activation", Toggle.Off, new ConfigDescription("Activate the limits the difference of levels between players to damage each other in pvp areas."));
                 pvpWackyEpicMMOLevelDifferenceLimitValue = config("4 - Mods integration", "Max Level Difference to damage in PvP areas - Value", 100, new ConfigDescription("Limits the difference of levels between players to damage each other in pvp areas (default = 100)."));
+                
+                playersListPanelButtonText = config("5 - Translations", "Players List Panel Button Text", "Show/Hide list", new ConfigDescription("Button name used to show/hide the players panel list in the minimap."));
 
                 SetupWatcher();
             }

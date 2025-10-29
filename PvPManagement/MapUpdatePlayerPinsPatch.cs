@@ -6,30 +6,6 @@ using UnityEngine.UI;
 
 namespace PvPBiomeDominions.PvPManagement
 {
-    public class MapPlayersListPatch
-    {
-        [HarmonyPatch(typeof(Minimap), "Awake")]
-        public class MiniMap_Awake_Patch
-        {
-            public static void Postfix(Minimap __instance)
-            {
-                //TODO Create list inside map
-                
-            }
-        }
-        
-        [HarmonyPatch(typeof(Minimap), "Update")]
-        public class MiniMap_Update_Patch
-        {
-            public static void Postfix(Minimap __instance)
-            {
-                //TODO Update players list
-            }
-        }
-    }
-    
-    
-    
     [HarmonyPatch(typeof(Minimap), "UpdatePlayerPins")]
     public static class Minimap_UpdatePlayerPins_Patch
     {
@@ -44,20 +20,12 @@ namespace PvPBiomeDominions.PvPManagement
                 if (pin.m_type != Minimap.PinType.Player || pin.m_name == Player.m_localPlayer.GetPlayerName())
                     continue;
 
-                // Get PlayerInfo
-                ZDOID charID = znetPlayerInfos.GetValueSafe(pin.m_name).m_characterID;
-
-                // Find PvP status
-                bool isPVP = false;
-                ZDO zdo = ZDOMan.instance.GetZDO(charID);
-                if (zdo != null)
-                    isPVP = zdo.GetBool("pvp");
-
-                // Update sprint accordingly
                 var img = pin.m_uiElement?.GetComponent<Image>();
                 if (img == null)
                     continue;
 
+                // Find PvP status with playerInfo and update sprite
+                bool isPVP = GameManager.isInfoPVP(znetPlayerInfos.GetValueSafe(pin.m_name));
                 img.sprite = isPVP ? ImageManager.spriteIconVanillaImage : ImageManager.spriteBlueIconImage;
             }
         }
