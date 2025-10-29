@@ -2,6 +2,7 @@ using System.Reflection;
 using HarmonyLib;
 using PvPBiomeDominions.Helpers;
 using PvPBiomeDominions.Helpers.WardIsLove;
+using UnityEngine;
 
 namespace PvPBiomeDominions.PositionManagement
 {
@@ -40,6 +41,7 @@ namespace PvPBiomeDominions.PositionManagement
     [HarmonyPatch(typeof(Minimap), "Update")]
     public class MinimapUpdatePatch
     {
+        private static float lastUpdateTime = 0f;
         public static void Postfix(Minimap __instance)
         {
             if (!__instance) return;
@@ -76,6 +78,14 @@ namespace PvPBiomeDominions.PositionManagement
             
             if (__instance.m_publicPosition.isOn)
                 ImageManager.UpdateMapSelectorIcon();
+            
+            // Refresh config for sync issues
+            if (__instance.m_largeRoot.activeSelf && Time.time - lastUpdateTime >= ConfigurationFile.pvpMinimapPlayersListRefresh.Value)
+            {
+                lastUpdateTime = Time.time;
+                ConfigurationFile.configFile.Reload();
+            }
+
         }
     }
 
