@@ -141,17 +141,12 @@ namespace PvPBiomeDominions.PvPManagement.UI
             // Connected players list
             foreach (var info in players)
             {
-                for (int i = 0; i < 5; i++)
-                {
-                    Logger.Log("Painting row for "+info.m_name);
-                    AddRowToScrollList(info);
-                }
+                AddRowToScrollList(info);
             }
         }
         
         private void AddRowToScrollList(ZNet.PlayerInfo info)
         {
-            Logger.Log("adding row");
             var entry = new GameObject("Player_Row", typeof(RectTransform));
             entry.transform.SetParent(content.transform, false);
             RectTransform rt = entry.GetComponent<RectTransform>();
