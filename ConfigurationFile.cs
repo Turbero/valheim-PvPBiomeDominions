@@ -161,7 +161,7 @@ namespace PvPBiomeDominions
                 pvpRuleInOcean = config("2 - PvP Settings", "Biome 9 - Ocean Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Ocean. Possible values: Pvp,Pve,PlayerChoice."));
                 pvpTombstoneLootAlertMessage = config("2 - PvP Settings", "Tombstone Looting Alert Message", "<color=red>{0} is looting your tombstone!</color>", new ConfigDescription("Shows alert on tombstone owner screen when being looted by a different player"));
                 pvpTombstoneDestroyAlertMessage = config("2 - PvP Settings", "Tombstone Destroy Alert Message", "<color=red>{0} sacked and destroyed your tombstone!</color>", new ConfigDescription("Shows alert on tombstone owner screen when destroyed by a different player"));
-                pvpMinimapPlayersListRefresh = config("2 - PvP Settings", "Map Players List Refresh", 5, new ConfigDescription("Time in seconds to refresh the players list in the map."));
+                pvpMinimapPlayersListRefresh = config("2 - PvP Settings", "Map Players List Refresh", 30, new ConfigDescription("Time in seconds to refresh the players list in the map."));
                     
                 positionAdminExempt = config("3 - Map Position", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the 'Position Always On' rule.")); 
                 positionRuleInWards = config("3 - Map Position", "Position Rule In Wards (override biome)", PositionSharingWardRule.FollowBiomeRule, new ConfigDescription("Set up the position sharing in wards, overriding biome rules if it's needed. Possible values: HidePlayer,ShowPlayer,PlayerChoice,FollowBiomeRule"));
