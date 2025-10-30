@@ -15,11 +15,15 @@ namespace PvPBiomeDominions.PvPManagement
                 .GroupBy(p => p.m_name).ToDictionary(p => p.Key, p => p.First());
 
             List<Minimap.PinData> m_pins = (List<Minimap.PinData>) GameManager.GetPrivateValue(__instance, "m_pins");
-            foreach (var pin in m_pins)
+            List<Minimap.PinData> playerPins = m_pins.Where(p =>
+                p.m_type == Minimap.PinType.Player).ToList();
+            foreach (var pin in playerPins)
             {
-                if (pin.m_type != Minimap.PinType.Player || pin.m_name == Player.m_localPlayer.GetPlayerName())
+                if (pin.m_type != Minimap.PinType.Player || 
+                    string.IsNullOrEmpty(pin.m_name) ||
+                    pin.m_name == Player.m_localPlayer.GetPlayerName())
                     continue;
-
+                
                 var img = pin.m_uiElement?.GetComponent<Image>();
                 if (img == null)
                     continue;
