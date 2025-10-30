@@ -19,9 +19,10 @@ namespace PvPBiomeDominions.PvPManagement
                 p.m_type == Minimap.PinType.Player).ToList();
             foreach (var pin in playerPins)
             {
-                if (pin.m_type != Minimap.PinType.Player || 
-                    string.IsNullOrEmpty(pin.m_name) ||
-                    pin.m_name == Player.m_localPlayer.GetPlayerName())
+                if (pin.m_type != Minimap.PinType.Player ||                // not a player pin 
+                    string.IsNullOrEmpty(pin.m_name) ||                    // empty name
+                    pin.m_name == Player.m_localPlayer.GetPlayerName() ||  // not local player
+                    !znetPlayerInfos.Keys.Contains(pin.m_name))            // not a player name
                     continue;
                 
                 var img = pin.m_uiElement?.GetComponent<Image>();
