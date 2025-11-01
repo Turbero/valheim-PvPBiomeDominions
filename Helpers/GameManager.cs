@@ -23,14 +23,24 @@ namespace PvPBiomeDominions.Helpers
             return BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("WackyMole.EpicMMOSystem");
         }
 
+        public static bool isGroupsModInstalled()
+        {
+            return Groups.API.IsLoaded();
+        }
+
         public static bool isInfoPVP(ZNet.PlayerInfo info)
         {
-            Logger.Log("Checking PVP logic for " + info.m_name);
             ZDOID charID = info.m_characterID;
+            
             // Find PvP status
             ZDO zdo = ZDOMan.instance.GetZDO(charID);
             if (zdo != null)
-                return zdo.GetBool("pvp");
+            {
+                bool isPvP = zdo.GetBool("pvp", true); // TODO we say pvp by default for now even if it doesn't exist to use red default icon
+                Logger.Log($"isPvP result for {info.m_name} is {isPvP}");
+                return isPvP;
+            }
+            Logger.Log($"no zdo found for {info.m_name}");
             return false;
         }
         public static Sprite getSprite(String name)

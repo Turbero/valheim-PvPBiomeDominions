@@ -4,6 +4,7 @@ using HarmonyLib;
 namespace PvPBiomeDominions
 {
     [BepInPlugin(GUID, NAME, VERSION)]
+    [BepInDependency("org.bepinex.plugins.groups", BepInDependency.DependencyFlags.SoftDependency)]
     public class PvPBiomeDominions : BaseUnityPlugin
     {
         public const string GUID = "Turbero.PvPBiomeDominions";

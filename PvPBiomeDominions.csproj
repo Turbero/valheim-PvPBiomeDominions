@@ -48,6 +48,9 @@
     <Reference Include="BepInEx">
       <HintPath>..\..\Libs\BepInEx.dll</HintPath>
     </Reference>
+    <Reference Include="Groups">
+      <HintPath>Libs\Groups.dll</HintPath>
+    </Reference>
     <Reference Include="ServerSync, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libs\External\ServerSync.dll</HintPath>
@@ -90,6 +93,7 @@
     <Compile Include="Helpers\WardIsLove\WardMonoscript.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="PositionManagement\PositionPatch.cs" />
+    <Compile Include="PositionManagement\WelcomeMessagePatch.cs" />
     <Compile Include="PvPBiomeDominions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PvPManagement\MapUpdatePlayerPinsPatch.cs" />
@@ -109,7 +113,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="icons\minimap-valheim-icon-blue.png" />
+    <EmbeddedResource Include="icons\minimap-valheim-icon-base.png" />
+    <Content Include="Libs\GroupsAPI.dll" />
     <Content Include="Libs\ServerSync.dll" />
     <Content Include="MODGEN\icon.png" />
     <Content Include="pdb2mdb.exe" />
