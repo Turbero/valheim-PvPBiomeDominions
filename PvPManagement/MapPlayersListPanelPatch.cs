@@ -15,8 +15,11 @@ namespace PvPBiomeDominions.PvPManagement
 
         static void Postfix(Minimap __instance)
         {
+            if (__instance.m_largeRoot == null)
+                return;
+            
             // Create components
-            if (!created && __instance.m_largeRoot != null)
+            if (!created || panel == null || panel.panelRoot == null)
             {
                 panel = new PlayersListPanel(__instance);
                 created = true;
@@ -40,7 +43,8 @@ namespace PvPBiomeDominions.PvPManagement
 
         private static bool canUpdate(Minimap __instance)
         {
-            return __instance.m_largeRoot != null && __instance.m_largeRoot.activeSelf && panel.panelRoot.activeSelf;
+            return __instance.m_largeRoot != null && __instance.m_largeRoot.activeSelf &&
+                   panel != null && panel.panelRoot != null && panel.panelRoot.activeSelf;
         }
     }
 }
