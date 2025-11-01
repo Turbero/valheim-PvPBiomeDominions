@@ -43,8 +43,26 @@ namespace PvPBiomeDominions.Helpers
             spriteIconVanillaImage = sprite;
             Logger.Log("Vanilla sprite stored.");
             
-            spriteBlueIconImage = LoadSpriteFromEmbedded("icons.minimap-valheim-icon-blue.png");
+            spriteBlueIconImage = LoadSpriteFromEmbedded("icons.minimap-valheim-icon-base.png");
+            Color[] pixels = loadTexture("icons.minimap-valheim-icon-base.png").GetPixels();
+            for (int i = 0; i < pixels.Length; ++i)
+            {
+                if (pixels[i].r > 0.5 && pixels[i].b < 0.5 && pixels[i].g < 0.5)
+                {
+                    pixels[i] = new Color32(0, 188, 255, 196);
+                }
+            }
+            spriteBlueIconImage.texture.SetPixels(pixels);
+            spriteBlueIconImage.texture.Apply();
+            
             Logger.Log("Blue sprite loaded.");
+        }
+        
+        private static Texture2D loadTexture(string name)
+        {
+            Texture2D texture = new(0, 0);
+            texture.LoadImage(ReadEmbeddedFileBytes(name));
+            return texture;
         }
         
         private static Sprite LoadSpriteFromEmbedded(string embeddedPath)
