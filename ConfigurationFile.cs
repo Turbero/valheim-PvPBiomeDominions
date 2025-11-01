@@ -3,6 +3,7 @@ using BepInEx;
 using System;
 using System.IO;
 using ServerSync;
+using UnityEngine;
 
 namespace PvPBiomeDominions
 {
@@ -43,6 +44,8 @@ namespace PvPBiomeDominions
         private static ConfigEntry<bool> _serverConfigLocked = null;
 
         public static ConfigEntry<bool> debug;
+        public static ConfigEntry<Vector2> mapPlayersListPosition;
+        public static ConfigEntry<int> playersListMaxVisibleRows; //TODO Use me
 
         public static ConfigFile configFile;
         private static readonly string ConfigFileName = PvPBiomeDominions.GUID + ".cfg";
@@ -147,6 +150,8 @@ namespace PvPBiomeDominions
                 _ = ConfigSync.AddLockingConfigEntry(_serverConfigLocked);
 
                 debug = config("1 - General", "DebugMode", false, "Enabling/Disabling the debugging in the console (default = false)", false);
+                mapPlayersListPosition = config("1 - General", "Map Players List Position", new Vector2(250, 620), "Left corner position for the map players list", false);
+                playersListMaxVisibleRows = config("1 - General", "Players List Max. Visible Rows", 10, "Max. number of visible players in the map players list without scroll.", false);
                 
                 pvpAdminExempt = config("2 - PvP Settings", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the pvp biomes rules."));
                 pvpRuleInWards = config("2 - PvP Settings", "PvP Rule In Wards (override biome)", PvPWardRule.FollowBiomeRule, new ConfigDescription("Set up the pvp rule inside wards, overriding biome rules if it's needed. Possible values: Pvp,Pve,PlayerChoice,FollowBiomeRule"));

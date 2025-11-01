@@ -26,14 +26,13 @@ namespace PvPBiomeDominions.PvPManagement.UI
             // === PANEL PRINCIPAL ===
             panelRoot = new GameObject("PlayersListPanel", typeof(RectTransform), typeof(Image));
             panelRoot.transform.SetParent(minimap.transform.Find("large"), false);
-            //Object.Destroy(panelRoot.GetComponent<Image>()); //transparent
 
             RectTransform panelRT = panelRoot.GetComponent<RectTransform>();
             panelRT.anchorMin = new Vector2(0.5f, 0.5f);
             panelRT.anchorMax = new Vector2(0.5f, 0.5f);
             panelRT.pivot = new Vector2(0.5f, 0.5f);
             panelRT.anchoredPosition = new Vector2(-652, 100);
-            panelRT.sizeDelta = new Vector2(250f, 620f);
+            panelRT.sizeDelta = ConfigurationFile.mapPlayersListPosition.Value;
 
             Image bgImage = panelRoot.GetComponent<Image>();
             bgImage.color = new Color(0, 0, 0, 0.5f);
@@ -41,14 +40,12 @@ namespace PvPBiomeDominions.PvPManagement.UI
             // --- SCROLLRECT ---
             GameObject scrollObj = new GameObject("ScrollView", typeof(RectTransform), typeof(ScrollRect), typeof(Image));
             scrollObj.transform.SetParent(panelRoot.transform, false);
-            Object.Destroy(scrollObj.GetComponent<Image>()); //transparent
+            Object.Destroy(scrollObj.GetComponent<Image>()); // transparent
             RectTransform scrollRT = scrollObj.GetComponent<RectTransform>();
             scrollRT.anchorMin = new Vector2(0, 0);
             scrollRT.anchorMax = new Vector2(1, 1);
-            scrollRT.offsetMin = new Vector2(0, 0);
-            scrollRT.offsetMax = new Vector2(0, 0);
-
-            scrollObj.GetComponent<Image>().color = new Color(1, 1, 1, 0.05f);
+            scrollRT.offsetMin = Vector2.zero;
+            scrollRT.offsetMax = Vector2.zero;
 
             ScrollRect scrollRect = scrollObj.GetComponent<ScrollRect>();
             scrollRect.horizontal = false;
@@ -69,15 +66,14 @@ namespace PvPBiomeDominions.PvPManagement.UI
             scrollRect.viewport = vpRT;
 
             // --- CONTENT ---
-            content = new GameObject("Content", typeof(RectTransform), typeof(VerticalLayoutGroup),
-                typeof(ContentSizeFitter));
+            content = new GameObject("Content", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
             content.transform.SetParent(viewport.transform, false);
             RectTransform contentRT = content.GetComponent<RectTransform>();
             contentRT.anchorMin = new Vector2(0, 1);
             contentRT.anchorMax = new Vector2(1, 1);
             contentRT.pivot = new Vector2(0.5f, 1);
             contentRT.anchoredPosition = Vector2.zero;
-            contentRT.sizeDelta = new Vector2(0, 0);
+            contentRT.sizeDelta = Vector2.zero;
 
             var layout = content.GetComponent<VerticalLayoutGroup>();
             layout.childForceExpandHeight = false;
@@ -117,8 +113,8 @@ namespace PvPBiomeDominions.PvPManagement.UI
             RectTransform showHidePanelButtonRt = showHidePanelButtonGO.GetComponent<RectTransform>();
             showHidePanelButtonRt.anchoredPosition = new Vector2(-650, 45);
             showHidePanelButton = showHidePanelButtonGO.GetComponent<Button>();
-            showHidePanelButton.GetComponent<Button>().onClick = new Button.ButtonClickedEvent(); //avoids creating double click effect
-            showHidePanelButton.GetComponent<Button>().onClick.AddListener(() =>
+            showHidePanelButton.onClick = new Button.ButtonClickedEvent();
+            showHidePanelButton.onClick.AddListener(() =>
             {
                 panelRoot.SetActive(!panelRoot.activeSelf);
             });
@@ -179,6 +175,7 @@ namespace PvPBiomeDominions.PvPManagement.UI
 
             if (GameManager.isWackyEpicMMOSystemInstalled())
             {
+                /*Logger.Log("MMO is loaded!");
                 var killsGO = new GameObject("Player_Level", typeof(RectTransform), typeof(TextMeshProUGUI));
                 killsGO.transform.SetParent(entry.transform, false);
                 RectTransform killRt = killsGO.GetComponent<RectTransform>();
@@ -187,13 +184,15 @@ namespace PvPBiomeDominions.PvPManagement.UI
                 var textKills = killsGO.GetComponent<TextMeshProUGUI>();
                 textKills.name = "level";
                 textKills.text = "LVL: ???";
+                
                 textKills.font = GameManager.getFontAsset("Valheim-Norse");
                 textKills.fontSize = 22;
                 textKills.color = Color.white;
                 textKills.fontStyle = FontStyles.Bold;
-                textKills.alignment = TextAlignmentOptions.Left;
+                textKills.alignment = TextAlignmentOptions.Left;*/
             }
             
+            //TODO Kills for m_knownTexts
             /*var deathIconGO = new GameObject("Player_DeathIcon", typeof(RectTransform), typeof(Image));
             deathIconGO.transform.SetParent(entry.transform, false);
             RectTransform deathIconRt = deathIconGO.GetComponent<RectTransform>();
