@@ -21,7 +21,7 @@ namespace PvPBiomeDominions.Helpers
 
         public static bool isWackyEpicMMOSystemInstalled()
         {
-            return BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("WackyMole.EpicMMOSystem");
+            return EpicMMOSystem_API.IsLoaded();
         }
 
         public static bool isGroupsModInstalled()
