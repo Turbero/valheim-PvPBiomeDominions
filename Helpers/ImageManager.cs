@@ -1,5 +1,6 @@
 using System.IO;
 using System.Reflection;
+using HarmonyLib;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,17 +10,25 @@ namespace PvPBiomeDominions.Helpers
     {
         public static Sprite spriteIconVanillaImage;
         public static Sprite spriteBlueIconImage;
+        public static Sprite spriteGroupIconImage;
         
         private static readonly string minimapLargeCheckMarkPath = "large/PublicPanel/PublicPosition/Background/Checkmark";
-        
+
+        [HarmonyPatch(typeof(Player), nameof(Player.OnSpawned))]
+        public static class PlayerOnSpawnedPatch
+        {
+            public static void Postfix(Player __instance)
+            {
+                if (spriteIconVanillaImage == null)
+                {
+                    Logger.Log("Initializing sprites...");
+                    InitSprites();
+                }
+            }
+        }
+
         public static void UpdateMapSelectorIcon()
         {
-            if (spriteIconVanillaImage == null)
-            {
-                Logger.Log("Initializing...");
-                InitSprites();
-            }
-            
             Player localPlayer = Player.m_localPlayer;
             if (localPlayer == null) return;
 
@@ -44,18 +53,30 @@ namespace PvPBiomeDominions.Helpers
             Logger.Log("Vanilla sprite stored.");
             
             spriteBlueIconImage = LoadSpriteFromEmbedded("icons.minimap-valheim-icon-base.png");
-            Color[] pixels = loadTexture("icons.minimap-valheim-icon-base.png").GetPixels();
-            for (int i = 0; i < pixels.Length; ++i)
+            Color[] bluePixels = loadTexture("icons.minimap-valheim-icon-base.png").GetPixels();
+            for (int i = 0; i < bluePixels.Length; ++i)
             {
-                if (pixels[i].r > 0.5 && pixels[i].b < 0.5 && pixels[i].g < 0.5)
+                if (bluePixels[i].r > 0.5 && bluePixels[i].b < 0.5 && bluePixels[i].g < 0.5)
                 {
-                    pixels[i] = new Color32(0, 188, 255, 196);
+                    bluePixels[i] = new Color32(0, 188, 255, 196);
                 }
             }
-            spriteBlueIconImage.texture.SetPixels(pixels);
+            spriteBlueIconImage.texture.SetPixels(bluePixels);
             spriteBlueIconImage.texture.Apply();
-            
             Logger.Log("Blue sprite loaded.");
+            
+            spriteGroupIconImage = LoadSpriteFromEmbedded("icons.minimap-valheim-icon-base.png");
+            Color[] groupPixels = loadTexture("icons.minimap-valheim-icon-base.png").GetPixels();
+            for (int i = 0; i < groupPixels.Length; ++i)
+            {
+                if (groupPixels[i].r > 0.5 && groupPixels[i].b < 0.5 && groupPixels[i].g < 0.5)
+                {
+                    groupPixels[i] = new Color32(0, 255, 0, 255);
+                }
+            }
+            spriteGroupIconImage.texture.SetPixels(groupPixels);
+            spriteGroupIconImage.texture.Apply();
+            Logger.Log("Group sprite loaded.");
         }
         
         private static Texture2D loadTexture(string name)
