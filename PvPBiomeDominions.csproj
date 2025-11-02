@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationFile.cs" />
+    <Compile Include="Helpers\EpicMMOSystem_API.cs" />
     <Compile Include="Helpers\GameManager.cs" />
     <Compile Include="Helpers\ImageManager.cs" />
     <Compile Include="Helpers\Marketplace_API.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Logger.cs" />
     <Compile Include="PositionManagement\MinimapUpdatePatch.cs" />
     <Compile Include="PositionManagement\PositionPatch.cs" />
+    <Compile Include="PositionManagement\UI\PlayersListPanel.cs" />
     <Compile Include="PositionManagement\WelcomeMessagePatch.cs" />
     <Compile Include="PvPBiomeDominions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -101,7 +103,6 @@
     <Compile Include="PvPManagement\PvPLevelsPatch.cs" />
     <Compile Include="PvPManagement\PvPPatch.cs" />
     <Compile Include="PvPManagement\TombStoneAlertsPatch.cs" />
-    <Compile Include="PvPManagement\UI\PlayersListPanel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Directory.Build.props" />

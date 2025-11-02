@@ -1,18 +1,21 @@
 using System.Collections.Generic;
+using System.Linq;
 using Groups;
 using PvPBiomeDominions.Helpers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace PvPBiomeDominions.PvPManagement.UI
+namespace PvPBiomeDominions.PositionManagement.UI
 {
     public class PlayersListPanel
     {
+        public static readonly Vector2 ROW_SIZE_DELTA = new(230f, 24f);
+        
         public readonly GameObject panelRoot;
         public readonly GameObject content;
 
-        private Sprite deathIconSprite;
+        private Sprite killsIconSprite;
 
         private Button showHidePanelButton;
 
@@ -125,7 +128,7 @@ namespace PvPBiomeDominions.PvPManagement.UI
             buttonText.alignment = TextAlignmentOptions.Center;
             buttonText.text = ConfigurationFile.playersListPanelButtonText.Value;
             
-            deathIconSprite = minimap.m_largeRoot.transform.Find("IconPanel2/IconDeath").GetComponent<Image>().sprite;
+            killsIconSprite = minimap.m_largeRoot.transform.Find("IconPanel2/IconDeath").GetComponent<Image>().sprite;
         }
         
         public void UpdateList(List<ZNet.PlayerInfo> players)
@@ -139,12 +142,40 @@ namespace PvPBiomeDominions.PvPManagement.UI
             List<PlayerReference> groupPlayers = GameManager.GetGroupPlayers();
 
             // Connected players list
+            AddTitleHeaderToScrollList(players.Count);
             foreach (var info in players)
             {
                 string playerName = info.m_name;
                 bool isInCurrentGroup = groupPlayers.FindIndex(pRef => pRef.name.Equals(playerName)) >= 0;
                 AddRowToScrollList(info, isInCurrentGroup);
             }
+        }
+
+        private void AddTitleHeaderToScrollList(int playersCount)
+        {
+            var entry = new GameObject("Title_Row", typeof(RectTransform));
+            entry.transform.SetParent(content.transform, false);
+            RectTransform rt = entry.GetComponent<RectTransform>();
+            rt.anchorMin = new Vector2(0.5f, 1);
+            rt.anchorMax = new Vector2(0.5f, 1);
+            rt.pivot = new Vector2(0.5f, 1);
+            rt.anchoredPosition = new Vector2(0, -10);
+            rt.sizeDelta = ROW_SIZE_DELTA;
+            
+            var textGO = new GameObject("Title_Name", typeof(RectTransform), typeof(TextMeshProUGUI));
+            textGO.transform.SetParent(entry.transform, false);
+            RectTransform textRt = textGO.GetComponent<RectTransform>();
+            textRt.anchoredPosition = Vector2.zero;
+            var text = textGO.GetComponent<TextMeshProUGUI>();
+            text.name = "name";
+            text.text = $"PLAYERS: <color=yellow>{playersCount}</color>";
+            text.font = GameManager.getFontAsset("Valheim-Norse");
+            text.fontSize = 22;
+            text.color = Color.white;
+            text.fontStyle = FontStyles.Bold;
+            text.alignment = TextAlignmentOptions.Center;
+            
+            playerEntries.Add(entry);
         }
         
         private void AddRowToScrollList(ZNet.PlayerInfo info, bool isInCurrentGroup)
@@ -156,61 +187,73 @@ namespace PvPBiomeDominions.PvPManagement.UI
             rt.anchorMax = new Vector2(0.5f, 1);
             rt.pivot = new Vector2(0.5f, 1);
             rt.anchoredPosition = new Vector2(0, -10);
-            rt.sizeDelta = new Vector2(230f, 24f);
+            rt.sizeDelta = ROW_SIZE_DELTA;
             
-            var imageGO = new GameObject("Player_Icon", typeof(RectTransform), typeof(Image));
-            imageGO.transform.SetParent(entry.transform, false);
-            RectTransform imageRt = imageGO.GetComponent<RectTransform>();
+            var iconGO = new GameObject("Player_Icon", typeof(RectTransform), typeof(Image));
+            iconGO.transform.SetParent(entry.transform, false);
+            RectTransform imageRt = iconGO.GetComponent<RectTransform>();
             imageRt.sizeDelta = new Vector2(32, 32);
             imageRt.anchoredPosition = new Vector2(-105, 0);
-            Image playerIcon = imageGO.GetComponent<Image>();
+            Image playerIcon = iconGO.GetComponent<Image>();
             if (isInCurrentGroup)
                 playerIcon.sprite = ImageManager.spriteGroupIconImage;
             else
                 playerIcon.sprite = GameManager.isInfoPVP(info) ? ImageManager.spriteIconVanillaImage : ImageManager.spriteBlueIconImage;
             
-            var textGO = new GameObject("Player_Name", typeof(RectTransform), typeof(TextMeshProUGUI));
-            textGO.transform.SetParent(entry.transform, false);
-            RectTransform textRt = textGO.GetComponent<RectTransform>();
+            var nameGO = new GameObject("Player_Name", typeof(RectTransform), typeof(TextMeshProUGUI));
+            nameGO.transform.SetParent(entry.transform, false);
+            RectTransform textRt = nameGO.GetComponent<RectTransform>();
             textRt.anchoredPosition = new Vector2(14, 0);
-            var text = textGO.GetComponent<TextMeshProUGUI>();
-            text.name = "name";
+            var text = GetTextEntryComponent(nameGO, "name");
             text.text = info.m_name;
+            
+            //Kills for m_knownTexts
+            if (info.m_name != Player.m_localPlayer.GetPlayerName())
+            {
+                var killsIconGO = new GameObject("Player_KillsIcon", typeof(RectTransform), typeof(Image));
+                killsIconGO.transform.SetParent(entry.transform, false);
+                RectTransform killsIconRt = killsIconGO.GetComponent<RectTransform>();
+                killsIconRt.sizeDelta = new Vector2(32, 32);
+                killsIconRt.anchoredPosition = new Vector2(55, 0);
+                Image killsIcon = killsIconGO.GetComponent<Image>();
+                killsIcon.sprite = killsIconSprite;
+
+                var killsValueGO = new GameObject("Player_KillsValue", typeof(RectTransform), typeof(TextMeshProUGUI));
+                killsValueGO.transform.SetParent(entry.transform, false);
+                RectTransform killsValueGORt = killsValueGO.GetComponent<RectTransform>();
+                killsValueGORt.sizeDelta = new Vector2(32, 32);
+                killsValueGORt.anchoredPosition = new Vector2(100, 0);
+                var killsValue = GetTextEntryComponent(killsValueGO, "value");
+                List<KeyValuePair<string, string>> knownTexts = Player.m_localPlayer.GetKnownTexts();
+                string keyToLookUp = PvPBiomeDominions.GUID+"_Kills_"+info.m_name;
+                string killsValueToLookUp = knownTexts.FirstOrDefault(kvp => kvp.Key.Equals(keyToLookUp)).Value;
+                killsValue.text = string.IsNullOrEmpty(killsValueToLookUp) ? "0" : killsValueToLookUp;
+            }
+
+            //TODO MMO Level
+            /*var playerLevel = EpicMMOSystem_API.GetLevel();
+            if (playerLevel > 0 && info.m_name == Player.m_localPlayer.GetPlayerName()) {
+                var levelGO = new GameObject("Player_Level", typeof(RectTransform), typeof(TextMeshProUGUI));
+                levelGO.transform.SetParent(entry.transform, false);
+                RectTransform killRt = levelGO.GetComponent<RectTransform>();
+                killRt.anchoredPosition = new Vector2(105, 0);
+                var textKills = GetTextEntryComponent(levelGO, "level");
+                textKills.text = $"LVL: {EpicMMOSystem_API.GetLevel()}";
+            }*/
+
+            playerEntries.Add(entry);
+        }
+
+        private TextMeshProUGUI GetTextEntryComponent(GameObject parent, string name)
+        {
+            var text = parent.GetComponent<TextMeshProUGUI>();
+            text.name = name;
             text.font = GameManager.getFontAsset("Valheim-Norse");
             text.fontSize = 22;
             text.color = Color.white;
             text.fontStyle = FontStyles.Bold;
             text.alignment = TextAlignmentOptions.Left;
-
-            /*if (GameManager.isWackyEpicMMOSystemInstalled())
-            {
-                Logger.Log("MMO is loaded!");
-                var killsGO = new GameObject("Player_Level", typeof(RectTransform), typeof(TextMeshProUGUI));
-                killsGO.transform.SetParent(entry.transform, false);
-                RectTransform killRt = killsGO.GetComponent<RectTransform>();
-                killRt.sizeDelta = new Vector2(32, 32);
-                killRt.anchoredPosition = new Vector2(155, 0);
-                var textKills = killsGO.GetComponent<TextMeshProUGUI>();
-                textKills.name = "level";
-                textKills.text = "LVL: ???";
-                
-                textKills.font = GameManager.getFontAsset("Valheim-Norse");
-                textKills.fontSize = 22;
-                textKills.color = Color.white;
-                textKills.fontStyle = FontStyles.Bold;
-                textKills.alignment = TextAlignmentOptions.Left;
-            }*/
-            
-            //TODO Kills for m_knownTexts
-            /*var deathIconGO = new GameObject("Player_DeathIcon", typeof(RectTransform), typeof(Image));
-            deathIconGO.transform.SetParent(entry.transform, false);
-            RectTransform deathIconRt = deathIconGO.GetComponent<RectTransform>();
-            deathIconRt.sizeDelta = new Vector2(32, 32);
-            deathIconRt.anchoredPosition = new Vector2(105, 0);
-            Image deathIcon = deathIconGO.GetComponent<Image>();
-            deathIcon.sprite = deathIconSprite;*/
-            
-            playerEntries.Add(entry);
+            return text;
         }
     }
 }

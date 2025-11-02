@@ -3,7 +3,7 @@ using System.Reflection;
 using HarmonyLib;
 using PvPBiomeDominions.Helpers;
 using PvPBiomeDominions.Helpers.WardIsLove;
-using PvPBiomeDominions.PvPManagement.UI;
+using PvPBiomeDominions.PositionManagement.UI;
 using UnityEngine;
 
 namespace PvPBiomeDominions.PositionManagement
