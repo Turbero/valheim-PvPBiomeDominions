@@ -1,5 +1,11 @@
 ### CHANGELOG
 
+## 1.1.1
+
+* Fix for Pinnacle mod player pins, they don't turn blue anymore.
+* Added GroupsAPI integration.
+* Fixed some colouring maps, but still some known issues to be resolved.
+
 ## 1.1.0
 
 * New: added panel on the minimap with a list of connected players and their pve/pvp status. It can be hidden with a new button in the bottom left corner of the map.
