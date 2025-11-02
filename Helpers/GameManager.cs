@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Groups;
 using HarmonyLib;
 using TMPro;
 using UnityEngine;
@@ -90,6 +91,17 @@ namespace PvPBiomeDominions.Helpers
             {
                 return cachedFonts.GetValueSafe(name);
             }
+        }
+
+        public static List<PlayerReference> GetGroupPlayers()
+        {
+            List<PlayerReference> groupPlayers = new List<PlayerReference>();
+            if (isGroupsModInstalled())
+            {
+                groupPlayers.AddRange(Groups.API.GroupPlayers());
+            }
+
+            return groupPlayers;
         }
     }
 }

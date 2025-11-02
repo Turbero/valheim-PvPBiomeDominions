@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Groups;
 using PvPBiomeDominions.Helpers;
 using TMPro;
 using UnityEngine;
@@ -133,15 +134,20 @@ namespace PvPBiomeDominions.PvPManagement.UI
             foreach (var go in playerEntries)
                 Object.Destroy(go);
             playerEntries.Clear();
+            
+            //Group info 
+            List<PlayerReference> groupPlayers = GameManager.GetGroupPlayers();
 
             // Connected players list
             foreach (var info in players)
             {
-                AddRowToScrollList(info);
+                string playerName = info.m_name;
+                bool isInCurrentGroup = groupPlayers.FindIndex(pRef => pRef.name.Equals(playerName)) >= 0;
+                AddRowToScrollList(info, isInCurrentGroup);
             }
         }
         
-        private void AddRowToScrollList(ZNet.PlayerInfo info)
+        private void AddRowToScrollList(ZNet.PlayerInfo info, bool isInCurrentGroup)
         {
             var entry = new GameObject("Player_Row", typeof(RectTransform));
             entry.transform.SetParent(content.transform, false);
@@ -158,7 +164,10 @@ namespace PvPBiomeDominions.PvPManagement.UI
             imageRt.sizeDelta = new Vector2(32, 32);
             imageRt.anchoredPosition = new Vector2(-105, 0);
             Image playerIcon = imageGO.GetComponent<Image>();
-            playerIcon.sprite = GameManager.isInfoPVP(info) ? ImageManager.spriteIconVanillaImage : ImageManager.spriteBlueIconImage;
+            if (isInCurrentGroup)
+                playerIcon.sprite = ImageManager.spriteGroupIconImage;
+            else
+                playerIcon.sprite = GameManager.isInfoPVP(info) ? ImageManager.spriteIconVanillaImage : ImageManager.spriteBlueIconImage;
             
             var textGO = new GameObject("Player_Name", typeof(RectTransform), typeof(TextMeshProUGUI));
             textGO.transform.SetParent(entry.transform, false);
@@ -173,9 +182,9 @@ namespace PvPBiomeDominions.PvPManagement.UI
             text.fontStyle = FontStyles.Bold;
             text.alignment = TextAlignmentOptions.Left;
 
-            if (GameManager.isWackyEpicMMOSystemInstalled())
+            /*if (GameManager.isWackyEpicMMOSystemInstalled())
             {
-                /*Logger.Log("MMO is loaded!");
+                Logger.Log("MMO is loaded!");
                 var killsGO = new GameObject("Player_Level", typeof(RectTransform), typeof(TextMeshProUGUI));
                 killsGO.transform.SetParent(entry.transform, false);
                 RectTransform killRt = killsGO.GetComponent<RectTransform>();
@@ -189,8 +198,8 @@ namespace PvPBiomeDominions.PvPManagement.UI
                 textKills.fontSize = 22;
                 textKills.color = Color.white;
                 textKills.fontStyle = FontStyles.Bold;
-                textKills.alignment = TextAlignmentOptions.Left;*/
-            }
+                textKills.alignment = TextAlignmentOptions.Left;
+            }*/
             
             //TODO Kills for m_knownTexts
             /*var deathIconGO = new GameObject("Player_DeathIcon", typeof(RectTransform), typeof(Image));

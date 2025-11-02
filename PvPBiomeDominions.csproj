@@ -49,7 +49,7 @@
       <HintPath>..\..\Libs\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="Groups">
-      <HintPath>Libs\Groups.dll</HintPath>
+      <HintPath>Libs\GroupsAPI.dll</HintPath>
     </Reference>
     <Reference Include="ServerSync, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -92,12 +92,12 @@
     <Compile Include="Helpers\WardIsLove\WardIsLovePlugin.cs" />
     <Compile Include="Helpers\WardIsLove\WardMonoscript.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="PositionManagement\MinimapUpdatePatch.cs" />
     <Compile Include="PositionManagement\PositionPatch.cs" />
     <Compile Include="PositionManagement\WelcomeMessagePatch.cs" />
     <Compile Include="PvPBiomeDominions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PvPManagement\MapUpdatePlayerPinsPatch.cs" />
-    <Compile Include="PvPManagement\MapPlayersListPanelPatch.cs" />
     <Compile Include="PvPManagement\PvPLevelsPatch.cs" />
     <Compile Include="PvPManagement\PvPPatch.cs" />
     <Compile Include="PvPManagement\TombStoneAlertsPatch.cs" />
