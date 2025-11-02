@@ -1,8 +1,6 @@
-using System.Reflection;
 using HarmonyLib;
 using PvPBiomeDominions.Helpers;
 using PvPBiomeDominions.Helpers.WardIsLove;
-using UnityEngine;
 
 namespace PvPBiomeDominions.PositionManagement
 {
@@ -35,57 +33,6 @@ namespace PvPBiomeDominions.PositionManagement
             
             if (___m_publicReferencePosition)
                 ImageManager.UpdateMapSelectorIcon();
-        }
-    }
-
-    [HarmonyPatch(typeof(Minimap), "Update")]
-    public class MinimapUpdatePatch
-    {
-        private static float lastUpdateTime = 0f;
-        public static void Postfix(Minimap __instance)
-        {
-            if (!__instance) return;
-            if (ConfigurationFile.positionAdminExempt.Value == ConfigurationFile.Toggle.On && ConfigurationFile.ConfigSync.IsAdmin)
-                return;
-
-            // First ward rule
-            bool isInsideWard = WardIsLovePlugin.IsInsideWard();
-            var wardPositionRule = ConfigurationFile.positionRuleInWards.Value;
-            if (isInsideWard && wardPositionRule != ConfigurationFile.PositionSharingWardRule.FollowBiomeRule)
-            {
-                if (wardPositionRule == ConfigurationFile.PositionSharingWardRule.PlayerChoice)
-                    return;
-                
-                __instance.m_publicPosition.isOn = wardPositionRule == ConfigurationFile.PositionSharingWardRule.ShowPlayer;
-                return;
-            }
-
-            // Then biome rule
-            var fieldInfo = __instance.GetType().GetField("m_biome", BindingFlags.Instance | BindingFlags.NonPublic);
-            if (fieldInfo == null)
-                return;
-            
-            var mBiome = fieldInfo.GetValue(__instance);
-            if (mBiome == null)
-                return;
-            
-            Heightmap.Biome minimapBiome = (Heightmap.Biome) mBiome;
-            ConfigurationFile.PositionSharingBiomeRule biomePositionBiomeRule = ConfigurationFile.getBiomeRulePosition(minimapBiome);
-            if (biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.PlayerChoice)
-                return;
-            
-            __instance.m_publicPosition.isOn = biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.ShowPlayer;
-            
-            if (__instance.m_publicPosition.isOn)
-                ImageManager.UpdateMapSelectorIcon();
-            
-            // Refresh config for sync issues
-            if (__instance.m_largeRoot.activeSelf && Time.time - lastUpdateTime >= ConfigurationFile.pvpMinimapPlayersListRefresh.Value)
-            {
-                lastUpdateTime = Time.time;
-                ConfigurationFile.configFile.Reload();
-            }
-
         }
     }
 
