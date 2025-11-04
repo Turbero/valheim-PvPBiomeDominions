@@ -146,6 +146,9 @@ namespace PvPBiomeDominions.PositionManagement.UI
         
         public void RefreshContent(List<ZNet.PlayerInfo> players, bool createNewCache)
         {
+            // Refresh button name
+            showHidePanelButton.GetComponentInChildren<TextMeshProUGUI>().text = ConfigurationFile.playersListPanelButtonText.Value;
+            
             // Clear previous entries
             foreach (var go in playerEntriesObjects)
                 Object.Destroy(go);
@@ -191,7 +194,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             textRt.anchoredPosition = Vector2.zero;
             var text = textGO.GetComponent<TextMeshProUGUI>();
             text.name = "name";
-            text.text = $"PLAYERS: <color=yellow>{playersCount}</color>";
+            text.text = $"{ConfigurationFile.playersMapListTitle.Value}: <color=yellow>{playersCount}</color>";
             text.font = GameManager.getFontAsset("Valheim-Norse");
             text.fontSize = 22;
             text.color = Color.white;

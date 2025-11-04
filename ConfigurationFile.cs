@@ -93,6 +93,7 @@ namespace PvPBiomeDominions
         
         //Translations
         public static ConfigEntry<string> playersListPanelButtonText;
+        public static ConfigEntry<string> playersMapListTitle;
 
         public static PvPBiomeRule getCurrentBiomeRulePvPRule()
         {
@@ -184,6 +185,7 @@ namespace PvPBiomeDominions
                 pvpWackyEpicMMOLevelDifferenceLimitValue = config("4 - Mods integration", "Max Level Difference to damage in PvP areas - Value", 100, new ConfigDescription("Limits the difference of levels between players to damage each other in pvp areas (default = 100)."));
                 
                 playersListPanelButtonText = config("5 - Translations", "Players List Panel Button Text", "Show/Hide list", new ConfigDescription("Button name used to show/hide the players panel list in the minimap."));
+                playersMapListTitle = config("5 - Translations", "Players Map List Title", "Players", new ConfigDescription("Title of the map players list with connected count."));
 
                 SetupWatcher();
             }
