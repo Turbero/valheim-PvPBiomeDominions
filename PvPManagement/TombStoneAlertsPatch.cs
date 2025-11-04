@@ -1,57 +1,79 @@
+using System.Linq;
 using HarmonyLib;
 
 namespace PvPBiomeDominions.PvPManagement
 {
-    [HarmonyPatch(typeof(Container), "Interact")]
-    public class Container_Interact_Patch
+    public class TombStoneAlertsPatch
     {
-        static void Postfix(Container __instance, Humanoid character, bool hold, bool alt, ref bool __result)
+        [HarmonyPatch(typeof(Container), "Interact")]
+        public class Container_Interact_Patch
         {
-            if (ConfigurationFile.pvpTombstoneLootAlertMessage.Value == string.Empty) return;
-            
-            TombStone tomb = __instance.GetComponentInParent<TombStone>();
-            if (tomb == null) return;
-            
-            Logger.Log("Checking tombstone interact alert...");
-            if (__instance.GetInventory().GetAllItems().Count > 0)
+            static void Postfix(Container __instance, Humanoid character, bool hold, bool alt, ref bool __result)
             {
-                string owner = tomb.GetOwnerName();
+                if (ConfigurationFile.pvpTombstoneLootAlertMessage.Value == string.Empty) return;
 
-                Player localPlayer = Player.m_localPlayer;
-                Logger.Log($"owner {owner} vs localPlayer {localPlayer.GetPlayerName()}");
-                if (owner != localPlayer.GetPlayerName())
+                TombStone tomb = __instance.GetComponentInParent<TombStone>();
+                if (tomb == null) return;
+
+                Logger.Log("Checking tombstone interact alert...");
+                if (__instance.GetInventory().GetAllItems().Count > 0)
                 {
-                    Logger.Log($"Sending interact alert message to {owner}...");
-                    Player playerOwner = Player.GetAllPlayers().Find(p => p.GetPlayerName().Equals(owner));
-                    if (playerOwner != null)
-                        playerOwner.Message(MessageHud.MessageType.Center, ConfigurationFile.pvpTombstoneLootAlertMessage.Value.Replace("{0}", localPlayer.GetPlayerName()));
+                    processRPCWarning(tomb.GetOwnerName(), true);
                 }
             }
         }
-    }
 
-    [HarmonyPatch(typeof(Container), "TakeAll")]
-    public class Container_TakeAll_Patch
-    {
-        static void Postfix(Container __instance, Humanoid character, ref bool __result)
+        [HarmonyPatch(typeof(Container), "TakeAll")]
+        public class Container_TakeAll_Patch
         {
-            if (ConfigurationFile.pvpTombstoneDestroyAlertMessage.Value == string.Empty || !__result) return;
-            
-            TombStone tomb = __instance.GetComponentInParent<TombStone>();
-            if (tomb == null) return;
+            static void Postfix(Container __instance, Humanoid character, ref bool __result)
+            {
+                if (ConfigurationFile.pvpTombstoneDestroyAlertMessage.Value == string.Empty || !__result) return;
 
-            Logger.Log("Checking tombstone takeAll alert...");
-            
-            string owner = tomb.GetOwnerName();
+                TombStone tomb = __instance.GetComponentInParent<TombStone>();
+                if (tomb == null) return;
+
+                Logger.Log("Checking tombstone takeAll alert...");
+                processRPCWarning(tomb.GetOwnerName(), false);
+            }
+        }
+
+        private static void processRPCWarning(string owner, bool isInteractAlert)
+        {
             Player localPlayer = Player.m_localPlayer;
             Logger.Log($"owner {owner} vs localPlayer {localPlayer.GetPlayerName()}");
             if (owner != localPlayer.GetPlayerName())
             {
-                Logger.Log($"Sending takeAll alert message to {owner}...");
-                Player playerOwner = Player.GetAllPlayers().Find(p => p.GetPlayerName().Equals(owner));
-                if (playerOwner != null)
-                    playerOwner.Message(MessageHud.MessageType.Center, ConfigurationFile.pvpTombstoneDestroyAlertMessage.Value.Replace("{0}", localPlayer.GetPlayerName()));
+                ZNet.PlayerInfo playerOwner = ZNet.instance.GetPlayerList().FirstOrDefault(p => p.m_name.Equals(owner));
+                
+                long ownerID = playerOwner.m_characterID.UserID;
+                if (ownerID == 0)
+                {
+                    //owner not found (probably not online at the moment)
+                    Logger.Log("Not found (probably disconnected)");
+                    return;
+                }
+
+                Logger.Log($"Sending alert message to tombStone owner {owner} with ID {ownerID}...");
+                ZRoutedRpc.instance.InvokeRoutedRPC(ownerID, "RPC_TombStoneAlertPlayer", isInteractAlert);
             }
+            else
+                Logger.Log("Recovering tombStone content...");
+        }
+
+        public static void RPC_TombStoneAlertPlayer(long sender, bool isInteractAlert)
+        {
+            Logger.Log("[RPC_TombStoneAlertPlayer] entered");
+            
+            //sender is the thief uid!
+            ZNet.PlayerInfo playerThief = ZNet.instance.GetPlayerList().FirstOrDefault(p => p.m_characterID.UserID == sender);
+            Player localPlayer = Player.m_localPlayer;
+            Logger.Log("[RPC_TombStoneAlertPlayer] RPC sent to " + Player.m_localPlayer.GetPlayerName() + " from " + playerThief.m_name);
+            
+            if (isInteractAlert)
+                localPlayer.Message(MessageHud.MessageType.Center, ConfigurationFile.pvpTombstoneLootAlertMessage.Value.Replace("{0}", playerThief.m_name));
+            else
+                localPlayer.Message(MessageHud.MessageType.Center, ConfigurationFile.pvpTombstoneDestroyAlertMessage.Value.Replace("{0}", playerThief.m_name));
         }
     }
 }
