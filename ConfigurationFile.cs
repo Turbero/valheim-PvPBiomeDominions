@@ -46,6 +46,7 @@ namespace PvPBiomeDominions
         public static ConfigEntry<bool> debug;
         public static ConfigEntry<Vector2> mapPlayersListPosition;
         public static ConfigEntry<Vector2> mapPlayersListSize;
+        public static ConfigEntry<bool> mapPinColoring;
 
         public static ConfigFile configFile;
         private static readonly string ConfigFileName = PvPBiomeDominions.GUID + ".cfg";
@@ -153,6 +154,7 @@ namespace PvPBiomeDominions
                 debug = config("1 - General", "DebugMode", false, "Enabling/Disabling the debugging in the console (default = false)", false);
                 mapPlayersListPosition = config("1 - General", "Map Players List Position", new Vector2(-602, 100), "Left corner position for the map players list", false);
                 mapPlayersListSize = config("1 - General", "Map Players List Size", new Vector2(350, 620), "Left corner position for the map players list", false);
+                mapPinColoring = config("1 - General", "Map Pins PvP Coloring", true, "Enable/disable the pins coloring in the player maps according to their pvp status", false);
                 
                 pvpAdminExempt = config("2 - PvP Settings", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the pvp biomes rules."));
                 pvpRuleInWards = config("2 - PvP Settings", "PvP Rule In Wards (override biome)", PvPWardRule.FollowBiomeRule, new ConfigDescription("Set up the pvp rule inside wards, overriding biome rules if it's needed. Possible values: Pvp,Pve,PlayerChoice,FollowBiomeRule"));
