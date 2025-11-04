@@ -24,7 +24,6 @@ namespace PvPBiomeDominions.PvPManagement
             if (GameManager.isGroupsModInstalled())
             {
                 groupPlayers.AddRange(Groups.API.GroupPlayers());
-                Logger.Log("Current group players count: " + groupPlayers.Count);
             }
             foreach (var pin in playerPins)
             {

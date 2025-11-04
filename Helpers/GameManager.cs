@@ -38,7 +38,6 @@ namespace PvPBiomeDominions.Helpers
             if (zdo != null)
             {
                 bool isPvP = zdo.GetBool("pvp", true); // TODO we say pvp by default for now even if it doesn't exist to use red default icon
-                Logger.Log($"isPvP result for {info.m_name} is {isPvP}");
                 return isPvP;
             }
             Logger.Log($"no zdo found for {info.m_name}");

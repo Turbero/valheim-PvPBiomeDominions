@@ -9,18 +9,20 @@ using UnityEngine;
 namespace PvPBiomeDominions.PositionManagement
 {
     [HarmonyPatch(typeof(Minimap), "Update")]
-    public class MinimapUpdatePatch
+    public static class MinimapUpdatePatch
     {
         private static bool created = false;
         private static float lastUpdateTime = 0f;
         
-        private static PlayersListPanel panel;
+        public static PlayersListPanel panel;
         public static void Postfix(Minimap __instance)
         {
             if (!__instance) return;
             if (ConfigurationFile.positionAdminExempt.Value == ConfigurationFile.Toggle.On && ConfigurationFile.ConfigSync.IsAdmin)
                 return;
 
+            if (Player.m_localPlayer == null) return;
+            
             // First ward rule
             bool isInsideWard = WardIsLovePlugin.IsInsideWard();
             var wardPositionRule = ConfigurationFile.positionRuleInWards.Value;
@@ -42,7 +44,8 @@ namespace PvPBiomeDominions.PositionManagement
             if (mBiome == null)
                 return;
             
-            Heightmap.Biome minimapBiome = (Heightmap.Biome) mBiome;
+            //Heightmap.Biome minimapBiome = (Heightmap.Biome) mBiome;
+            Heightmap.Biome minimapBiome = Player.m_localPlayer.GetCurrentBiome();
             ConfigurationFile.PositionSharingBiomeRule biomePositionBiomeRule = ConfigurationFile.getBiomeRulePosition(minimapBiome);
             if (biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.PlayerChoice)
                 return;
@@ -70,12 +73,14 @@ namespace PvPBiomeDominions.PositionManagement
             // Create components
             if (!created || panel == null || panel.panelRoot == null)
             {
+                Logger.Log("HandlePlayersListPanel - First time");
                 panel = new PlayersListPanel(__instance);
                 created = true;
                 
                 if (!canUpdate(__instance))
                     return;
-                panel.UpdateList(ZNet.instance.GetPlayerList().OrderBy(p => p.m_name).ToList());
+                panel.RefreshContent(ZNet.instance.GetPlayerList().OrderBy(p => p.m_name).ToList(), true);
+                
                 return;
             }
 
@@ -87,7 +92,7 @@ namespace PvPBiomeDominions.PositionManagement
             if (Time.time - lastUpdateTime >= ConfigurationFile.pvpMinimapPlayersListRefresh.Value)
             {
                 lastUpdateTime = Time.time;
-                panel.UpdateList(ZNet.instance.GetPlayerList().OrderBy(p => p.m_name).ToList());
+                panel.RefreshContent(ZNet.instance.GetPlayerList().OrderBy(p => p.m_name).ToList(), false);
             }
         }
 
