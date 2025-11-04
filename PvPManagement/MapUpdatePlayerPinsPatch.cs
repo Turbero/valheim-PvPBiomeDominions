@@ -3,6 +3,8 @@ using System.Linq;
 using Groups;
 using HarmonyLib;
 using PvPBiomeDominions.Helpers;
+using PvPBiomeDominions.PositionManagement;
+using PvPBiomeDominions.PositionManagement.UI;
 using UnityEngine.UI;
 
 namespace PvPBiomeDominions.PvPManagement
@@ -41,8 +43,9 @@ namespace PvPBiomeDominions.PvPManagement
                 if (img == null)
                     continue;
 
-                // Find PvP status with playerInfo and update sprite
-                bool isPVP = GameManager.isInfoPVP(znetPlayerInfos.GetValueSafe(pin.m_name));
+                // Find PvP status (first cache then playerInfo) and update sprite
+                PlayerEntry playerEntry = MinimapUpdatePatch.panel.cachedPlayerEntries.Find(cpe => cpe.name.Equals(pin.m_name));
+                bool isPVP = playerEntry != null ? playerEntry.isPvP : GameManager.isInfoPVP(znetPlayerInfos.GetValueSafe(pin.m_name));
                 img.sprite = isPVP ? ImageManager.spriteIconVanillaImage : ImageManager.spriteBlueIconImage;
             }
         }
