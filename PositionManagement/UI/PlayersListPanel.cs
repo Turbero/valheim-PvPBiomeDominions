@@ -262,6 +262,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             
             playerEntriesObjects.Add(entry);
 
+            //Local player
             if (info.m_name == Player.m_localPlayer.GetPlayerName())
             {
                 //1) Icon
@@ -275,6 +276,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 return;
             }
 
+            //Other player
             if (newCache)
                 AddPlayerEntryToCachedPlayers(info, levelText, killedValue, playerIcon);
             else 
@@ -298,7 +300,10 @@ namespace PvPBiomeDominions.PositionManagement.UI
                     killedValue.text = string.IsNullOrEmpty(killsValueToLookUp) ? "0" : killsValueToLookUp;
                 }
                 else
+                {
+                    //New player connected after table creation
                     AddPlayerEntryToCachedPlayers(info, levelText, killedValue, playerIcon);
+                }
             }
         }
 
@@ -313,7 +318,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 iconPlayer = playerIcon,
                 isPvP = false //default
             });
-            //New player joined after creating the panel --> request the info with a message and update in response
+            //Request the info with a message and update in response
             ZRoutedRpc.instance.InvokeRoutedRPC(info.m_characterID.UserID, "RPC_RequestEpicMMOInfo");
         }
 
@@ -331,9 +336,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
 
         public void UpdateEpicInfo(EpicMMOSystem_Info epicInfo)
         {
-            Logger.Log("playerEntry found - name: "+epicInfo.playerName);
-            Logger.Log("playerEntry found - level: "+epicInfo.level);
-            Logger.Log("playerEntry found - isPvP: "+epicInfo.isPvP);
+            Logger.Log($"[UpdateEpicInfo] playerEntry found: name {epicInfo.playerName}, level {epicInfo.level}, isPvP {epicInfo.isPvP}");
             
             //It has to exist at this point
             PlayerEntry playerEntry = cachedPlayerEntries.Find(p => p.name.Equals(epicInfo.playerName));
@@ -341,25 +344,17 @@ namespace PvPBiomeDominions.PositionManagement.UI
             //Icon (UI)
             if (Groups.API.GroupPlayers().FindIndex(p => p.name.Equals(epicInfo.playerName)) >= 0)
             {
-                Logger.Log("UpdateEpicInfo: isInGroup");
+                Logger.Log("[UpdateEpicInfo] isInGroup");
                 playerEntry.iconPlayer.sprite = ImageManager.spriteGroupIconImage;
             }
             else
-            {
-                if (epicInfo.isPvP)
-                {
-                    Logger.Log("iconSprite for PvP");
-                    playerEntry.iconPlayer.sprite = ImageManager.spriteIconVanillaImage;
-                }
-                else
-                {
-                    Logger.Log("iconSprite for PvE");
-                    playerEntry.iconPlayer.sprite = ImageManager.spriteBlueIconImage;
-                }
-            }
+                playerEntry.iconPlayer.sprite = epicInfo.isPvP 
+                    ? ImageManager.spriteIconVanillaImage
+                    : ImageManager.spriteBlueIconImage;
 
             //isPvP
             playerEntry.isPvP = epicInfo.isPvP;
+            
             //Level
             playerEntry.levelUI.text = "LVL: " + epicInfo.level;
             //Level (UI)
