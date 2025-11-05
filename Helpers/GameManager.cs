@@ -19,11 +19,6 @@ namespace PvPBiomeDominions.Helpers
             return obj.GetType().GetField(name, bindingAttr)?.GetValue(obj);
         }
 
-        public static bool isGroupsModInstalled()
-        {
-            return Groups.API.IsLoaded();
-        }
-
         public static bool isInfoPVP(ZNet.PlayerInfo info)
         {
             ZDOID charID = info.m_characterID;
@@ -90,7 +85,7 @@ namespace PvPBiomeDominions.Helpers
         public static List<PlayerReference> GetGroupPlayers()
         {
             List<PlayerReference> groupPlayers = new List<PlayerReference>();
-            if (isGroupsModInstalled())
+            if (Groups.API.IsLoaded())
             {
                 groupPlayers.AddRange(Groups.API.GroupPlayers());
             }

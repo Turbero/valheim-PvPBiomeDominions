@@ -25,7 +25,7 @@ namespace PvPBiomeDominions.PvPManagement
                 p.m_type == Minimap.PinType.Player).ToList();
 
             List<PlayerReference> groupPlayers = new List<PlayerReference>();
-            if (GameManager.isGroupsModInstalled())
+            if (Groups.API.IsLoaded())
             {
                 groupPlayers.AddRange(Groups.API.GroupPlayers());
             }
