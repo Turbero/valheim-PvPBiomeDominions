@@ -1,5 +1,15 @@
 ### CHANGELOG
 
+## 1.2.0
+
+* Added to the map players list:
+  * title header with connected players count
+  * re-position from configuration file if playing with different screen sizes
+  * epicMMO level (if installed)
+* Added option to enable/disable the map player pins coloring according to their pvp status (enabled by default)
+* Fixed tombstone alerts when the owner is far away from the player who opens the tombstone
+* Fixed translation of the button to show/hide map players list
+
 ## 1.1.1
 
 * Fix for Pinnacle mod player pins, they don't turn blue anymore.

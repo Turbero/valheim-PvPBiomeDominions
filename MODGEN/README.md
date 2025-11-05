@@ -6,6 +6,8 @@ PVP Biome Dominions is a mod that allows creating rules for:
 
 based on the current biome of the player. You can apply different combat rules to Meadows, Black Forest, etc even for Ocean!
 
+In addition, a list of the current players will be shown on the left side of the big map when you open it up with a summary of the current player statuses.
+
 ## Usage instructions
 
 Generate the configuration file "Turbero.PvPBiomeDominions.cfg" that will be created once the mod is executed for first time. Then, edit the file or use a ConfigurationManager mod to apply the rules to each biome.

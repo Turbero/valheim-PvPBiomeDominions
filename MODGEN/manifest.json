@@ -1,6 +1,6 @@
 {
   "name": "PvPBiomeDominions",
-  "version_number": "1.1.1",
+  "version_number": "1.2.0",
   "website_url": "https://github.com/Turbero/valheim-PvPBiomeDominions",
   "description": "Commissioned mod to create specific rules per biome and wards for PvP control and position sharing management. Configure the rules for each of them and create the world you want.",
   "dependencies": [
