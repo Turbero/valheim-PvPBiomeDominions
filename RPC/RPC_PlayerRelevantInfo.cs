@@ -6,6 +6,10 @@ namespace PvPBiomeDominions.RPC
         public int level;
         public bool isPvP;
 
+        public string GetLevelText()
+        {
+            return level > 0 ? level.ToString() : "???";
+        }
         public ZPackage GetPackage()
         {
             ZPackage pkg = new ZPackage();

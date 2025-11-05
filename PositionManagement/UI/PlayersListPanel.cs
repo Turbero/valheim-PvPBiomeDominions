@@ -17,6 +17,11 @@ namespace PvPBiomeDominions.PositionManagement.UI
         public TextMeshProUGUI killedTimesUI;
         public Image iconPlayer;
         public bool isPvP;
+
+        public string GetLevelText()
+        {
+            return level > 0 ? level.ToString() : "???";
+        }
     }
     
     public class PlayersListPanel
@@ -299,7 +304,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
                         playerIcon.sprite = playerEntry.isPvP ? ImageManager.spriteIconVanillaImage : ImageManager.spriteBlueIconImage;
 
                     // 2) Level
-                    levelText.text = $"LVL: {playerEntry.level}";
+                    levelText.text = "LVL: " + playerEntry.GetLevelText();
 
                     // 3) Killed number
                     List<KeyValuePair<string, string>> knownTexts = Player.m_localPlayer.GetKnownTexts();
@@ -363,7 +368,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             playerEntry.isPvP = playerRelevantInfo.isPvP;
             
             //Level
-            playerEntry.levelUI.text = "LVL: " + playerRelevantInfo.level;
+            playerEntry.levelUI.text = "LVL: " + playerRelevantInfo.GetLevelText();
             //Level (UI)
             playerEntry.level = playerRelevantInfo.level;
             
