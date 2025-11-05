@@ -10,7 +10,7 @@ namespace PvPBiomeDominions.PvPManagement
     {
         static bool Prefix(HitData hit, Character __instance)
         {
-            if (!GameManager.isWackyEpicMMOSystemInstalled() || ConfigurationFile.pvpWackyEpicMMOLevelDifferenceLimitEnabled.Value == ConfigurationFile.Toggle.Off)
+            if (!EpicMMOSystem_API.IsLoaded() || ConfigurationFile.pvpWackyEpicMMOLevelDifferenceLimitEnabled.Value == ConfigurationFile.Toggle.Off)
                 return true;
             
             if (__instance  != null && __instance.GetType() == typeof(Player))

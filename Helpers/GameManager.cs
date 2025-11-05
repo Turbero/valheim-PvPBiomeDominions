@@ -19,11 +19,6 @@ namespace PvPBiomeDominions.Helpers
             return obj.GetType().GetField(name, bindingAttr)?.GetValue(obj);
         }
 
-        public static bool isWackyEpicMMOSystemInstalled()
-        {
-            return EpicMMOSystem_API.IsLoaded();
-        }
-
         public static bool isGroupsModInstalled()
         {
             return Groups.API.IsLoaded();
