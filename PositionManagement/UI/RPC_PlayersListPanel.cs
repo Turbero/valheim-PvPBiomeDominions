@@ -8,13 +8,31 @@ namespace PvPBiomeDominions.PositionManagement.UI
     {
         public static void RPC_RequestPlayerRelevantInfo(long sender)
         {
-            Player localPlayer = Player.m_localPlayer;
-            if (sender == ZDOMan.GetSessionID()) return; //skip selfmessage sent with ZroutedRpc.Everyone
-            
             Logger.Log("[RPC_RequestPlayerRelevantInfo] entered");
-            ZNet.PlayerInfo playerSender = ZNet.instance.GetPlayerList().FirstOrDefault(p => p.m_characterID.UserID == sender);
-            Logger.Log("[RPC_RequestPlayerRelevantInfo] RPC sent to " + Player.m_localPlayer.GetPlayerName() + " from " + playerSender.m_name);
             
+            if (sender == ZDOMan.GetSessionID())
+            {
+                Logger.Log("[RPC_RequestPlayerRelevantInfo] skip selfmessage sent with ZroutedRpc.Everyone");
+                return; //skip selfmessage sent with ZroutedRpc.Everyone
+            }
+            
+            Player localPlayer = Player.m_localPlayer;
+            if (localPlayer == null)
+            {
+                Logger.Log("localPlayer null. RPC message aborted.");
+                return;
+            }
+            
+            ZNet.PlayerInfo playerSender = ZNet.instance.GetPlayerList().FirstOrDefault(
+                p => p.m_name != null &&
+                p.m_characterID.UserID == sender);
+            if (playerSender.m_name == null)
+            {
+                Logger.Log("PlayerSender not found. RPC message aborted.");
+                return;
+            }
+            
+            Logger.Log("[RPC_RequestPlayerRelevantInfo] RPC sent to " + Player.m_localPlayer.GetPlayerName() + " from " + playerSender.m_name);
             RPC_PlayerRelevantInfo playerRelevantInfo = new RPC_PlayerRelevantInfo
             {
                 playerName = localPlayer.GetPlayerName(),
