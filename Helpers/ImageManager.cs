@@ -90,24 +90,24 @@ namespace PvPBiomeDominions.Helpers
         {
             try
             {
-                // Leer los datos de la imagen
+                // Read image data
                 byte[] imageData = ReadEmbeddedFileBytes(embeddedPath);
                 if (imageData == null)
                     Logger.Log("imageData is null");
 
-                // Crear textura
-                Texture2D texture = new Texture2D(2, 2); // El tamaño inicial no importa; será ajustado.
+                // Create texture
+                Texture2D texture = new Texture2D(2, 2); // doesn't matter init size. It will be adjusted
                 if (!texture.LoadImage(imageData))
                 {
                     Debug.LogError("Failed to load texture from image data.");
                     return null;
                 }
 
-                // Crear sprite a partir de la textura
+                // Create sprite from texture
                 return Sprite.Create(
                     texture,
                     new Rect(0, 0, texture.width, texture.height),
-                    new Vector2(0.5f, 0.5f) // Punto de pivote
+                    new Vector2(0.5f, 0.5f) // Pivot point
                 );
             }
             catch (System.Exception ex)
