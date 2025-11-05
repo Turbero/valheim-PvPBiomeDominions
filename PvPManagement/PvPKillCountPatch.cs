@@ -5,18 +5,22 @@ using PvPBiomeDominions.PositionManagement;
 
 namespace PvPBiomeDominions.PvPManagement
 {
-    [HarmonyPatch(typeof(Character), "OnDeath")]
-    [HarmonyPriority(Priority.VeryLow)]
+    //FIXME
+    //[HarmonyPatch(typeof(Character), nameof(Character.ApplyDamage))]
     public class PvPKillCountPatch
     {
-        static void Postfix(Character __instance)
+        public static void Postfix(Character __instance, HitData hit)
         {
+            Logger.Log("PvPKillCountPatch Postfix. Type: "+__instance.GetType());
+            if (__instance.IsTamed()) return;
+            if (__instance.GetHealth() > 0f) return;
+
             if (__instance  != null && __instance.GetType() == typeof(Player))
             {
-                Player playerAttacker = Player.m_localPlayer;
+                Logger.Log("Player killed detected.");
                 Player playerKilled = __instance as Player;
                 
-                //TODO Update knownTexts
+                //Update knownTexts
                 var dicKnownTexts = (Dictionary<string, string>)GameManager.GetPrivateValue(Player.m_localPlayer, "m_knownTexts");
                 string prefixKills = GameManager.PREFIX_KILLS;
                 var knownText = prefixKills + playerKilled.GetPlayerName();
@@ -31,6 +35,7 @@ namespace PvPBiomeDominions.PvPManagement
                         dicKnownTexts.Remove(knownText);
                         dicKnownTexts.Add(knownText, ""+(valueInt+1));
                         finalCount = valueInt + 1;
+                        Logger.Log("New key value: "+finalCount);
                     }
                     else
                     {
@@ -46,8 +51,9 @@ namespace PvPBiomeDominions.PvPManagement
                     Logger.Log("UpdatePlayerRelevantInfo - Add new knownText: "+knownText+" with value=1");
                 }
                 
-                //TODO Refresh UI immediately if possible
-                MinimapUpdatePatch.panel.UpdatePlayerKilledCount(playerKilled.GetPlayerName(), finalCount);
+                //Refresh UI immediately if possible
+                if (MinimapUpdatePatch.panel != null)
+                    MinimapUpdatePatch.panel.UpdatePlayerKilledCount(playerKilled.GetPlayerName(), finalCount);
             }
         }
     }

@@ -249,7 +249,8 @@ namespace PvPBiomeDominions.PositionManagement.UI
             //Killed value in m_knownTexts
             var killsIconGO = new GameObject("Player_KillsIcon", typeof(RectTransform), typeof(Image));
             killsIconGO.transform.SetParent(entry.transform, false);
-            killsIconGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
+            //killsIconGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
+            killsIconGO.SetActive(false); //TODO Fix patch for lethal damage to player
             RectTransform killsIconRt = killsIconGO.GetComponent<RectTransform>();
             killsIconRt.sizeDelta = new Vector2(32, 32);
             killsIconRt.anchoredPosition = new Vector2(EpicMMOSystem_API.IsLoaded() ? 100 : 20, 0);
@@ -258,6 +259,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
 
             var killsValueGO = new GameObject("Player_KilledByHostValue", typeof(RectTransform), typeof(TextMeshProUGUI));
             killsValueGO.transform.SetParent(entry.transform, false);
+            killsValueGO.SetActive(false); //TODO Fix patch for lethal damage to player
             RectTransform killedValueGORt = killsValueGO.GetComponent<RectTransform>();
             killedValueGORt.sizeDelta = new Vector2(32, 32);
             killedValueGORt.anchoredPosition = new Vector2(EpicMMOSystem_API.IsLoaded() ? 140 : 60, 0);
