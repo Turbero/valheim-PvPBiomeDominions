@@ -22,7 +22,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
     public class PlayersListPanel
     {
         private static readonly Vector2 ROW_SIZE_DELTA = new(230f, 24f);
-        private static readonly string PREFIX_KILLS = PvPBiomeDominions.GUID + "_Kills_";
+        private static readonly string PREFIX_KILLS = GameManager.PREFIX_KILLS;
         
         public readonly GameObject panelRoot;
         public readonly GameObject content;
@@ -365,11 +365,20 @@ namespace PvPBiomeDominions.PositionManagement.UI
             else
             {
                 playerEntry.killedTimesUI.text = "0";
-                //Add new knownText to player - this should be persisted
                 var newKnownText = PREFIX_KILLS + playerRelevantInfo.playerName;
-                Logger.Log("UpdatePlayerRelevantInfo - Add new knownTexts: "+newKnownText);
+                Logger.Log("UpdatePlayerRelevantInfo - Add new knownText: "+newKnownText+" with value=0");
                 var dicKnownTexts = (Dictionary<string, string>)GameManager.GetPrivateValue(Player.m_localPlayer, "m_knownTexts");
                 dicKnownTexts.Add(newKnownText, "0");
+            }
+        }
+
+        public void UpdatePlayerKilledCount(string playerNameToFind, int newCount)
+        {
+            PlayerEntry cachedPlayer = cachedPlayerEntries.Find(cpe => cpe.name.Equals(playerNameToFind));
+            if (cachedPlayer != null)
+            {
+                Logger.Log($"cachedPlayer {cachedPlayer.name} found. Updating killed count...");
+                cachedPlayer.killedTimesUI.text = newCount.ToString();
             }
         }
     }
