@@ -154,10 +154,21 @@ namespace PvPBiomeDominions.PositionManagement.UI
             foreach (var go in playerEntriesObjects)
                 Object.Destroy(go);
             playerEntriesObjects.Clear();
-            
+
             if (createNewCache)
                 cachedPlayerEntries.Clear();
-            
+            else
+            {
+                //Remove already disconnected players
+                List<PlayerEntry> cachedPlayerEntriesToRemove = new List<PlayerEntry>();
+                foreach (var cachedPlayerEntry in cachedPlayerEntries)
+                    if (!players.Exists(p => p.m_name.Equals(cachedPlayerEntry.name)))
+                        cachedPlayerEntriesToRemove.Add(cachedPlayerEntry);
+
+                foreach (var cachedPlayerEntryToRemove in cachedPlayerEntriesToRemove)
+                    cachedPlayerEntries.Remove(cachedPlayerEntryToRemove);
+            }
+
             //Group info 
             List<PlayerReference> groupPlayers = GameManager.GetGroupPlayers();
 
@@ -254,7 +265,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             RectTransform killRt = levelGO.GetComponent<RectTransform>();
             killRt.anchoredPosition = new Vector2(105, 0);
             var levelText = GetTextEntryComponent(levelGO, "Level");
-            levelText.text = "0"; //init value
+            levelText.text = "LVL: ???"; //init value
             
             playerEntriesObjects.Add(entry);
 
