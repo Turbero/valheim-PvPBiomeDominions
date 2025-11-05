@@ -77,7 +77,7 @@ namespace PvPBiomeDominions.PositionManagement
                 panel = new PlayersListPanel(__instance);
                 created = true;
                 
-                if (!canUpdate(__instance))
+                if (!IsBigMapOpened(__instance))
                     return;
                 panel.RefreshContent(ZNet.instance.GetPlayerList().OrderBy(p => p.m_name).ToList(), true);
                 
@@ -85,7 +85,7 @@ namespace PvPBiomeDominions.PositionManagement
             }
 
             // If map not opened, we don't refresh
-            if (!canUpdate(__instance))
+            if (!IsBigMapOpened(__instance))
                 return;
 
             // Only refresh when more than X seconds has passed from last time
@@ -96,7 +96,7 @@ namespace PvPBiomeDominions.PositionManagement
             }
         }
 
-        private static bool canUpdate(Minimap __instance)
+        private static bool IsBigMapOpened(Minimap __instance)
         {
             return __instance.m_largeRoot != null && __instance.m_largeRoot.activeSelf &&
                    panel != null && panel.panelRoot != null && panel.panelRoot.activeSelf;
