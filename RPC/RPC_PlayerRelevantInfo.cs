@@ -1,6 +1,6 @@
-namespace PvPBiomeDominions.Helpers
+namespace PvPBiomeDominions.RPC
 {
-    public class EpicMMOSystem_Info
+    public class RPC_PlayerRelevantInfo
     {
         public string playerName;
         public int level;
@@ -15,9 +15,9 @@ namespace PvPBiomeDominions.Helpers
             return pkg;
         }
 
-        public static EpicMMOSystem_Info FromPackage(ZPackage pkg)
+        public static RPC_PlayerRelevantInfo FromPackage(ZPackage pkg)
         {
-            EpicMMOSystem_Info info = new EpicMMOSystem_Info
+            RPC_PlayerRelevantInfo info = new RPC_PlayerRelevantInfo
             {
                 playerName = pkg.ReadString(),
                 level = pkg.ReadInt(),

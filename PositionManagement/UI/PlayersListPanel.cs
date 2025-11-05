@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Groups;
 using PvPBiomeDominions.Helpers;
+using PvPBiomeDominions.RPC;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -171,7 +172,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
 
             // ----- SEND RPC MESSAGE TO EVERYONE TO REQUEST INFO AND FILL THE FIELDS WITH UPDATED VALUES ----- //
             Logger.Log("Sending request to everyone");
-            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, "RPC_RequestEpicMMOInfo");
+            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, "RPC_RequestPlayerRelevantInfo");
         }
 
         private void AddTitleHeaderToScrollList(int playersCount)
@@ -314,7 +315,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 isPvP = false //default
             });
             //Request the info with a message and update in response
-            ZRoutedRpc.instance.InvokeRoutedRPC(info.m_characterID.UserID, "RPC_RequestEpicMMOInfo");
+            ZRoutedRpc.instance.InvokeRoutedRPC(info.m_characterID.UserID, "RPC_RequestPlayerRelevantInfo");
         }
 
         private TextMeshProUGUI GetTextEntryComponent(GameObject parent, string name)
@@ -329,44 +330,44 @@ namespace PvPBiomeDominions.PositionManagement.UI
             return text;
         }
 
-        public void UpdateEpicInfo(EpicMMOSystem_Info epicInfo)
+        public void UpdatePlayerRelevantInfo(RPC_PlayerRelevantInfo playerRelevantInfo)
         {
-            Logger.Log($"[UpdateEpicInfo] playerEntry found: name {epicInfo.playerName}, level {epicInfo.level}, isPvP {epicInfo.isPvP}");
+            Logger.Log($"[UpdatePlayerRelevantInfo] playerEntry found: name {playerRelevantInfo.playerName}, level {playerRelevantInfo.level}, isPvP {playerRelevantInfo.isPvP}");
             
             //It has to exist at this point
-            PlayerEntry playerEntry = cachedPlayerEntries.Find(p => p.name.Equals(epicInfo.playerName));
+            PlayerEntry playerEntry = cachedPlayerEntries.Find(p => p.name.Equals(playerRelevantInfo.playerName));
 
             //Icon (UI)
-            if (Groups.API.GroupPlayers().FindIndex(p => p.name.Equals(epicInfo.playerName)) >= 0)
+            if (Groups.API.GroupPlayers().FindIndex(p => p.name.Equals(playerRelevantInfo.playerName)) >= 0)
             {
-                Logger.Log("[UpdateEpicInfo] isInGroup");
+                Logger.Log("[UpdatePlayerRelevantInfo] isInGroup");
                 playerEntry.iconPlayer.sprite = ImageManager.spriteGroupIconImage;
             }
             else
-                playerEntry.iconPlayer.sprite = epicInfo.isPvP 
+                playerEntry.iconPlayer.sprite = playerRelevantInfo.isPvP 
                     ? ImageManager.spriteIconVanillaImage
                     : ImageManager.spriteBlueIconImage;
 
             //isPvP
-            playerEntry.isPvP = epicInfo.isPvP;
+            playerEntry.isPvP = playerRelevantInfo.isPvP;
             
             //Level
-            playerEntry.levelUI.text = "LVL: " + epicInfo.level;
+            playerEntry.levelUI.text = "LVL: " + playerRelevantInfo.level;
             //Level (UI)
-            playerEntry.level = epicInfo.level;
+            playerEntry.level = playerRelevantInfo.level;
             
             //Killed number (UI)
             var knownTexts = Player.m_localPlayer.GetKnownTexts();
-            bool existKilledTimes = knownTexts.Exists(kp => kp.Key.Equals(PREFIX_KILLS + epicInfo.playerName));
-            Logger.Log("UpdateEpicInfo - existKilledTimes: "+existKilledTimes);
+            bool existKilledTimes = knownTexts.Exists(kp => kp.Key.Equals(PREFIX_KILLS + playerRelevantInfo.playerName));
+            Logger.Log("UpdatePlayerRelevantInfo - existKilledTimes: "+existKilledTimes);
             if (existKilledTimes)
-                playerEntry.killedTimesUI.text = knownTexts.Find(kp => kp.Key.Equals(PREFIX_KILLS + epicInfo.playerName)).Value;
+                playerEntry.killedTimesUI.text = knownTexts.Find(kp => kp.Key.Equals(PREFIX_KILLS + playerRelevantInfo.playerName)).Value;
             else
             {
                 playerEntry.killedTimesUI.text = "0";
                 //Add new knownText to player - this should be persisted
-                var newKnownText = PREFIX_KILLS + epicInfo.playerName;
-                Logger.Log("UpdateEpicInfo - Add new knownTexts: "+newKnownText);
+                var newKnownText = PREFIX_KILLS + playerRelevantInfo.playerName;
+                Logger.Log("UpdatePlayerRelevantInfo - Add new knownTexts: "+newKnownText);
                 var dicKnownTexts = (Dictionary<string, string>)GameManager.GetPrivateValue(Player.m_localPlayer, "m_knownTexts");
                 dicKnownTexts.Add(newKnownText, "0");
             }

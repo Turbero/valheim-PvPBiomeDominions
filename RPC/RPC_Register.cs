@@ -1,6 +1,5 @@
 using System;
 using HarmonyLib;
-using PvPBiomeDominions.Helpers;
 using PvPBiomeDominions.PositionManagement.UI;
 using PvPBiomeDominions.PvPManagement;
 
@@ -10,8 +9,8 @@ namespace PvPBiomeDominions.RPC
     public class GameStartPatch {
         private static void Prefix() {
             ZRoutedRpc.instance.Register("RPC_TombStoneAlertPlayer", new Action<long, bool>(TombStoneAlertsPatch.RPC_TombStoneAlertPlayer));
-            ZRoutedRpc.instance.Register("RPC_RequestEpicMMOInfo", RPC_PlayersListPanel.RPC_RequestEpicMMOInfo);
-            ZRoutedRpc.instance.Register("RPC_ResponseEpicMMOInfo", new Action<long, ZPackage>(RPC_PlayersListPanel.RPC_ResponseEpicMMOInfo));
+            ZRoutedRpc.instance.Register("RPC_RequestPlayerRelevantInfo", RPC_PlayersListPanel.RPC_RequestPlayerRelevantInfo);
+            ZRoutedRpc.instance.Register("RPC_ResponsePlayerRelevantInfo", new Action<long, ZPackage>(RPC_PlayersListPanel.RPC_ResponsePlayerRelevantInfo));
         }
     }
 }
