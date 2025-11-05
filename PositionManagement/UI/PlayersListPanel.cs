@@ -169,12 +169,9 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 AddRowToScrollList(info, isInCurrentGroup, createNewCache);
             }
 
-            if (createNewCache)
-            {
-                // ----- SEND RPC MESSAGE TO EVERYONE TO REQUEST INFO AND FILL THE FIELDS ----- //
-                Logger.Log("Sending request to everyone");
-                ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, "RPC_RequestEpicMMOInfo");
-            }
+            // ----- SEND RPC MESSAGE TO EVERYONE TO REQUEST INFO AND FILL THE FIELDS WITH UPDATED VALUES ----- //
+            Logger.Log("Sending request to everyone");
+            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, "RPC_RequestEpicMMOInfo");
         }
 
         private void AddTitleHeaderToScrollList(int playersCount)
@@ -233,32 +230,30 @@ namespace PvPBiomeDominions.PositionManagement.UI
             nameText.text = info.m_name;
             
             //Killed value in m_knownTexts
-            TextMeshProUGUI killedValue = null;
-            if (info.m_name != Player.m_localPlayer.GetPlayerName())
-            {
-                var killsIconGO = new GameObject("Player_KillsIcon", typeof(RectTransform), typeof(Image));
-                killsIconGO.transform.SetParent(entry.transform, false);
-                killsIconGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
-                RectTransform killsIconRt = killsIconGO.GetComponent<RectTransform>();
-                killsIconRt.sizeDelta = new Vector2(32, 32);
-                killsIconRt.anchoredPosition = new Vector2(100, 0);
-                Image killsIcon = killsIconGO.GetComponent<Image>();
-                killsIcon.sprite = killsIconSprite;
+            var killsIconGO = new GameObject("Player_KillsIcon", typeof(RectTransform), typeof(Image));
+            killsIconGO.transform.SetParent(entry.transform, false);
+            killsIconGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
+            RectTransform killsIconRt = killsIconGO.GetComponent<RectTransform>();
+            killsIconRt.sizeDelta = new Vector2(32, 32);
+            killsIconRt.anchoredPosition = new Vector2(EpicMMOSystem_API.IsLoaded() ? 100 : 20, 0);
+            Image killsIcon = killsIconGO.GetComponent<Image>();
+            killsIcon.sprite = killsIconSprite;
 
-                var killsValueGO = new GameObject("Player_KilledByHostValue", typeof(RectTransform), typeof(TextMeshProUGUI));
-                killsValueGO.transform.SetParent(entry.transform, false);
-                RectTransform killedValueGORt = killsValueGO.GetComponent<RectTransform>();
-                killedValueGORt.sizeDelta = new Vector2(32, 32);
-                killedValueGORt.anchoredPosition = new Vector2(140, 0);
-                killedValue = GetTextEntryComponent(killsValueGO, "KilledByHost");
-            }
+            var killsValueGO = new GameObject("Player_KilledByHostValue", typeof(RectTransform), typeof(TextMeshProUGUI));
+            killsValueGO.transform.SetParent(entry.transform, false);
+            RectTransform killedValueGORt = killsValueGO.GetComponent<RectTransform>();
+            killedValueGORt.sizeDelta = new Vector2(32, 32);
+            killedValueGORt.anchoredPosition = new Vector2(EpicMMOSystem_API.IsLoaded() ? 140 : 60, 0);
+            TextMeshProUGUI killedValue = GetTextEntryComponent(killsValueGO, "KilledByHost");
 
             //MMO Level
             var levelGO = new GameObject("Player_Level", typeof(RectTransform), typeof(TextMeshProUGUI));
             levelGO.transform.SetParent(entry.transform, false);
+            levelGO.SetActive(EpicMMOSystem_API.IsLoaded());
             RectTransform killRt = levelGO.GetComponent<RectTransform>();
             killRt.anchoredPosition = new Vector2(105, 0);
             var levelText = GetTextEntryComponent(levelGO, "Level");
+            levelText.text = "0"; //init value
             
             playerEntriesObjects.Add(entry);
 
