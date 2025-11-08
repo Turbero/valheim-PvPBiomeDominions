@@ -1,5 +1,10 @@
 ### CHANGELOG
 
+## 1.2.1
+
+* Group members are now shown at the top of the map players list and then the rest of the connected players in the server
+* Added protection against some exceptions until UI components are loaded
+
 ## 1.2.0
 
 * Added to the map players list:
