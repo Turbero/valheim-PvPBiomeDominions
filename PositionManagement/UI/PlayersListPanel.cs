@@ -356,7 +356,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             PlayerEntry playerEntry = cachedPlayerEntries.Find(p => p.name.Equals(playerRelevantInfo.playerName));
 
             //Icon (UI)
-            if (Groups.API.GroupPlayers().FindIndex(p => p.name.Equals(playerRelevantInfo.playerName)) >= 0)
+            if (playerEntry.iconPlayer != null && Groups.API.GroupPlayers().FindIndex(p => p.name.Equals(playerRelevantInfo.playerName)) >= 0)
             {
                 Logger.Log("[UpdatePlayerRelevantInfo] isInGroup");
                 playerEntry.iconPlayer.sprite = ImageManager.spriteGroupIconImage;
@@ -370,23 +370,30 @@ namespace PvPBiomeDominions.PositionManagement.UI
             playerEntry.isPvP = playerRelevantInfo.isPvP;
             
             //Level
-            playerEntry.levelUI.text = "LVL: " + playerRelevantInfo.GetLevelText();
+            if (playerEntry.levelUI != null)
+                playerEntry.levelUI.text = "LVL: " + playerRelevantInfo.GetLevelText();
             //Level (UI)
             playerEntry.level = playerRelevantInfo.level;
             
             //Killed number (UI)
-            var knownTexts = Player.m_localPlayer.GetKnownTexts();
-            bool existKilledTimes = knownTexts.Exists(kp => kp.Key.Equals(PREFIX_KILLS + playerRelevantInfo.playerName));
-            Logger.Log("UpdatePlayerRelevantInfo - existKilledTimes: "+existKilledTimes);
-            if (existKilledTimes)
-                playerEntry.killedTimesUI.text = knownTexts.Find(kp => kp.Key.Equals(PREFIX_KILLS + playerRelevantInfo.playerName)).Value;
-            else
+            if (playerEntry.killedTimesUI != null)
             {
-                playerEntry.killedTimesUI.text = "0";
-                var newKnownText = PREFIX_KILLS + playerRelevantInfo.playerName;
-                Logger.Log("UpdatePlayerRelevantInfo - Add new knownText: "+newKnownText+" with value=0");
-                var dicKnownTexts = (Dictionary<string, string>)GameManager.GetPrivateValue(Player.m_localPlayer, "m_knownTexts");
-                dicKnownTexts.Add(newKnownText, "0");
+                var knownTexts = Player.m_localPlayer.GetKnownTexts();
+                bool existKilledTimes =
+                    knownTexts.Exists(kp => kp.Key.Equals(PREFIX_KILLS + playerRelevantInfo.playerName));
+                Logger.Log("UpdatePlayerRelevantInfo - existKilledTimes: " + existKilledTimes);
+                if (existKilledTimes)
+                    playerEntry.killedTimesUI.text = knownTexts
+                        .Find(kp => kp.Key.Equals(PREFIX_KILLS + playerRelevantInfo.playerName)).Value;
+                else
+                {
+                    playerEntry.killedTimesUI.text = "0";
+                    var newKnownText = PREFIX_KILLS + playerRelevantInfo.playerName;
+                    Logger.Log("UpdatePlayerRelevantInfo - Add new knownText: " + newKnownText + " with value=0");
+                    var dicKnownTexts =
+                        (Dictionary<string, string>)GameManager.GetPrivateValue(Player.m_localPlayer, "m_knownTexts");
+                    dicKnownTexts.Add(newKnownText, "0");
+                }
             }
         }
 

@@ -15,7 +15,7 @@ namespace PvPBiomeDominions.PvPManagement
     {
         static void Postfix(Minimap __instance)
         {
-            if (!ConfigurationFile.mapPinColoring.Value) return;
+            if (!ConfigurationFile.mapPinColoring.Value || MinimapUpdatePatch.panel == null) return;
                 
             Dictionary<string, ZNet.PlayerInfo> znetPlayerInfos = ZNet.instance.GetPlayerList()
                 .GroupBy(p => p.m_name).ToDictionary(p => p.Key, p => p.First());
