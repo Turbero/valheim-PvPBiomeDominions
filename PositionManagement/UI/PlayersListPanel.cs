@@ -179,11 +179,22 @@ namespace PvPBiomeDominions.PositionManagement.UI
 
             // Connected players list
             AddTitleHeaderToScrollList(players.Count);
+            
+            // Add first people in the group
             foreach (var info in players)
             {
                 string playerName = info.m_name;
                 bool isInCurrentGroup = groupPlayers.FindIndex(pRef => pRef.name.Equals(playerName)) >= 0;
-                AddRowToScrollList(info, isInCurrentGroup, createNewCache);
+                if (isInCurrentGroup)
+                    AddRowToScrollList(info, true, createNewCache);
+            }
+            // Then people not in the group
+            foreach (var info in players)
+            {
+                string playerName = info.m_name;
+                bool isInCurrentGroup = groupPlayers.FindIndex(pRef => pRef.name.Equals(playerName)) >= 0;
+                if (!isInCurrentGroup)
+                    AddRowToScrollList(info, false, createNewCache);
             }
 
             // ----- SEND RPC MESSAGE TO EVERYONE TO REQUEST INFO AND FILL THE FIELDS WITH UPDATED VALUES ----- //
