@@ -10,7 +10,7 @@ namespace PvPBiomeDominions.PvPManagement
         {
             static void Postfix(Container __instance, Humanoid character, bool hold, bool alt, ref bool __result)
             {
-                if (ConfigurationFile.pvpTombstoneLootAlertMessage.Value == string.Empty) return;
+                if (!ConfigurationFile.showMessageWhenLootingYourTombstone.Value || ConfigurationFile.pvpTombstoneLootAlertMessage.Value == string.Empty) return;
 
                 TombStone tomb = __instance.GetComponentInParent<TombStone>();
                 if (tomb == null) return;
