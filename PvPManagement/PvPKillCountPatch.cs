@@ -1,10 +1,19 @@
 using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using PvPBiomeDominions.Helpers;
 using PvPBiomeDominions.PositionManagement;
 
 namespace PvPBiomeDominions.PvPManagement
 {
+    [HarmonyPatch(typeof(Player), nameof(Player.GetKnownTexts))]
+    public class FixCompendium
+    {
+        public static void Postfix(ref List<KeyValuePair<string, string>> __result)
+        {
+            __result = __result.Where(p => !p.Key.StartsWith(PvPBiomeDominions.GUID)).ToList();
+        }
+    }
     //FIXME
     //[HarmonyPatch(typeof(Character), nameof(Character.ApplyDamage))]
     public class PvPKillCountPatch
