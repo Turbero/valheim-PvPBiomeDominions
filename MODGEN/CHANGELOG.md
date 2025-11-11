@@ -1,5 +1,11 @@
 ### CHANGELOG
 
+## 1.2.2
+
+* End of player name replaced by "..." if too long (configurable in .cfg)
+* Added toggle to enable/disable the alerts sent to the tombstone owners
+* Fixed issue in compendium to hide unnecessary custom entries
+
 ## 1.2.1
 
 * Group members are now shown at the top of the map players list and then the rest of the connected players in the server
