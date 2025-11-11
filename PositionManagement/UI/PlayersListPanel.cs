@@ -255,7 +255,9 @@ namespace PvPBiomeDominions.PositionManagement.UI
             RectTransform textRt = nameGO.GetComponent<RectTransform>();
             textRt.anchoredPosition = new Vector2(-30, 0);
             var nameText = GetTextEntryComponent(nameGO, "Name");
-            nameText.text = info.m_name;
+            nameText.text = info.m_name.Length < ConfigurationFile.maxPlayerNamesCharactersInList.Value
+                ? info.m_name
+                : info.m_name.Substring(0, ConfigurationFile.maxPlayerNamesCharactersInList.Value - 3) + "...";
             
             //Killed value in m_knownTexts
             var killsIconGO = new GameObject("Player_KillsIcon", typeof(RectTransform), typeof(Image));

@@ -47,6 +47,9 @@ namespace PvPBiomeDominions
         public static ConfigEntry<Vector2> mapPlayersListPosition;
         public static ConfigEntry<Vector2> mapPlayersListSize;
         public static ConfigEntry<bool> mapPinColoring;
+        public static ConfigEntry<int> maxPlayerNamesCharactersInList;
+        public static ConfigEntry<bool> showMessageWhenLootingYourTombstone;
+        
 
         public static ConfigFile configFile;
         private static readonly string ConfigFileName = PvPBiomeDominions.GUID + ".cfg";
@@ -155,7 +158,9 @@ namespace PvPBiomeDominions
                 mapPlayersListPosition = config("1 - General", "Map Players List Position", new Vector2(-602, 100), "Left corner position for the map players list", false);
                 mapPlayersListSize = config("1 - General", "Map Players List Size", new Vector2(350, 620), "Left corner position for the map players list", false);
                 mapPinColoring = config("1 - General", "Map Pins PvP Coloring", true, "Enable/disable the pins coloring in the player maps according to their pvp status", false);
-                
+                maxPlayerNamesCharactersInList = config("1 - General", "Max Player Names Characters In List", 15, "Limits the player name shown in the map players list and replace by '...' when too long to avoid overlap with other elements", false);
+        		showMessageWhenLootingYourTombstone = config("1 - General", "Show Message When Looting Your Tombstone", true, "Enable/disable showing alert in your screen when your tombstone is being looted.");
+
                 pvpAdminExempt = config("2 - PvP Settings", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the pvp biomes rules."));
                 pvpRuleInWards = config("2 - PvP Settings", "PvP Rule In Wards (override biome)", PvPWardRule.FollowBiomeRule, new ConfigDescription("Set up the pvp rule inside wards, overriding biome rules if it's needed. Possible values: Pvp,Pve,PlayerChoice,FollowBiomeRule"));
                 pvpRuleInMeadows = config("2 - PvP Settings", "Biome 1 - Meadows Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Meadows. Possible values: Pvp,Pve,PlayerChoice."));
