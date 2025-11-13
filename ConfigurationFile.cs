@@ -2,7 +2,9 @@
 using BepInEx;
 using System;
 using System.IO;
+using PvPBiomeDominions.PositionManagement;
 using ServerSync;
+using TMPro;
 using UnityEngine;
 
 namespace PvPBiomeDominions
@@ -155,10 +157,10 @@ namespace PvPBiomeDominions
                 _ = ConfigSync.AddLockingConfigEntry(_serverConfigLocked);
 
                 debug = config("1 - General", "DebugMode", false, "Enabling/Disabling the debugging in the console (default = false)", false);
-                mapPlayersListPosition = config("1 - General", "Map Players List Position", new Vector2(-602, 100), "Left corner position for the map players list", false);
-                mapPlayersListSize = config("1 - General", "Map Players List Size", new Vector2(350, 620), "Left corner position for the map players list", false);
+                mapPlayersListPosition = config("1 - General", "Map Players List Position", new Vector2(-602, 100), "Left corner position for the map players list (default: x=-602, y=100)", false);
+                mapPlayersListSize = config("1 - General", "Map Players List Size", new Vector2(350, 620), "Left corner position for the map players list (default: x=350, y=620)", false);
                 mapPinColoring = config("1 - General", "Map Pins PvP Coloring", true, "Enable/disable the pins coloring in the player maps according to their pvp status", false);
-                maxPlayerNamesCharactersInList = config("1 - General", "Max Player Names Characters In List", 15, "Limits the player name shown in the map players list and replace by '...' when too long to avoid overlap with other elements", false);
+                maxPlayerNamesCharactersInList = config("1 - General", "Max Player Names Number of Characters In List", 15, "Limits the player name shown in the map players list and replace by '...' when too long to avoid overlap with other elements", false);
         		showMessageWhenLootingYourTombstone = config("1 - General", "Show Message When Looting Your Tombstone", true, "Enable/disable showing alert in your screen when your tombstone is being looted.");
 
                 pvpAdminExempt = config("2 - PvP Settings", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the pvp biomes rules."));
@@ -226,7 +228,13 @@ namespace PvPBiomeDominions
 
         private static void SettingsChanged(object sender, EventArgs e)
         {
-            
+            // Immediate Refresh elements
+            if (MinimapUpdatePatch.panel != null)
+            {
+                MinimapUpdatePatch.panel.showHidePanelButton.GetComponentInChildren<TextMeshProUGUI>().text = playersListPanelButtonText.Value;
+                MinimapUpdatePatch.panel.panelRT.anchoredPosition = mapPlayersListPosition.Value;
+                MinimapUpdatePatch.panel.panelRT.sizeDelta = mapPlayersListSize.Value;
+            }
         }
 
         private static ConfigEntry<T> config<T>(string group, string name, T value, string description,
