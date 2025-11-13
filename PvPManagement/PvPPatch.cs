@@ -16,6 +16,7 @@ namespace PvPBiomeDominions.PvPManagement
             if (Game.instance && !Player.m_localPlayer) return;
             if (!InventoryGui.instance) return;
             
+            //Admins exempt rule
             if (ConfigurationFile.pvpAdminExempt.Value == ConfigurationFile.Toggle.On && ConfigurationFile.ConfigSync.IsAdmin)
                 return;
             
