@@ -51,8 +51,9 @@ namespace PvPBiomeDominions.PositionManagement
             {
                 if (wardPositionRule == ConfigurationFile.PositionSharingWardRule.PlayerChoice)
                     return;
-                
-                ZNet.instance.SetPublicReferencePosition(wardPositionRule == ConfigurationFile.PositionSharingWardRule.ShowPlayer);
+
+                GameManager.SetPrivateValue(ZNet.instance, "m_publicReferencePosition",
+                    wardPositionRule == ConfigurationFile.PositionSharingWardRule.ShowPlayer);
                 return;
             }
 
@@ -61,7 +62,8 @@ namespace PvPBiomeDominions.PositionManagement
             if (biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.PlayerChoice)
                 return;
             
-            ZNet.instance.SetPublicReferencePosition(biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.ShowPlayer);
+            GameManager.SetPrivateValue(ZNet.instance, "m_publicReferencePosition",
+                biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.ShowPlayer);
             
             if (ZNet.instance.IsReferencePositionPublic())
                 ImageManager.UpdateMapSelectorIcon();

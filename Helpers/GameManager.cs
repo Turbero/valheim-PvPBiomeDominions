@@ -19,6 +19,11 @@ namespace PvPBiomeDominions.Helpers
         {
             return obj.GetType().GetField(name, bindingAttr)?.GetValue(obj);
         }
+        
+        public static void SetPrivateValue(object obj, string name, object value, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.NonPublic)
+        {
+            obj.GetType().GetField(name, bindingAttr)?.SetValue(obj, value);
+        }
 
         public static bool isInfoPVP(ZNet.PlayerInfo info)
         {
