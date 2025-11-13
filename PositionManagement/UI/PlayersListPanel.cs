@@ -30,11 +30,12 @@ namespace PvPBiomeDominions.PositionManagement.UI
         private static readonly string PREFIX_KILLS = GameManager.PREFIX_KILLS;
         
         public readonly GameObject panelRoot;
+        public readonly RectTransform panelRT;
         public readonly GameObject content;
 
         private readonly Sprite killsIconSprite;
 
-        private Button showHidePanelButton;
+        public Button showHidePanelButton;
 
         private readonly List<GameObject> playerEntriesObjects = new(); //TODO To be removed
         public readonly List<PlayerEntry> cachedPlayerEntries = new();
@@ -50,7 +51,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             panelRoot = new GameObject("PlayersListPanel", typeof(RectTransform), typeof(Image));
             panelRoot.transform.SetParent(minimap.transform.Find("large"), false);
 
-            RectTransform panelRT = panelRoot.GetComponent<RectTransform>();
+            panelRT = panelRoot.GetComponent<RectTransform>();
             panelRT.anchorMin = new Vector2(0.5f, 0.5f);
             panelRT.anchorMax = new Vector2(0.5f, 0.5f);
             panelRT.pivot = new Vector2(0.5f, 0.5f);
@@ -152,9 +153,6 @@ namespace PvPBiomeDominions.PositionManagement.UI
         
         public void RefreshContent(List<ZNet.PlayerInfo> players, bool createNewCache)
         {
-            // Refresh button name
-            showHidePanelButton.GetComponentInChildren<TextMeshProUGUI>().text = ConfigurationFile.playersListPanelButtonText.Value;
-            
             // Clear previous entries
             foreach (var go in playerEntriesObjects)
                 Object.Destroy(go);
