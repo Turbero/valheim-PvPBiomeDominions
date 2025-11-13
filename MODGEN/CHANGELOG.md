@@ -1,5 +1,11 @@
 ### CHANGELOG
 
+## 1.2.3
+
+* Map players list position and size configuration changes apply immediately now
+* Fixed issue showing the map players list if admins are exempt of position sharing
+* Attempt to fix position sharing issue when player spawns into a world
+
 ## 1.2.2
 
 * End of player name replaced by "..." if too long (configurable in .cfg)
