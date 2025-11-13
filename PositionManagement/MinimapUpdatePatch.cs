@@ -18,10 +18,25 @@ namespace PvPBiomeDominions.PositionManagement
         public static void Postfix(Minimap __instance)
         {
             if (!__instance) return;
+            
+            if (Player.m_localPlayer == null) return;
+
+            // ---------- MAP PLAYERS LIST ---------- //
+            HandlePlayersListPanel(__instance);
+
+            // Refresh config for sync issues
+            if (__instance.m_largeRoot != null && 
+                __instance.m_largeRoot.activeSelf && 
+                Time.time - lastUpdateTime >= ConfigurationFile.pvpMinimapPlayersListRefresh.Value)
+            {
+                lastUpdateTime = Time.time;
+                ConfigurationFile.configFile.Reload();
+            }
+            
+            // ---------- POSITION SHARING RULE ---------- //
+            // Admins exempt rule
             if (ConfigurationFile.positionAdminExempt.Value == ConfigurationFile.Toggle.On && ConfigurationFile.ConfigSync.IsAdmin)
                 return;
-
-            if (Player.m_localPlayer == null) return;
             
             // First ward rule
             bool isInsideWard = WardIsLovePlugin.IsInsideWard();
@@ -54,15 +69,6 @@ namespace PvPBiomeDominions.PositionManagement
             
             if (__instance.m_publicPosition.isOn)
                 ImageManager.UpdateMapSelectorIcon();
-
-            HandlePlayersListPanel(__instance);
-
-            // Refresh config for sync issues
-            if (__instance.m_largeRoot.activeSelf && Time.time - lastUpdateTime >= ConfigurationFile.pvpMinimapPlayersListRefresh.Value)
-            {
-                lastUpdateTime = Time.time;
-                ConfigurationFile.configFile.Reload();
-            }
         }
 
         private static void HandlePlayersListPanel(Minimap __instance)
