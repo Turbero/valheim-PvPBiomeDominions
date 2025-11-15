@@ -76,6 +76,16 @@ namespace PvPBiomeDominions
         private static ConfigEntry<PvPBiomeRule> pvpRuleInAshlands;
         private static ConfigEntry<PvPBiomeRule> pvpRuleInDeepNorth;
         private static ConfigEntry<PvPBiomeRule> pvpRuleInOcean;
+        public static ConfigEntry<Toggle> wardCreationInMeadows;
+        public static ConfigEntry<Toggle> wardCreationInBlackForest;
+        public static ConfigEntry<Toggle> wardCreationInSwamp;
+        public static ConfigEntry<Toggle> wardCreationInMountain;
+        public static ConfigEntry<Toggle> wardCreationInPlains;
+        public static ConfigEntry<Toggle> wardCreationInMistlands;
+        public static ConfigEntry<Toggle> wardCreationInAshlands;
+        public static ConfigEntry<Toggle> wardCreationInDeepNorth;
+        public static ConfigEntry<Toggle> wardCreationInOcean;
+        public static ConfigEntry<string> wardModsPrefabIds;
         public static ConfigEntry<string> pvpTombstoneLootAlertMessage;
         public static ConfigEntry<string> pvpTombstoneDestroyAlertMessage;
         public static ConfigEntry<int> pvpMinimapPlayersListRefresh;
@@ -100,6 +110,7 @@ namespace PvPBiomeDominions
         //Translations
         public static ConfigEntry<string> playersListPanelButtonText;
         public static ConfigEntry<string> playersMapListTitle;
+        public static ConfigEntry<string> wardCreationNotAllowed;
 
         public static PvPBiomeRule getCurrentBiomeRulePvPRule()
         {
@@ -146,6 +157,27 @@ namespace PvPBiomeDominions
             }
 
             return PositionSharingBiomeRule.PlayerChoice;
+        }
+        
+        public static bool IsWardCreationAllowedInCurrentBiomeRule()
+        {
+            if (!EnvMan.instance) return true;
+            
+            Heightmap.Biome biome = EnvMan.instance.GetCurrentBiome();
+            switch (biome)
+            {
+                case Heightmap.Biome.Meadows: return wardCreationInMeadows.Value == Toggle.On;
+                case Heightmap.Biome.BlackForest: return wardCreationInBlackForest.Value == Toggle.On;
+                case Heightmap.Biome.Swamp: return wardCreationInSwamp.Value == Toggle.On;
+                case Heightmap.Biome.Mountain: return wardCreationInMountain.Value == Toggle.On;
+                case Heightmap.Biome.Plains: return wardCreationInPlains.Value == Toggle.On;
+                case Heightmap.Biome.Mistlands: return wardCreationInMistlands.Value == Toggle.On;
+                case Heightmap.Biome.AshLands: return wardCreationInAshlands.Value == Toggle.On;
+                case Heightmap.Biome.DeepNorth: return wardCreationInDeepNorth.Value == Toggle.On;
+                case Heightmap.Biome.Ocean: return wardCreationInOcean.Value == Toggle.On;
+            }
+
+            return true;
         }
 
         internal static void LoadConfig(BaseUnityPlugin plugin)
@@ -195,6 +227,18 @@ namespace PvPBiomeDominions
                 
                 playersListPanelButtonText = config("5 - Translations", "Players List Panel Button Text", "Show/Hide list", new ConfigDescription("Button name used to show/hide the players panel list in the minimap."));
                 playersMapListTitle = config("5 - Translations", "Players Map List Title", "Players", new ConfigDescription("Title of the map players list with connected count."));
+                wardCreationNotAllowed = config("5 - Translations", "Ward Creation Not Allowed", "Ward Creation is not allowed in this biome", new ConfigDescription("Title of the map players list with connected count."));
+
+                wardCreationInMeadows = config("6 - Ward Creation", "Ward Creation 1 - Meadows Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Meadows."));
+                wardCreationInBlackForest = config("6 - Ward Creation", "Ward Creation 2 - Black Forest Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Black Forest."));
+                wardCreationInSwamp = config("6 - Ward Creation", "Ward Creation 3 - Swamp Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Swamp."));
+                wardCreationInMountain = config("6 - Ward Creation", "Ward Creation 4 - Mountain Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Mountains."));
+                wardCreationInPlains = config("6 - Ward Creation", "Ward Creation 5 - Plains Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Plains."));
+                wardCreationInMistlands = config("6 - Ward Creation", "Ward Creation 6 - Mistlands Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Mistlands."));
+                wardCreationInAshlands = config("6 - Ward Creation", "Ward Creation 7 - Ashlands Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Ashlands."));
+                wardCreationInDeepNorth = config("6 - Ward Creation", "Ward Creation 8 - Deep North Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Deep North."));
+                wardCreationInOcean = config("6 - Ward Creation", "Ward Creation 9 - Ocean Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Ocean."));
+                wardModsPrefabIds = config("6 - Ward Creation", "Ward Creation Mods PrefabIds", "Thorward", new ConfigDescription("Comma-separated list of extra ward pieces from other mods to include in the ward creation check (default = Thorward)."));
 
                 SetupWatcher();
             }
