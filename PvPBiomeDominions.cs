@@ -5,11 +5,12 @@ namespace PvPBiomeDominions
 {
     [BepInPlugin(GUID, NAME, VERSION)]
     [BepInDependency("org.bepinex.plugins.groups", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("Azumatt.WardIsLove", BepInDependency.DependencyFlags.SoftDependency)]
     public class PvPBiomeDominions : BaseUnityPlugin
     {
         public const string GUID = "Turbero.PvPBiomeDominions";
         public const string NAME = "PvP Biome Dominions";
-        public const string VERSION = "1.2.3";
+        public const string VERSION = "1.3.0";
 
         private readonly Harmony harmony = new Harmony(GUID);
 

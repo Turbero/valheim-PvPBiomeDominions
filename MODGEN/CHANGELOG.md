@@ -1,5 +1,10 @@
 ### CHANGELOG
 
+## 1.3.0
+
+* Added new rules in config for wards placement in each biome to decide if it can be placed by the player (default = true)
+* Included an extra option to consider different wards from other mod pieces by adding their prefabIds (initiated with value for WoL mod)
+
 ## 1.2.3
 
 * Map players list position and size configuration changes apply immediately now
