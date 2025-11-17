@@ -394,17 +394,9 @@ namespace PvPBiomeDominions.PositionManagement.UI
                     knownTexts.Exists(kp => kp.Key.Equals(PREFIX_KILLS + playerRelevantInfo.playerName));
                 Logger.Log("UpdatePlayerRelevantInfo - existKilledTimes: " + existKilledTimes);
                 if (existKilledTimes)
-                    playerEntry.killedTimesUI.text = knownTexts
-                        .Find(kp => kp.Key.Equals(PREFIX_KILLS + playerRelevantInfo.playerName)).Value;
+                    playerEntry.killedTimesUI.text = knownTexts.Find(kp => kp.Key.Equals(PREFIX_KILLS + playerRelevantInfo.playerName)).Value;
                 else
-                {
                     playerEntry.killedTimesUI.text = "0";
-                    var newKnownText = PREFIX_KILLS + playerRelevantInfo.playerName;
-                    Logger.Log("UpdatePlayerRelevantInfo - Add new knownText: " + newKnownText + " with value=0");
-                    var dicKnownTexts =
-                        (Dictionary<string, string>)GameManager.GetPrivateValue(Player.m_localPlayer, "m_knownTexts");
-                    dicKnownTexts.Add(newKnownText, "0");
-                }
             }
         }
 
