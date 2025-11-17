@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.3.1
+
+* Fixed issue when opening map with players of the same name in the same world (there was a disabled feature for future interfering)
+
 ## 1.3.0
 
 * Added new rules in config for wards placement in each biome to decide if it can be placed by the player (default = true)
