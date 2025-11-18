@@ -8,7 +8,7 @@ namespace PvPBiomeDominions.Helpers
 {
     public class ImageManager
     {
-        public static Sprite spriteIconVanillaImage;
+        private static Sprite spriteIconVanillaImage;
         public static Sprite spriteBlueIconImage;
         public static Sprite spriteGroupIconImage;
         
@@ -19,12 +19,17 @@ namespace PvPBiomeDominions.Helpers
         {
             public static void Postfix(Player __instance)
             {
-                if (spriteIconVanillaImage == null)
-                {
-                    Logger.Log("Initializing sprites...");
-                    InitSprites();
-                }
+                Logger.Log("Initializing sprites...");
+                InitSprites();
             }
+        }
+
+        public static Sprite getSpriteIconVanillaImage()
+        {
+            if (spriteIconVanillaImage == null)
+                InitVanillaSprite();
+                
+            return spriteIconVanillaImage;
         }
 
         public static void UpdateMapSelectorIcon()
@@ -46,11 +51,7 @@ namespace PvPBiomeDominions.Helpers
 
         private static void InitSprites()
         {
-            if (spriteIconVanillaImage != null) return;
-            var sprite = Minimap.instance.transform.Find(minimapLargeCheckMarkPath)?.GetComponent<Image>().sprite;
-            if (sprite == null) return;
-            spriteIconVanillaImage = sprite;
-            Logger.Log("Vanilla sprite stored.");
+            InitVanillaSprite();
             
             spriteBlueIconImage = LoadSpriteFromEmbedded("icons.minimap-valheim-icon-base.png");
             Color[] bluePixels = loadTexture("icons.minimap-valheim-icon-base.png").GetPixels();
@@ -63,7 +64,7 @@ namespace PvPBiomeDominions.Helpers
             }
             spriteBlueIconImage.texture.SetPixels(bluePixels);
             spriteBlueIconImage.texture.Apply();
-            Logger.Log("Blue sprite loaded.");
+            Logger.LogInfo("Blue(PvE) sprite loaded.");
             
             spriteGroupIconImage = LoadSpriteFromEmbedded("icons.minimap-valheim-icon-base.png");
             Color[] groupPixels = loadTexture("icons.minimap-valheim-icon-base.png").GetPixels();
@@ -76,7 +77,18 @@ namespace PvPBiomeDominions.Helpers
             }
             spriteGroupIconImage.texture.SetPixels(groupPixels);
             spriteGroupIconImage.texture.Apply();
-            Logger.Log("Group sprite loaded.");
+            Logger.LogInfo("Green(Group) sprite loaded.");
+        }
+
+        private static void InitVanillaSprite()
+        {
+            var sprite = Minimap.instance.transform.Find(minimapLargeCheckMarkPath)?.GetComponent<Image>().sprite;
+            if (sprite != null)
+            {
+                spriteIconVanillaImage = sprite;
+                Logger.LogInfo("Vanilla(PvP) sprite stored.");
+            } else
+                Logger.LogWarning("Vanilla sprite not found.");
         }
         
         private static Texture2D loadTexture(string name)

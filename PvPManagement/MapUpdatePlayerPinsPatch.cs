@@ -46,7 +46,7 @@ namespace PvPBiomeDominions.PvPManagement
                 // Find PvP status (first cache then playerInfo) and update sprite
                 PlayerEntry playerEntry = MinimapUpdatePatch.panel.cachedPlayerEntries.Find(cpe => cpe.name.Equals(pin.m_name));
                 bool isPVP = playerEntry != null ? playerEntry.isPvP : GameManager.isInfoPVP(znetPlayerInfos.GetValueSafe(pin.m_name));
-                img.sprite = isPVP ? ImageManager.spriteIconVanillaImage : ImageManager.spriteBlueIconImage;
+                img.sprite = isPVP ? ImageManager.getSpriteIconVanillaImage() : ImageManager.spriteBlueIconImage;
             }
         }
     }

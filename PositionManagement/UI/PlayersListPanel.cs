@@ -246,7 +246,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             imageRt.sizeDelta = new Vector2(32, 32);
             imageRt.anchoredPosition = new Vector2(-150, 0);
             Image playerIcon = iconGO.GetComponent<Image>();
-            playerIcon.sprite = ImageManager.spriteIconVanillaImage; //by default
+            playerIcon.sprite = ImageManager.getSpriteIconVanillaImage(); //by default
             
             var nameGO = new GameObject("Player_Name", typeof(RectTransform), typeof(TextMeshProUGUI));
             nameGO.transform.SetParent(entry.transform, false);
@@ -294,7 +294,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 if (isInCurrentGroup)
                     playerIcon.sprite = ImageManager.spriteGroupIconImage;
                 else
-                    playerIcon.sprite = Player.m_localPlayer.IsPVPEnabled() ? ImageManager.spriteIconVanillaImage : ImageManager.spriteBlueIconImage;
+                    playerIcon.sprite = Player.m_localPlayer.IsPVPEnabled() ? ImageManager.getSpriteIconVanillaImage() : ImageManager.spriteBlueIconImage;
                 
                 // 2) Level
                 levelText.text = $"LVL: {EpicMMOSystem_API.GetLevel()}";
@@ -314,7 +314,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
                     if (isInCurrentGroup)
                         playerIcon.sprite = ImageManager.spriteGroupIconImage;
                     else
-                        playerIcon.sprite = playerEntry.isPvP ? ImageManager.spriteIconVanillaImage : ImageManager.spriteBlueIconImage;
+                        playerIcon.sprite = playerEntry.isPvP ? ImageManager.getSpriteIconVanillaImage() : ImageManager.spriteBlueIconImage;
 
                     // 2) Level
                     levelText.text = "LVL: " + playerEntry.GetLevelText();
@@ -374,7 +374,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             }
             else
                 playerEntry.iconPlayer.sprite = playerRelevantInfo.isPvP 
-                    ? ImageManager.spriteIconVanillaImage
+                    ? ImageManager.getSpriteIconVanillaImage()
                     : ImageManager.spriteBlueIconImage;
 
             //isPvP
