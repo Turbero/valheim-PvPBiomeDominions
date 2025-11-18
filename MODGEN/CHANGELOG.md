@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.3.2
+
+* Fix for white squares in icons not showing sometimes the corresponding sprite in map window when not loaded correctly
+
 ## 1.3.1
 
 * Fixed issue when opening map with players of the same name in the same world (there was a disabled feature for future interfering)
