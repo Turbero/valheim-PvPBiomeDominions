@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 using Groups;
+using HarmonyLib;
 using PvPBiomeDominions.Helpers;
 using PvPBiomeDominions.RPC;
 using TMPro;
@@ -14,7 +14,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
         public string name;
         public int level;
         public TextMeshProUGUI levelUI;
-        public TextMeshProUGUI killedTimesUI;
+        public TextMeshProUGUI killsTimesUI;
         public Image iconPlayer;
         public bool isPvP;
 
@@ -27,7 +27,6 @@ namespace PvPBiomeDominions.PositionManagement.UI
     public class PlayersListPanel
     {
         private static readonly Vector2 ROW_SIZE_DELTA = new(230f, 24f);
-        private static readonly string PREFIX_KILLS = GameManager.PREFIX_KILLS;
         
         public readonly GameObject panelRoot;
         public readonly RectTransform panelRT;
@@ -262,24 +261,23 @@ namespace PvPBiomeDominions.PositionManagement.UI
             var levelText = GetTextEntryComponent(levelGO, "Level");
             levelText.text = "LVL: ???"; //init value
             
-            //Killed value in m_knownTexts
+            //Kills value in m_knownTexts
             var killsIconGO = new GameObject("Player_KillsIcon", typeof(RectTransform), typeof(Image));
             killsIconGO.transform.SetParent(entry.transform, false);
-            //killsIconGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
-            killsIconGO.SetActive(false); //TODO Fix patch for lethal damage to player
+            killsIconGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
             RectTransform killsIconRt = killsIconGO.GetComponent<RectTransform>();
             killsIconRt.sizeDelta = new Vector2(32, 32);
             killsIconRt.anchoredPosition = new Vector2(EpicMMOSystem_API.IsLoaded() ? 100 : 20, 0);
             Image killsIcon = killsIconGO.GetComponent<Image>();
             killsIcon.sprite = killsIconSprite;
 
-            var killsValueGO = new GameObject("Player_KilledByHostValue", typeof(RectTransform), typeof(TextMeshProUGUI));
+            var killsValueGO = new GameObject("Player_Kills_" + info.m_name, typeof(RectTransform), typeof(TextMeshProUGUI));
             killsValueGO.transform.SetParent(entry.transform, false);
-            //killsValueGO.SetActive(false); //TODO Fix patch for lethal damage to player
-            RectTransform killedValueGORt = killsValueGO.GetComponent<RectTransform>();
-            killedValueGORt.sizeDelta = new Vector2(32, 32);
-            killedValueGORt.anchoredPosition = new Vector2(EpicMMOSystem_API.IsLoaded() ? 140 : 60, 0);
-            TextMeshProUGUI killedValue = GetTextEntryComponent(killsValueGO, "KilledByHost");
+            killsValueGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
+            RectTransform killsValueGORt = killsValueGO.GetComponent<RectTransform>();
+            killsValueGORt.sizeDelta = new Vector2(32, 32);
+            killsValueGORt.anchoredPosition = new Vector2(EpicMMOSystem_API.IsLoaded() ? 140 : 60, 0);
+            TextMeshProUGUI killsValue = GetTextEntryComponent(killsValueGO, "Kills");
 
             playerEntriesObjects.Add(entry);
 
@@ -299,9 +297,16 @@ namespace PvPBiomeDominions.PositionManagement.UI
 
             //Other player
             if (newCache)
-                AddPlayerEntryToCachedPlayers(info, levelText, killedValue, playerIcon);
+                AddPlayerEntryToCachedPlayers(info, levelText, killsValue, playerIcon);
             else 
             {
+                // Kills number
+                var knownTexts = (Dictionary<string, string>)GameManager.GetPrivateValue(Player.m_localPlayer, "m_knownTexts");
+                if (knownTexts.ContainsKey(GameManager.PREFIX_KILLS + info.m_name))
+                    killsValue.text = knownTexts.GetValueSafe(GameManager.PREFIX_KILLS + info.m_name);
+                else
+                    killsValue.text = "0";
+                
                 // -------- FILL FIELDS WITH CACHE -------- //
                 PlayerEntry playerEntry = cachedPlayerEntries.Find(pe => pe.name == info.m_name);
                 if (playerEntry != null)
@@ -314,28 +319,24 @@ namespace PvPBiomeDominions.PositionManagement.UI
 
                     // 2) Level
                     levelText.text = "LVL: " + playerEntry.GetLevelText();
-
-                    // 3) Killed number
-                    List<KeyValuePair<string, string>> knownTexts = Player.m_localPlayer.GetKnownTexts();
-                    string killsValueToLookUp = knownTexts.FirstOrDefault(kvp => kvp.Key.Equals(PREFIX_KILLS + info.m_name)).Value;
-                    killedValue.text = string.IsNullOrEmpty(killsValueToLookUp) ? "0" : killsValueToLookUp;
                 }
                 else
                 {
                     //New player connected after table creation
-                    AddPlayerEntryToCachedPlayers(info, levelText, killedValue, playerIcon);
+                    AddPlayerEntryToCachedPlayers(info, levelText, killsValue, playerIcon);
                 }
             }
         }
 
-        private void AddPlayerEntryToCachedPlayers(ZNet.PlayerInfo info, TextMeshProUGUI levelText, TextMeshProUGUI killedValue, Image playerIcon)
+        private void AddPlayerEntryToCachedPlayers(ZNet.PlayerInfo info, TextMeshProUGUI levelText, TextMeshProUGUI killsValue, Image playerIcon)
         {
+            Logger.Log("[AddPlayerEntryToCachedPlayers] Is killsValue object null? "+(killsValue == null));
             cachedPlayerEntries.Add(new PlayerEntry
             {
                 name = info.m_name,
                 level = 0, //default
                 levelUI = levelText,
-                killedTimesUI = killedValue,
+                killsTimesUI = killsValue,
                 iconPlayer = playerIcon,
                 isPvP = false //default
             });
@@ -382,30 +383,29 @@ namespace PvPBiomeDominions.PositionManagement.UI
             //Level (UI)
             playerEntry.level = playerRelevantInfo.level;
             
-            //Killed number (UI)
-            if (playerEntry.killedTimesUI != null)
+            //Kills number (UI)
+            if (playerEntry.killsTimesUI != null)
             {
-                var knownTexts = Player.m_localPlayer.GetKnownTexts();
-                bool existKilledTimes =
-                    knownTexts.Exists(kp => kp.Key.Equals(PREFIX_KILLS + playerRelevantInfo.playerName));
-                Logger.Log("UpdatePlayerRelevantInfo - existKilledTimes: " + existKilledTimes);
-                if (existKilledTimes)
-                    playerEntry.killedTimesUI.text = knownTexts.Find(kp => kp.Key.Equals(PREFIX_KILLS + playerRelevantInfo.playerName)).Value;
+                var knownTexts = (Dictionary<string, string>)GameManager.GetPrivateValue(Player.m_localPlayer, "m_knownTexts");
+                bool existKillsTimes = knownTexts.ContainsKey(GameManager.PREFIX_KILLS + playerRelevantInfo.playerName);
+                Logger.Log("UpdatePlayerRelevantInfo - existKillsTimes: " + existKillsTimes);
+                if (existKillsTimes)
+                    playerEntry.killsTimesUI.text = knownTexts[GameManager.PREFIX_KILLS + playerRelevantInfo.playerName];
                 else
-                    playerEntry.killedTimesUI.text = "0";
+                    playerEntry.killsTimesUI.text = "0";
             }
             
             //TODO Minimap icon visibility refresh
             //Minimap.instance.m_
         }
 
-        public void UpdatePlayerKilledCount(string playerNameToFind, int newCount)
+        public void UpdatePlayerKillsCount(string playerNameToFind, int newCount)
         {
             PlayerEntry cachedPlayer = cachedPlayerEntries.Find(cpe => cpe.name.Equals(playerNameToFind));
             if (cachedPlayer != null)
             {
-                Logger.Log($"cachedPlayer {cachedPlayer.name} found. Updating killed count...");
-                cachedPlayer.killedTimesUI.text = newCount.ToString();
+                Logger.Log($"cachedPlayer {cachedPlayer.name} found. Updating kills count...");
+                cachedPlayer.killsTimesUI.text = newCount.ToString();
             }
         }
     }

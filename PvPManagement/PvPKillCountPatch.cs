@@ -14,56 +14,70 @@ namespace PvPBiomeDominions.PvPManagement
             __result = __result.Where(p => !p.Key.StartsWith(PvPBiomeDominions.GUID)).ToList();
         }
     }
-    //FIXME
-    //[HarmonyPatch(typeof(Character), nameof(Character.ApplyDamage))]
+    
+    [HarmonyPatch(typeof(Character), nameof(Character.ApplyDamage))]
     public class PvPKillCountPatch
     {
-        public static void Postfix(Character __instance, HitData hit)
+        [HarmonyPostfix]
+        public static void ApplyReceivedDamageToCharacter(Character __instance, HitData hit)
         {
-            Logger.Log("PvPKillCountPatch Postfix. Type: "+__instance.GetType());
+            Logger.Log("[ApplyReceivedDamageToCharacter] Postfix. Damage received to character type: "+__instance.GetType());
             if (__instance.IsTamed()) return;
             if (__instance.GetHealth() > 0f) return;
+            
+            if (__instance != Player.m_localPlayer) return;
+            Logger.Log("Player killed detected!");
+            Player playerKilled = __instance as Player;
 
-            if (__instance  != null && __instance.GetType() == typeof(Player))
+            Character attacker = hit.GetAttacker();
+            if (attacker.gameObject.name != "Player(Clone)") return;
+            
+            Player attackerPlayer = attacker as Player;
+            Logger.Log($"Player killed by Player {attackerPlayer.GetPlayerName()} detected!");
+            
+            //TODO Test UserId to send to killer
+            Logger.Log($"Trying RPC with {attackerPlayer.GetZDOID().UserID} and {playerKilled.GetPlayerName()}");
+            ZRoutedRpc.instance.InvokeRoutedRPC(attackerPlayer.GetZDOID().UserID, "RPC_AddKillToKiller", playerKilled.GetPlayerName());
+        }
+
+        public static void RPC_AddKillToKiller(long sender, string killedPlayerName)
+        {
+            Logger.Log("[RPC_AddKillToKiller] RPC called.");
+            
+            //Update knownTexts
+            var dicKnownTexts = (Dictionary<string, string>)GameManager.GetPrivateValue(Player.m_localPlayer, "m_knownTexts");
+            string prefixKills = GameManager.PREFIX_KILLS;
+            var knownText = prefixKills + killedPlayerName;
+            int finalCount = 1;
+            if (dicKnownTexts.ContainsKey(knownText))
             {
-                Logger.Log("Player killed detected.");
-                Player playerKilled = __instance as Player;
-                
-                //Update knownTexts
-                var dicKnownTexts = (Dictionary<string, string>)GameManager.GetPrivateValue(Player.m_localPlayer, "m_knownTexts");
-                string prefixKills = GameManager.PREFIX_KILLS;
-                var knownText = prefixKills + playerKilled.GetPlayerName();
-                int finalCount = 1;
-                if (dicKnownTexts.ContainsKey(knownText))
+                string value = dicKnownTexts.GetValueSafe(knownText);
+                bool isInt = int.TryParse(value, out int valueInt);
+                if (isInt)
                 {
-                    string value = dicKnownTexts.GetValueSafe(knownText);
-                    bool isInt = int.TryParse(value, out int valueInt);
-                    if (isInt)
-                    {
-                        //Replace value with +1
-                        dicKnownTexts.Remove(knownText);
-                        dicKnownTexts.Add(knownText, ""+(valueInt+1));
-                        finalCount = valueInt + 1;
-                        Logger.Log("New key value: "+finalCount);
-                    }
-                    else
-                    {
-                        //Clean up ugly value and start over
-                        dicKnownTexts.Remove(knownText);
-                        dicKnownTexts.Add(knownText, "1");
-                        Logger.Log("UpdatePlayerRelevantInfo - Add new knownText: "+knownText+" with value=1");
-                    }
+                    //Replace value with +1
+                    dicKnownTexts.Remove(knownText);
+                    dicKnownTexts.Add(knownText, ""+(valueInt+1));
+                    finalCount = valueInt + 1;
+                    Logger.LogInfo("New key value: "+finalCount);
                 }
                 else
                 {
-                    dicKnownTexts.Add(knownText, "1");
-                    Logger.Log("UpdatePlayerRelevantInfo - Add new knownText: "+knownText+" with value=1");
+                    //Clean up ugly value and start over
+                    dicKnownTexts.Remove(knownText);
+                    dicKnownTexts.Add(knownText, finalCount.ToString());
+                    Logger.Log("[RPC_AddKillToKiller] Add new knownText: "+knownText+" with value=1");
                 }
-                
-                //Refresh UI immediately if possible
-                if (MinimapUpdatePatch.panel != null)
-                    MinimapUpdatePatch.panel.UpdatePlayerKilledCount(playerKilled.GetPlayerName(), finalCount);
             }
+            else
+            {
+                dicKnownTexts.Add(knownText, "1");
+                Logger.Log("[RPC_AddKillToKiller] Add new knownText: "+knownText+" with value=1");
+            }
+                
+            //Refresh UI immediately if possible
+            if (MinimapUpdatePatch.panel != null)
+                MinimapUpdatePatch.panel.UpdatePlayerKillsCount(killedPlayerName, finalCount);
         }
     }
 }
