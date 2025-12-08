@@ -43,10 +43,6 @@ namespace PvPBiomeDominions.PositionManagement.UI
         
         public PlayersListPanel(Minimap minimap)
         {
-            TMP_FontAsset font = TMP_Settings.defaultFontAsset;
-            if (font == null)
-                TMP_Settings.defaultFontAsset = GameManager.getFontAsset("Valheim-AveriaSansLibre");
-
             // === PANEL PRINCIPAL ===
             panelRoot = new GameObject("PlayersListPanel", typeof(RectTransform), typeof(Image));
             panelRoot.transform.SetParent(minimap.transform.Find("large"), false);
@@ -257,6 +253,15 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 ? info.m_name
                 : info.m_name.Substring(0, ConfigurationFile.maxPlayerNamesCharactersInList.Value - 3) + "...";
             
+            //MMO Level
+            var levelGO = new GameObject("Player_Level", typeof(RectTransform), typeof(TextMeshProUGUI));
+            levelGO.transform.SetParent(entry.transform, false);
+            levelGO.SetActive(EpicMMOSystem_API.IsLoaded());
+            RectTransform killRt = levelGO.GetComponent<RectTransform>();
+            killRt.anchoredPosition = new Vector2(105, 0);
+            var levelText = GetTextEntryComponent(levelGO, "Level");
+            levelText.text = "LVL: ???"; //init value
+            
             //Killed value in m_knownTexts
             var killsIconGO = new GameObject("Player_KillsIcon", typeof(RectTransform), typeof(Image));
             killsIconGO.transform.SetParent(entry.transform, false);
@@ -270,21 +275,12 @@ namespace PvPBiomeDominions.PositionManagement.UI
 
             var killsValueGO = new GameObject("Player_KilledByHostValue", typeof(RectTransform), typeof(TextMeshProUGUI));
             killsValueGO.transform.SetParent(entry.transform, false);
-            killsValueGO.SetActive(false); //TODO Fix patch for lethal damage to player
+            //killsValueGO.SetActive(false); //TODO Fix patch for lethal damage to player
             RectTransform killedValueGORt = killsValueGO.GetComponent<RectTransform>();
             killedValueGORt.sizeDelta = new Vector2(32, 32);
             killedValueGORt.anchoredPosition = new Vector2(EpicMMOSystem_API.IsLoaded() ? 140 : 60, 0);
             TextMeshProUGUI killedValue = GetTextEntryComponent(killsValueGO, "KilledByHost");
 
-            //MMO Level
-            var levelGO = new GameObject("Player_Level", typeof(RectTransform), typeof(TextMeshProUGUI));
-            levelGO.transform.SetParent(entry.transform, false);
-            levelGO.SetActive(EpicMMOSystem_API.IsLoaded());
-            RectTransform killRt = levelGO.GetComponent<RectTransform>();
-            killRt.anchoredPosition = new Vector2(105, 0);
-            var levelText = GetTextEntryComponent(levelGO, "Level");
-            levelText.text = "LVL: ???"; //init value
-            
             playerEntriesObjects.Add(entry);
 
             //Local player
@@ -398,6 +394,9 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 else
                     playerEntry.killedTimesUI.text = "0";
             }
+            
+            //TODO Minimap icon visibility refresh
+            //Minimap.instance.m_
         }
 
         public void UpdatePlayerKilledCount(string playerNameToFind, int newCount)
