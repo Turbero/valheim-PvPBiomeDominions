@@ -1,5 +1,6 @@
 ﻿using BepInEx;
 using HarmonyLib;
+using UnityEngine;
 
 namespace PvPBiomeDominions
 {
@@ -25,5 +26,22 @@ namespace PvPBiomeDominions
         {
             harmony.UnpatchSelf();
         }
+    }
+
+    [HarmonyPatch]
+    public class NoWarnings
+    {
+	    [HarmonyPatch(typeof(Debug), nameof(Debug.LogWarning), typeof(object), typeof(Object))]
+	    [HarmonyPrefix]
+	    private static bool LogWarning(object message, Object context)
+	    {
+		    if (message.ToString().Contains("The LiberationSans SDF Font Asset was not found") || 
+		        message.ToString().Contains("The character used for Ellipsis is not available in font asset"))
+		    {
+			    return false;
+		    }
+
+		    return true;
+	    }
     }
 }
