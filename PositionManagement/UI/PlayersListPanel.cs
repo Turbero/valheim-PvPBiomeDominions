@@ -15,6 +15,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
         public int level;
         public TextMeshProUGUI levelUI;
         public TextMeshProUGUI killsTimesUI;
+        public TextMeshProUGUI killedByTimesUI;
         public Image iconPlayer;
         public bool isPvP;
 
@@ -27,14 +28,18 @@ namespace PvPBiomeDominions.PositionManagement.UI
     public class PlayersListPanel
     {
         private static readonly Vector2 ROW_SIZE_DELTA = new(230f, 24f);
+        private static readonly int LEVEL_DATA_UI_LENGTH = 80;
         
         public readonly GameObject panelRoot;
         public readonly RectTransform panelRT;
         public readonly GameObject content;
 
         private readonly Sprite killsIconSprite;
+        private readonly Sprite killedIconSprite;
 
         public Button showHidePanelButton;
+        public Button azSortButton;
+        public Button levelSortButton;
 
         private readonly List<GameObject> playerEntriesObjects = new(); //TODO To be removed
         public readonly List<PlayerEntry> cachedPlayerEntries = new();
@@ -42,7 +47,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
         
         public PlayersListPanel(Minimap minimap)
         {
-            // === PANEL PRINCIPAL ===
+            // === MAIN PANEL ===
             panelRoot = new GameObject("PlayersListPanel", typeof(RectTransform), typeof(Image));
             panelRoot.transform.SetParent(minimap.transform.Find("large"), false);
 
@@ -51,7 +56,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             panelRT.anchorMax = new Vector2(0.5f, 0.5f);
             panelRT.pivot = new Vector2(0.5f, 0.5f);
             panelRT.anchoredPosition = ConfigurationFile.mapPlayersListPosition.Value;
-            panelRT.sizeDelta = ConfigurationFile.mapPlayersListSize.Value;
+            panelRT.sizeDelta = new Vector2(420 - getLevelUIContentLength(false), 620);
 
             Image bgImage = panelRoot.GetComponent<Image>();
             bgImage.color = new Color(0, 0, 0, 0.5f);
@@ -124,13 +129,22 @@ namespace PvPBiomeDominions.PositionManagement.UI
             scrollRect.verticalScrollbar = scrollbar;
             scrollRect.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
 
-            // --- SHOW/HIDE BUTTON ---
+            createButtons(minimap);
+            
+            killsIconSprite = minimap.m_largeRoot.transform.Find("IconPanel2/IconDeath").GetComponent<Image>().sprite;
+            killedIconSprite = minimap.m_largeRoot.transform.Find("IconPanel2/IconDeath").GetComponent<Image>().sprite;
+        }
+
+        private void createButtons(Minimap minimap)
+        {
+            // --- MAP PLAYERS LIST BUTTONS
+            // SHOW/HIDE BUTTON
             GameObject showHidePanelButtonGO =
                 GameObject.Instantiate(InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton").gameObject,
                     minimap.transform.Find("large"));
             showHidePanelButtonGO.name = "PlayersListPanelButton";
             RectTransform showHidePanelButtonRt = showHidePanelButtonGO.GetComponent<RectTransform>();
-            showHidePanelButtonRt.anchoredPosition = new Vector2(-650, 45);
+            showHidePanelButtonRt.anchoredPosition = new Vector2(-680, 45);
             showHidePanelButton = showHidePanelButtonGO.GetComponent<Button>();
             showHidePanelButton.onClick = new Button.ButtonClickedEvent();
             showHidePanelButton.onClick.AddListener(() =>
@@ -143,7 +157,49 @@ namespace PvPBiomeDominions.PositionManagement.UI
             buttonText.alignment = TextAlignmentOptions.Center;
             buttonText.text = ConfigurationFile.playersListPanelButtonText.Value;
             
-            killsIconSprite = minimap.m_largeRoot.transform.Find("IconPanel2/IconDeath").GetComponent<Image>().sprite;
+            // A-Z SORT BUTTON
+            GameObject azSortButtonGO =
+                GameObject.Instantiate(InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton").gameObject,
+                    minimap.transform.Find("large"));
+            azSortButtonGO.name = "PlayersListPanelAZButton";
+            RectTransform azSortButtonRt = azSortButtonGO.GetComponent<RectTransform>();
+            azSortButtonRt.anchoredPosition = new Vector2(-555, 45);
+            azSortButtonRt.sizeDelta = new Vector2(70, 46);
+            azSortButton = azSortButtonGO.GetComponent<Button>();
+            TextMeshProUGUI azSortbuttonText = azSortButton.GetComponentInChildren<TextMeshProUGUI>();
+            azSortbuttonText.fontStyle = FontStyles.Normal;
+            azSortbuttonText.color = new Color(1f, 0.7176f, 0.3603f);
+            azSortbuttonText.alignment = TextAlignmentOptions.Center;
+            azSortbuttonText.text = "A-Z";
+            azSortButton.onClick = new Button.ButtonClickedEvent();
+            azSortButton.onClick.AddListener(() =>
+            {
+                azSortbuttonText.text = azSortbuttonText.text.Equals("A-Z") ? "Z-A" : "A-Z";
+                //TODO Sort list by name
+                
+            });
+
+            // LEVEL SORT BUTTON
+            GameObject levelSortButtonGO =
+                GameObject.Instantiate(InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton").gameObject,
+                    minimap.transform.Find("large"));
+            levelSortButtonGO.name = "PlayersListPanelLevelButton";
+            RectTransform levelSortButtonRt = levelSortButtonGO.GetComponent<RectTransform>();
+            levelSortButtonRt.anchoredPosition = new Vector2(-480, 45);
+            levelSortButtonRt.sizeDelta = new Vector2(70, 46);
+            levelSortButton = levelSortButtonGO.GetComponent<Button>();
+            TextMeshProUGUI levelSortbuttonText = levelSortButton.GetComponentInChildren<TextMeshProUGUI>();
+            levelSortbuttonText.fontStyle = FontStyles.Normal;
+            levelSortbuttonText.color = new Color(1f, 0.7176f, 0.3603f);
+            levelSortbuttonText.alignment = TextAlignmentOptions.Center;
+            levelSortbuttonText.text = "1-100";
+            levelSortButton.onClick = new Button.ButtonClickedEvent();
+            levelSortButton.onClick.AddListener(() =>
+            {
+                levelSortbuttonText.text = levelSortbuttonText.text.Equals("1-100") ? "100-1" : "1-100";
+                //TODO Sort list by level
+                
+            });
         }
         
         public void RefreshContent(List<ZNet.PlayerInfo> players, bool createNewCache)
@@ -239,14 +295,14 @@ namespace PvPBiomeDominions.PositionManagement.UI
             iconGO.transform.SetParent(entry.transform, false);
             RectTransform imageRt = iconGO.GetComponent<RectTransform>();
             imageRt.sizeDelta = new Vector2(32, 32);
-            imageRt.anchoredPosition = new Vector2(-150, 0);
+            imageRt.anchoredPosition = new Vector2(-185, 0);
             Image playerIcon = iconGO.GetComponent<Image>();
             playerIcon.sprite = ImageManager.getSpriteIconVanillaImage(); //by default
             
             var nameGO = new GameObject("Player_Name", typeof(RectTransform), typeof(TextMeshProUGUI));
             nameGO.transform.SetParent(entry.transform, false);
             RectTransform textRt = nameGO.GetComponent<RectTransform>();
-            textRt.anchoredPosition = new Vector2(-30, 0);
+            textRt.anchoredPosition = new Vector2(-65, 0);
             var nameText = GetTextEntryComponent(nameGO, "Name");
             nameText.text = info.m_name.Length < ConfigurationFile.maxPlayerNamesCharactersInList.Value
                 ? info.m_name
@@ -257,7 +313,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             levelGO.transform.SetParent(entry.transform, false);
             levelGO.SetActive(EpicMMOSystem_API.IsLoaded());
             RectTransform killRt = levelGO.GetComponent<RectTransform>();
-            killRt.anchoredPosition = new Vector2(105, 0);
+            killRt.anchoredPosition = new Vector2(70, 0);
             var levelText = GetTextEntryComponent(levelGO, "Level");
             levelText.text = "LVL: ???"; //init value
             
@@ -267,17 +323,37 @@ namespace PvPBiomeDominions.PositionManagement.UI
             killsIconGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
             RectTransform killsIconRt = killsIconGO.GetComponent<RectTransform>();
             killsIconRt.sizeDelta = new Vector2(32, 32);
-            killsIconRt.anchoredPosition = new Vector2(EpicMMOSystem_API.IsLoaded() ? 100 : 20, 0);
+            killsIconRt.anchoredPosition = new Vector2(-15 + getLevelUIContentLength(), 0);
             Image killsIcon = killsIconGO.GetComponent<Image>();
             killsIcon.sprite = killsIconSprite;
+            killsIcon.color = new Color32(0, 255, 0, 255);
 
             var killsValueGO = new GameObject("Player_Kills_" + info.m_name, typeof(RectTransform), typeof(TextMeshProUGUI));
             killsValueGO.transform.SetParent(entry.transform, false);
             killsValueGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
             RectTransform killsValueGORt = killsValueGO.GetComponent<RectTransform>();
             killsValueGORt.sizeDelta = new Vector2(32, 32);
-            killsValueGORt.anchoredPosition = new Vector2(EpicMMOSystem_API.IsLoaded() ? 140 : 60, 0);
+            killsValueGORt.anchoredPosition = new Vector2(45 + getLevelUIContentLength(), 0);
             TextMeshProUGUI killsValue = GetTextEntryComponent(killsValueGO, "Kills");
+            
+            //Killed value in m_knownTexts
+            var killedByIconGO = new GameObject("Player_KilledByIcon", typeof(RectTransform), typeof(Image));
+            killedByIconGO.transform.SetParent(entry.transform, false);
+            killedByIconGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
+            RectTransform killedByIconRt = killedByIconGO.GetComponent<RectTransform>();
+            killedByIconRt.sizeDelta = new Vector2(32, 32);
+            killedByIconRt.anchoredPosition = new Vector2(65 + getLevelUIContentLength(), 0);
+            Image killedByIcon = killedByIconGO.GetComponent<Image>();
+            killedByIcon.sprite = killsIconSprite;
+            killedByIcon.color = new Color32(255, 0, 0, 255);
+            
+            var killedByValueGO = new GameObject("Player_KilledBy_" + info.m_name, typeof(RectTransform), typeof(TextMeshProUGUI));
+            killedByValueGO.transform.SetParent(entry.transform, false);
+            killedByValueGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
+            RectTransform killedByValueGORt = killedByValueGO.GetComponent<RectTransform>();
+            killedByValueGORt.sizeDelta = new Vector2(32, 32);
+            killedByValueGORt.anchoredPosition = new Vector2(105 + getLevelUIContentLength(), 0);
+            TextMeshProUGUI killedByValue = GetTextEntryComponent(killedByValueGO, "KilledBy");
 
             playerEntriesObjects.Add(entry);
 
@@ -297,15 +373,20 @@ namespace PvPBiomeDominions.PositionManagement.UI
 
             //Other player
             if (newCache)
-                AddPlayerEntryToCachedPlayers(info, levelText, killsValue, playerIcon);
+                AddPlayerEntryToCachedPlayers(info, levelText, killsValue, killedByValue, playerIcon);
             else 
             {
-                // Kills number
                 var knownTexts = (Dictionary<string, string>)GameManager.GetPrivateValue(Player.m_localPlayer, "m_knownTexts");
+                // Kills number
                 if (knownTexts.ContainsKey(GameManager.PREFIX_KILLS + info.m_name))
                     killsValue.text = knownTexts.GetValueSafe(GameManager.PREFIX_KILLS + info.m_name);
                 else
                     killsValue.text = "0";
+                // KilledBy number
+                if (knownTexts.ContainsKey(GameManager.PREFIX_KILLEDBY + info.m_name))
+                    killedByValue.text = knownTexts.GetValueSafe(GameManager.PREFIX_KILLEDBY + info.m_name);
+                else
+                    killedByValue.text = "0";
                 
                 // -------- FILL FIELDS WITH CACHE -------- //
                 PlayerEntry playerEntry = cachedPlayerEntries.Find(pe => pe.name == info.m_name);
@@ -323,12 +404,12 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 else
                 {
                     //New player connected after table creation
-                    AddPlayerEntryToCachedPlayers(info, levelText, killsValue, playerIcon);
+                    AddPlayerEntryToCachedPlayers(info, levelText, killsValue, killedByValue, playerIcon);
                 }
             }
         }
 
-        private void AddPlayerEntryToCachedPlayers(ZNet.PlayerInfo info, TextMeshProUGUI levelText, TextMeshProUGUI killsValue, Image playerIcon)
+        private void AddPlayerEntryToCachedPlayers(ZNet.PlayerInfo info, TextMeshProUGUI levelText, TextMeshProUGUI killsValue, TextMeshProUGUI killedByValue, Image playerIcon)
         {
             Logger.Log("[AddPlayerEntryToCachedPlayers] Is killsValue object null? "+(killsValue == null));
             cachedPlayerEntries.Add(new PlayerEntry
@@ -337,6 +418,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 level = 0, //default
                 levelUI = levelText,
                 killsTimesUI = killsValue,
+                killedByTimesUI = killedByValue,
                 iconPlayer = playerIcon,
                 isPvP = false //default
             });
@@ -394,6 +476,17 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 else
                     playerEntry.killsTimesUI.text = "0";
             }
+            //KilledBy number (UI)
+            if (playerEntry.killsTimesUI != null)
+            {
+                var knownTexts = (Dictionary<string, string>)GameManager.GetPrivateValue(Player.m_localPlayer, "m_knownTexts");
+                bool existKillsTimes = knownTexts.ContainsKey(GameManager.PREFIX_KILLEDBY + playerRelevantInfo.playerName);
+                Logger.Log("UpdatePlayerRelevantInfo - existKillsTimes: " + existKillsTimes);
+                if (existKillsTimes)
+                    playerEntry.killedByTimesUI.text = knownTexts[GameManager.PREFIX_KILLEDBY + playerRelevantInfo.playerName];
+                else
+                    playerEntry.killedByTimesUI.text = "0";
+            }
             
             //TODO Minimap icon visibility refresh
             //Minimap.instance.m_
@@ -407,6 +500,23 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 Logger.Log($"cachedPlayer {cachedPlayer.name} found. Updating kills count...");
                 cachedPlayer.killsTimesUI.text = newCount.ToString();
             }
+        }
+        public void UpdatePlayerKilledByCount(string playerNameToFind, int newCount)
+        {
+            PlayerEntry cachedPlayer = cachedPlayerEntries.Find(cpe => cpe.name.Equals(playerNameToFind));
+            if (cachedPlayer != null)
+            {
+                Logger.Log($"cachedPlayer {cachedPlayer.name} found. Updating killed by count...");
+                cachedPlayer.killedByTimesUI.text = newCount.ToString();
+            }
+        }
+
+        private int getLevelUIContentLength(bool returnIfLoaded = true)
+        {
+            if (returnIfLoaded)
+                return EpicMMOSystem_API.IsLoaded() ? LEVEL_DATA_UI_LENGTH : 0;
+            
+            return EpicMMOSystem_API.IsLoaded() ? 0 : LEVEL_DATA_UI_LENGTH;
         }
     }
 }

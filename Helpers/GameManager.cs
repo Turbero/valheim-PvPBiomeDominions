@@ -11,6 +11,7 @@ namespace PvPBiomeDominions.Helpers
     public class GameManager
     {
         public static readonly string PREFIX_KILLS = PvPBiomeDominions.GUID + "_Kills_";
+        public static readonly string PREFIX_KILLEDBY = PvPBiomeDominions.GUID + "_KilledBy_";
         
         private static readonly Dictionary<string, Sprite> cachedSprites = new Dictionary<string, Sprite>();
         private static readonly Dictionary<string, TMP_FontAsset> cachedFonts = new Dictionary<string, TMP_FontAsset>();

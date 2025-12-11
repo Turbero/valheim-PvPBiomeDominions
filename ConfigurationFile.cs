@@ -47,7 +47,6 @@ namespace PvPBiomeDominions
 
         public static ConfigEntry<bool> debug;
         public static ConfigEntry<Vector2> mapPlayersListPosition;
-        public static ConfigEntry<Vector2> mapPlayersListSize;
         public static ConfigEntry<bool> mapPinColoring;
         public static ConfigEntry<int> maxPlayerNamesCharactersInList;
         public static ConfigEntry<bool> showMessageWhenLootingYourTombstone;
@@ -189,8 +188,7 @@ namespace PvPBiomeDominions
                 _ = ConfigSync.AddLockingConfigEntry(_serverConfigLocked);
 
                 debug = config("1 - General", "DebugMode", false, "Enabling/Disabling the debugging in the console (default = false)", false);
-                mapPlayersListPosition = config("1 - General", "Map Players List Position", new Vector2(-602, 100), "Left corner position for the map players list (default: x=-602, y=100)", false);
-                mapPlayersListSize = config("1 - General", "Map Players List Size", new Vector2(350, 620), "Width/Height for the map players list size (default: x=350, y=620)", false);
+                mapPlayersListPosition = config("1 - General", "Map Players List Position", new Vector2(-568, 100), "Left corner position for the map players list (default: x=-602, y=100)", false);
                 mapPinColoring = config("1 - General", "Map Pins PvP Coloring", true, "Enable/disable the pins coloring in the player maps according to their pvp status", false);
                 maxPlayerNamesCharactersInList = config("1 - General", "Max Player Names Number of Characters In List", 15, "Limits the player name shown in the map players list and replace by '...' when too long to avoid overlap with other elements", false);
         		showMessageWhenLootingYourTombstone = config("1 - General", "Show Message When Looting Your Tombstone", true, "Enable/disable showing alert in your screen when your tombstone is being looted.");
@@ -277,7 +275,6 @@ namespace PvPBiomeDominions
             {
                 MinimapUpdatePatch.panel.showHidePanelButton.GetComponentInChildren<TextMeshProUGUI>().text = playersListPanelButtonText.Value;
                 MinimapUpdatePatch.panel.panelRT.anchoredPosition = mapPlayersListPosition.Value;
-                MinimapUpdatePatch.panel.panelRT.sizeDelta = mapPlayersListSize.Value;
             }
         }
 
