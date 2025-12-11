@@ -333,7 +333,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             killsValueGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
             RectTransform killsValueGORt = killsValueGO.GetComponent<RectTransform>();
             killsValueGORt.sizeDelta = new Vector2(32, 32);
-            killsValueGORt.anchoredPosition = new Vector2(45 + getLevelUIContentLength(), 0);
+            killsValueGORt.anchoredPosition = new Vector2(25 + getLevelUIContentLength(), 0);
             TextMeshProUGUI killsValue = GetTextEntryComponent(killsValueGO, "Kills");
             
             //Killed value in m_knownTexts
