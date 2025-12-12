@@ -98,7 +98,7 @@ namespace PvPBiomeDominions.PositionManagement
             if (Time.time - lastUpdateTime >= ConfigurationFile.pvpMinimapPlayersListRefresh.Value)
             {
                 lastUpdateTime = Time.time;
-                panel.RefreshContent(ZNet.instance.GetPlayerList().OrderBy(p => p.m_name).ToList(), false);
+                panel.RefreshContent(ZNet.instance.GetPlayerList(), false);
             }
         }
 

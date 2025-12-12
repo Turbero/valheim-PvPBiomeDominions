@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Groups;
 using HarmonyLib;
 using PvPBiomeDominions.Helpers;
@@ -24,6 +25,17 @@ namespace PvPBiomeDominions.PositionManagement.UI
             return level > 0 ? level.ToString() : "???";
         }
     }
+
+    public enum PlayersListOrderType
+    {
+        ByName,
+        ByLevel
+    }
+    public enum PlayersListOrderDirection
+    {
+        ASC,
+        DESC
+    }
     
     public class PlayersListPanel
     {
@@ -32,18 +44,19 @@ namespace PvPBiomeDominions.PositionManagement.UI
         
         public readonly GameObject panelRoot;
         public readonly RectTransform panelRT;
-        public readonly GameObject content;
+        private readonly GameObject content;
 
         private readonly Sprite killsIconSprite;
-        private readonly Sprite killedIconSprite;
 
         public Button showHidePanelButton;
-        public Button azSortButton;
-        public Button levelSortButton;
+        private Button azSortButton;
+        private Button levelSortButton;
 
-        private readonly List<GameObject> playerEntriesObjects = new(); //TODO To be removed
+        private readonly List<GameObject> playerEntriesObjects = new();
         public readonly List<PlayerEntry> cachedPlayerEntries = new();
-        
+
+        private PlayersListOrderType orderType = PlayersListOrderType.ByName;
+        private PlayersListOrderDirection orderDirection = PlayersListOrderDirection.ASC;
         
         public PlayersListPanel(Minimap minimap)
         {
@@ -132,7 +145,6 @@ namespace PvPBiomeDominions.PositionManagement.UI
             createButtons(minimap);
             
             killsIconSprite = minimap.m_largeRoot.transform.Find("IconPanel2/IconDeath").GetComponent<Image>().sprite;
-            killedIconSprite = minimap.m_largeRoot.transform.Find("IconPanel2/IconDeath").GetComponent<Image>().sprite;
         }
 
         private void createButtons(Minimap minimap)
@@ -174,15 +186,25 @@ namespace PvPBiomeDominions.PositionManagement.UI
             azSortButton.onClick = new Button.ButtonClickedEvent();
             azSortButton.onClick.AddListener(() =>
             {
-                azSortbuttonText.text = azSortbuttonText.text.Equals("A-Z") ? "Z-A" : "A-Z";
-                //TODO Sort list by name
-                
+                orderType = PlayersListOrderType.ByName;
+                if (azSortbuttonText.text.Equals("A-Z"))
+                {
+                    azSortbuttonText.text = "Z-A";
+                    orderDirection = PlayersListOrderDirection.DESC;
+                }
+                else
+                {
+                    azSortbuttonText.text = "A-Z";
+                    orderDirection = PlayersListOrderDirection.ASC;
+                }
+                RefreshContent(ZNet.instance.GetPlayerList(), false);
             });
 
             // LEVEL SORT BUTTON
             GameObject levelSortButtonGO =
                 GameObject.Instantiate(InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton").gameObject,
                     minimap.transform.Find("large"));
+            levelSortButtonGO.SetActive(false); //TODO Show when sort by level is added
             levelSortButtonGO.name = "PlayersListPanelLevelButton";
             RectTransform levelSortButtonRt = levelSortButtonGO.GetComponent<RectTransform>();
             levelSortButtonRt.anchoredPosition = new Vector2(-480, 45);
@@ -196,9 +218,18 @@ namespace PvPBiomeDominions.PositionManagement.UI
             levelSortButton.onClick = new Button.ButtonClickedEvent();
             levelSortButton.onClick.AddListener(() =>
             {
-                levelSortbuttonText.text = levelSortbuttonText.text.Equals("1-100") ? "100-1" : "1-100";
-                //TODO Sort list by level
-                
+                orderType = PlayersListOrderType.ByLevel;
+                if (levelSortbuttonText.text.Equals("1-100"))
+                {
+                    levelSortbuttonText.text = "100-1";
+                    orderDirection = PlayersListOrderDirection.DESC;
+                }
+                else
+                {
+                    levelSortbuttonText.text = "1-100";
+                    orderDirection = PlayersListOrderDirection.ASC;
+                }
+                RefreshContent(ZNet.instance.GetPlayerList(), false);
             });
         }
         
@@ -229,6 +260,9 @@ namespace PvPBiomeDominions.PositionManagement.UI
             // Connected players list
             AddTitleHeaderToScrollList(players.Count);
             
+            // Sort list
+            players = sortList(players);
+            
             // Add first people in the group
             foreach (var info in players)
             {
@@ -249,6 +283,17 @@ namespace PvPBiomeDominions.PositionManagement.UI
             // ----- SEND RPC MESSAGE TO EVERYONE TO REQUEST INFO AND FILL THE FIELDS WITH UPDATED VALUES ----- //
             Logger.Log("Sending request to everyone");
             ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, "RPC_RequestPlayerRelevantInfo");
+        }
+
+        private List<ZNet.PlayerInfo> sortList(List<ZNet.PlayerInfo> players)
+        {
+            if (orderType == PlayersListOrderType.ByName)
+                if (orderDirection == PlayersListOrderDirection.ASC)
+                    return ZNet.instance.GetPlayerList().OrderBy(p => p.m_name).ToList();
+                else
+                    return ZNet.instance.GetPlayerList().OrderBy(p => p.m_name).Reverse().ToList();
+            else
+                return players; //TODO Sort by level
         }
 
         private void AddTitleHeaderToScrollList(int playersCount)
