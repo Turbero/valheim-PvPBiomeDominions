@@ -1,5 +1,17 @@
 ### CHANGELOG
 
+## 1.4.0
+
+Added:
+* number of times a player has killed (green) to and has been killed (red) by each player connected in the server in the map players list
+* new button to sort map players list by name
+
+Fixed:
+* Removed configuration for players panel size (it was useless) but you can still reposition it.
+* Removed warnings when opening map
+
+IMPORTANT: delete config file and let the mod recreate it to resize the panel properly (if you feel confident, change values manually after update)
+
 ## 1.3.2
 
 * Fix for white squares in icons not showing sometimes the corresponding sprite in map window when not loaded correctly
