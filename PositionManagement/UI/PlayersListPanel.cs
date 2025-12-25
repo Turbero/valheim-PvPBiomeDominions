@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
-using Groups;
 using HarmonyLib;
 using PvPBiomeDominions.Helpers;
 using PvPBiomeDominions.RPC;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerReference = Groups.PlayerReference;
 
 namespace PvPBiomeDominions.PositionManagement.UI
 {
@@ -40,7 +40,6 @@ namespace PvPBiomeDominions.PositionManagement.UI
     public class PlayersListPanel
     {
         private static readonly Vector2 ROW_SIZE_DELTA = new(230f, 24f);
-        private static readonly int LEVEL_DATA_UI_LENGTH = 80;
         
         public readonly GameObject panelRoot;
         public readonly RectTransform panelRT;
@@ -69,7 +68,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             panelRT.anchorMax = new Vector2(0.5f, 0.5f);
             panelRT.pivot = new Vector2(0.5f, 0.5f);
             panelRT.anchoredPosition = ConfigurationFile.mapPlayersListPosition.Value;
-            panelRT.sizeDelta = new Vector2(420 - getLevelUIContentLength(false), 620);
+            panelRT.sizeDelta = ConfigurationFile.mapPlayersListSize.Value;
 
             Image bgImage = panelRoot.GetComponent<Image>();
             bgImage.color = new Color(0, 0, 0, 0.5f);
@@ -335,32 +334,24 @@ namespace PvPBiomeDominions.PositionManagement.UI
             rt.anchoredPosition = new Vector2(0, -10);
             rt.sizeDelta = ROW_SIZE_DELTA;
             
-            //Player Name
+            //Player Icon
             var iconGO = new GameObject("Player_Icon", typeof(RectTransform), typeof(Image));
             iconGO.transform.SetParent(entry.transform, false);
-            RectTransform imageRt = iconGO.GetComponent<RectTransform>();
-            imageRt.sizeDelta = new Vector2(32, 32);
-            imageRt.anchoredPosition = new Vector2(-185, 0);
+            RectTransform imagePlayerIconRt = iconGO.GetComponent<RectTransform>();
+            imagePlayerIconRt.sizeDelta = new Vector2(32, 32);
+            imagePlayerIconRt.anchoredPosition = new Vector2(-200, 0);
             Image playerIcon = iconGO.GetComponent<Image>();
             playerIcon.sprite = ImageManager.getSpriteIconVanillaImage(); //by default
             
+            //Player Name
             var nameGO = new GameObject("Player_Name", typeof(RectTransform), typeof(TextMeshProUGUI));
             nameGO.transform.SetParent(entry.transform, false);
             RectTransform textRt = nameGO.GetComponent<RectTransform>();
-            textRt.anchoredPosition = new Vector2(-65, 0);
+            textRt.anchoredPosition = new Vector2(-80, 0);
             var nameText = GetTextEntryComponent(nameGO, "Name");
             nameText.text = info.m_name.Length < ConfigurationFile.maxPlayerNamesCharactersInList.Value
                 ? info.m_name
                 : info.m_name.Substring(0, ConfigurationFile.maxPlayerNamesCharactersInList.Value - 3) + "...";
-            
-            //MMO Level
-            var levelGO = new GameObject("Player_Level", typeof(RectTransform), typeof(TextMeshProUGUI));
-            levelGO.transform.SetParent(entry.transform, false);
-            levelGO.SetActive(EpicMMOSystem_API.IsLoaded());
-            RectTransform killRt = levelGO.GetComponent<RectTransform>();
-            killRt.anchoredPosition = new Vector2(70, 0);
-            var levelText = GetTextEntryComponent(levelGO, "Level");
-            levelText.text = "LVL: ???"; //init value
             
             //Kills value in m_knownTexts
             var killsIconGO = new GameObject("Player_KillsIcon", typeof(RectTransform), typeof(Image));
@@ -368,7 +359,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             killsIconGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
             RectTransform killsIconRt = killsIconGO.GetComponent<RectTransform>();
             killsIconRt.sizeDelta = new Vector2(32, 32);
-            killsIconRt.anchoredPosition = new Vector2(-15 + getLevelUIContentLength(), 0);
+            killsIconRt.anchoredPosition = new Vector2(-30, 0);
             Image killsIcon = killsIconGO.GetComponent<Image>();
             killsIcon.sprite = killsIconSprite;
             killsIcon.color = new Color32(0, 255, 0, 255);
@@ -378,7 +369,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             killsValueGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
             RectTransform killsValueGORt = killsValueGO.GetComponent<RectTransform>();
             killsValueGORt.sizeDelta = new Vector2(32, 32);
-            killsValueGORt.anchoredPosition = new Vector2(25 + getLevelUIContentLength(), 0);
+            killsValueGORt.anchoredPosition = new Vector2(10, 0);
             TextMeshProUGUI killsValue = GetTextEntryComponent(killsValueGO, "Kills");
             
             //Killed value in m_knownTexts
@@ -387,7 +378,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             killedByIconGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
             RectTransform killedByIconRt = killedByIconGO.GetComponent<RectTransform>();
             killedByIconRt.sizeDelta = new Vector2(32, 32);
-            killedByIconRt.anchoredPosition = new Vector2(65 + getLevelUIContentLength(), 0);
+            killedByIconRt.anchoredPosition = new Vector2(50, 0);
             Image killedByIcon = killedByIconGO.GetComponent<Image>();
             killedByIcon.sprite = killsIconSprite;
             killedByIcon.color = new Color32(255, 0, 0, 255);
@@ -397,8 +388,37 @@ namespace PvPBiomeDominions.PositionManagement.UI
             killedByValueGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
             RectTransform killedByValueGORt = killedByValueGO.GetComponent<RectTransform>();
             killedByValueGORt.sizeDelta = new Vector2(32, 32);
-            killedByValueGORt.anchoredPosition = new Vector2(105 + getLevelUIContentLength(), 0);
+            killedByValueGORt.anchoredPosition = new Vector2(90, 0);
             TextMeshProUGUI killedByValue = GetTextEntryComponent(killedByValueGO, "KilledBy");
+
+            //Player Guild icon (if available)
+            Logger.Log("Guilds_API_Reflection.IsLoaded() is "+Guilds_API_Reflection.IsLoaded());
+            if (Guilds_API_Reflection.IsLoaded()){ //TODO Add .cfg to decide showing or not the guild icon, server-synced
+                var guildGO = new GameObject("Player_Guild", typeof(RectTransform), typeof(Image));
+                guildGO.transform.SetParent(entry.transform, false);
+                RectTransform guildRt = guildGO.GetComponent<RectTransform>();
+                guildRt.sizeDelta = new Vector2(32, 32); //TODO Adjust to row height
+                guildRt.anchoredPosition = new Vector2(130, 0);
+                Image imageGuild = guildGO.GetComponent<Image>();
+                
+                //sprite calculation
+                object guild = Guilds_API_Reflection.GetPlayerGuild(Player.m_localPlayer);
+                if (guild != null)
+                {
+                    int iconId = Guilds_API_Reflection.GetNestedProperty<int>(guild, "General", "icon");
+                    imageGuild.sprite = Guilds_API_Reflection.GetGuildIconById(iconId);
+                }
+                guildGO.SetActive(guild != null);
+            }
+            
+            //MMO Level
+            var levelGO = new GameObject("Player_Level", typeof(RectTransform), typeof(TextMeshProUGUI));
+            levelGO.transform.SetParent(entry.transform, false);
+            levelGO.SetActive(EpicMMOSystem_API.IsLoaded());
+            RectTransform killRt = levelGO.GetComponent<RectTransform>();
+            killRt.anchoredPosition = new Vector2(Guilds_API_Reflection.IsLoaded() ? 255 : 130, 0);
+            var levelText = GetTextEntryComponent(levelGO, "Level");
+            levelText.text = "LVL: ???"; //init value
 
             playerEntriesObjects.Add(entry);
 
@@ -554,14 +574,6 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 Logger.Log($"cachedPlayer {cachedPlayer.name} found. Updating killed by count...");
                 cachedPlayer.killedByTimesUI.text = newCount.ToString();
             }
-        }
-
-        private int getLevelUIContentLength(bool returnIfLoaded = true)
-        {
-            if (returnIfLoaded)
-                return EpicMMOSystem_API.IsLoaded() ? LEVEL_DATA_UI_LENGTH : 0;
-            
-            return EpicMMOSystem_API.IsLoaded() ? 0 : LEVEL_DATA_UI_LENGTH;
         }
     }
 }
