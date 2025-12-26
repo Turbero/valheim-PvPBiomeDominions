@@ -51,6 +51,9 @@
     <Reference Include="Groups">
       <HintPath>Libs\GroupsAPI.dll</HintPath>
     </Reference>
+    <Reference Include="Guilds">
+      <HintPath>Libs\GuildsAPI.dll</HintPath>
+    </Reference>
     <Reference Include="ServerSync, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libs\External\ServerSync.dll</HintPath>
@@ -92,7 +95,6 @@
     <Compile Include="Helpers\SpriteExtractor.cs" />
     <Compile Include="Helpers\WardIsLove\WardIsLovePlugin.cs" />
     <Compile Include="Helpers\WardIsLove\WardMonoscript.cs" />
-    <Compile Include="Helpers\Guilds_API_Reflection.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="PositionManagement\MinimapUpdatePatch.cs" />
     <Compile Include="PositionManagement\PositionPatch.cs" />
@@ -122,6 +124,7 @@
   <ItemGroup>
     <EmbeddedResource Include="icons\minimap-valheim-icon-base.png" />
     <Content Include="Libs\GroupsAPI.dll" />
+    <Content Include="Libs\GuildsAPI.dll" />
     <Content Include="Libs\ServerSync.dll" />
     <Content Include="MODGEN\icon.png" />
     <Content Include="pdb2mdb.exe" />
