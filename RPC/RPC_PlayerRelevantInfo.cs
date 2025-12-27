@@ -4,6 +4,7 @@ namespace PvPBiomeDominions.RPC
     {
         public string playerName;
         public int level;
+        public int guildId;
         public bool isPvP;
 
         public string GetLevelText()
@@ -15,6 +16,7 @@ namespace PvPBiomeDominions.RPC
             ZPackage pkg = new ZPackage();
             pkg.Write(playerName);
             pkg.Write(level);
+            pkg.Write(guildId);
             pkg.Write(isPvP);
             return pkg;
         }
@@ -25,6 +27,7 @@ namespace PvPBiomeDominions.RPC
             {
                 playerName = pkg.ReadString(),
                 level = pkg.ReadInt(),
+                guildId = pkg.ReadInt(),
                 isPvP = pkg.ReadBool(),
             };
             return info;

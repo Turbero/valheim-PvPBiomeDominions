@@ -14,11 +14,14 @@ namespace PvPBiomeDominions.PositionManagement.UI
     {
         public string name;
         public int level;
-        public TextMeshProUGUI levelUI;
+        public int guildId;
+        public bool isPvP;
+        
+        public Image iconPlayer;
         public TextMeshProUGUI killsTimesUI;
         public TextMeshProUGUI killedByTimesUI;
-        public Image iconPlayer;
-        public bool isPvP;
+        public TextMeshProUGUI levelUI;
+        public Image guildIconUI;
 
         public string GetLevelText()
         {
@@ -391,36 +394,23 @@ namespace PvPBiomeDominions.PositionManagement.UI
             killedByValueGORt.anchoredPosition = new Vector2(90, 0);
             TextMeshProUGUI killedByValue = GetTextEntryComponent(killedByValueGO, "KilledBy");
 
-            //Player Guild icon (if installed)
-            Logger.Log("Guilds.API.IsLoaded() is "+Guilds.API.IsLoaded());
-            if (Guilds.API.IsLoaded()){ //TODO Add .cfg to decide showing or not the guild icon, server-synced
-                var guildGO = new GameObject("Player_Guild", typeof(RectTransform), typeof(Image));
-                guildGO.transform.SetParent(entry.transform, false);
-                RectTransform guildRt = guildGO.GetComponent<RectTransform>();
-                guildRt.sizeDelta = new Vector2(32, 32);
-                guildRt.anchoredPosition = new Vector2(130, 0);
-                Image imageGuild = guildGO.GetComponent<Image>();
-                
-                //sprite calculation
-                Guilds.Guild guild = Guilds.API.GetPlayerGuild(Player.m_localPlayer); //TODO use PlayerEntrt.guildId if not localPlayer
-                if (guild != null)
-                {
-                    int iconId = guild.General.icon;
-                    Logger.Log("IconId detected: "+iconId);
-                    imageGuild.sprite = Guilds.API.GetGuildIconById(iconId);
-                }
-                guildGO.SetActive(guild != null);
-            }
-            
             //MMO Level
             var levelGO = new GameObject("Player_Level", typeof(RectTransform), typeof(TextMeshProUGUI));
             levelGO.transform.SetParent(entry.transform, false);
             levelGO.SetActive(EpicMMOSystem_API.IsLoaded());
             RectTransform killRt = levelGO.GetComponent<RectTransform>();
-            killRt.anchoredPosition = new Vector2(Guilds.API.IsLoaded() ? 255 : 130, 0); //TODO Add .cfg to decide showing or not the guild icon, server-synced
+            killRt.anchoredPosition = new Vector2(130, 0);
             var levelText = GetTextEntryComponent(levelGO, "Level");
             levelText.text = "LVL: ???"; //init value
 
+            //Player Guild icon (if installed)
+            var guildGO = new GameObject("Player_Guild", typeof(RectTransform), typeof(Image));
+            guildGO.transform.SetParent(entry.transform, false);
+            RectTransform guildRt = guildGO.GetComponent<RectTransform>();
+            guildRt.sizeDelta = new Vector2(32, 32);
+            guildRt.anchoredPosition = new Vector2(Groups.API.IsLoaded() ? 255 : 130, 0);
+            Image imageGuild = guildGO.GetComponent<Image>();
+            
             playerEntriesObjects.Add(entry);
 
             //Local player
@@ -434,12 +424,20 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 
                 // 2) Level
                 levelText.text = $"LVL: {EpicMMOSystem_API.GetLevel()}";
+                
+                // 3) Guild icon
+                Guilds.Guild guild = Guilds.API.GetOwnGuild();
+                if (guild != null)
+                {
+                    imageGuild.sprite = Guilds.API.GetGuildIconById(guild.General.icon);
+                }
+                guildGO.SetActive(Guilds.API.IsLoaded() && guild != null);
                 return;
             }
 
             //Other player
             if (newCache)
-                AddPlayerEntryToCachedPlayers(info, levelText, killsValue, killedByValue, playerIcon);
+                AddPlayerEntryToCachedPlayers(info, levelText, killsValue, killedByValue, playerIcon, imageGuild);
             else 
             {
                 var knownTexts = (Dictionary<string, string>)GameManager.GetPrivateValue(Player.m_localPlayer, "m_knownTexts");
@@ -466,27 +464,37 @@ namespace PvPBiomeDominions.PositionManagement.UI
 
                     // 2) Level
                     levelText.text = "LVL: " + playerEntry.GetLevelText();
+                    
+                    // 3) Guild icon
+                    Guilds.Guild guild = Guilds.API.GetGuild(playerEntry.guildId);
+                    if (guild != null)
+                    {
+                        imageGuild.sprite = Guilds.API.GetGuildIconById(guild.General.icon);
+                    }
+                    guildGO.SetActive(Guilds.API.IsLoaded() && guild != null);
                 }
                 else
                 {
                     //New player connected after table creation
-                    AddPlayerEntryToCachedPlayers(info, levelText, killsValue, killedByValue, playerIcon);
+                    AddPlayerEntryToCachedPlayers(info, levelText, killsValue, killedByValue, playerIcon, imageGuild);
                 }
             }
         }
 
-        private void AddPlayerEntryToCachedPlayers(ZNet.PlayerInfo info, TextMeshProUGUI levelText, TextMeshProUGUI killsValue, TextMeshProUGUI killedByValue, Image playerIcon)
+        private void AddPlayerEntryToCachedPlayers(ZNet.PlayerInfo info, TextMeshProUGUI levelText, TextMeshProUGUI killsValue, TextMeshProUGUI killedByValue, Image playerIcon, Image imageGuild)
         {
             Logger.Log("[AddPlayerEntryToCachedPlayers] Adding...");
             cachedPlayerEntries.Add(new PlayerEntry
             {
                 name = info.m_name,
                 level = 0, //default
-                levelUI = levelText,
+                guildId = -1, //default
+                isPvP = false, //default
+                iconPlayer = playerIcon,
                 killsTimesUI = killsValue,
                 killedByTimesUI = killedByValue,
-                iconPlayer = playerIcon,
-                isPvP = false //default
+                levelUI = levelText,
+                guildIconUI = imageGuild
             });
             //Request the info with a message and update in response
             ZRoutedRpc.instance.InvokeRoutedRPC(info.m_characterID.UserID, "RPC_RequestPlayerRelevantInfo");
@@ -506,7 +514,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
 
         public void UpdatePlayerRelevantInfo(RPC_PlayerRelevantInfo playerRelevantInfo)
         {
-            Logger.Log($"[UpdatePlayerRelevantInfo] playerEntry found: name {playerRelevantInfo.playerName}, level {playerRelevantInfo.level}, isPvP {playerRelevantInfo.isPvP}");
+            Logger.Log($"[UpdatePlayerRelevantInfo] playerEntry found: name {playerRelevantInfo.playerName}, level {playerRelevantInfo.level}, guildId {playerRelevantInfo.guildId}, isPvP {playerRelevantInfo.isPvP}");
             
             //It has to exist at this point
             PlayerEntry playerEntry = cachedPlayerEntries.Find(p => p.name.Equals(playerRelevantInfo.playerName));
@@ -524,12 +532,6 @@ namespace PvPBiomeDominions.PositionManagement.UI
 
             //isPvP
             playerEntry.isPvP = playerRelevantInfo.isPvP;
-            
-            //Level
-            if (playerEntry.levelUI != null)
-                playerEntry.levelUI.text = "LVL: " + playerRelevantInfo.GetLevelText();
-            //Level (UI)
-            playerEntry.level = playerRelevantInfo.level;
             
             //Kills number (UI)
             if (playerEntry.killsTimesUI != null)
@@ -554,6 +556,18 @@ namespace PvPBiomeDominions.PositionManagement.UI
                     playerEntry.killedByTimesUI.text = "0";
             }
             
+            //Level
+            playerEntry.level = playerRelevantInfo.level;
+            //Level (UI)
+            if (playerEntry.levelUI != null)
+                playerEntry.levelUI.text = "LVL: " + playerRelevantInfo.GetLevelText();
+            
+            //Guild
+            playerEntry.guildId = playerRelevantInfo.guildId;
+            //GuildIcon (UI)
+            if (playerEntry.guildIconUI != null && playerEntry.guildId != -1)
+                playerEntry.guildIconUI.sprite = Guilds.API.GetGuildIconById(Guilds.API.GetGuild(playerEntry.guildId)!.General.icon);
+
             //TODO Minimap icon visibility refresh
             //Minimap.instance.m_
         }

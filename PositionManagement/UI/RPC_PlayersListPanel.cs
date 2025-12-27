@@ -33,10 +33,12 @@ namespace PvPBiomeDominions.PositionManagement.UI
             }
             
             Logger.Log("[RPC_RequestPlayerRelevantInfo] RPC sent to " + Player.m_localPlayer.GetPlayerName() + " from " + playerSender.m_name);
+            Guilds.Guild guild = Guilds.API.GetOwnGuild();
             RPC_PlayerRelevantInfo playerRelevantInfo = new RPC_PlayerRelevantInfo
             {
                 playerName = localPlayer.GetPlayerName(),
                 level = EpicMMOSystem_API.GetLevel(),
+                guildId = guild != null ? guild.General.icon : -1,
                 isPvP = localPlayer.IsPVPEnabled()
             };
             ZPackage pkg = playerRelevantInfo.GetPackage();
