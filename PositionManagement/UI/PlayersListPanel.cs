@@ -399,7 +399,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             levelGO.transform.SetParent(entry.transform, false);
             levelGO.SetActive(EpicMMOSystem_API.IsLoaded());
             RectTransform killRt = levelGO.GetComponent<RectTransform>();
-            killRt.anchoredPosition = new Vector2(130, 0);
+            killRt.anchoredPosition = new Vector2(215, 0);
             var levelText = GetTextEntryComponent(levelGO, "Level");
             levelText.text = "LVL: ???"; //init value
 
@@ -408,11 +408,14 @@ namespace PvPBiomeDominions.PositionManagement.UI
             guildGO.transform.SetParent(entry.transform, false);
             RectTransform guildRt = guildGO.GetComponent<RectTransform>();
             guildRt.sizeDelta = new Vector2(32, 32);
-            guildRt.anchoredPosition = new Vector2(Groups.API.IsLoaded() ? 255 : 130, 0);
+            guildRt.anchoredPosition = new Vector2(Groups.API.IsLoaded() ? 195 : 135, 0);
             Image imageGuild = guildGO.GetComponent<Image>();
             
             playerEntriesObjects.Add(entry);
 
+            killsValue.text = "0";
+            killedByValue.text = "0";
+            
             //Local player
             if (info.m_name == Player.m_localPlayer.GetPlayerName())
             {
@@ -444,13 +447,9 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 // Kills number
                 if (knownTexts.ContainsKey(GameManager.PREFIX_KILLS + info.m_name))
                     killsValue.text = knownTexts.GetValueSafe(GameManager.PREFIX_KILLS + info.m_name);
-                else
-                    killsValue.text = "0";
                 // KilledBy number
                 if (knownTexts.ContainsKey(GameManager.PREFIX_KILLEDBY + info.m_name))
                     killedByValue.text = knownTexts.GetValueSafe(GameManager.PREFIX_KILLEDBY + info.m_name);
-                else
-                    killedByValue.text = "0";
                 
                 // -------- FILL FIELDS WITH CACHE -------- //
                 PlayerEntry playerEntry = cachedPlayerEntries.Find(pe => pe.name == info.m_name);
