@@ -29,6 +29,11 @@ namespace PvPBiomeDominions.PvPManagement
             Logger.Log("Player killed detected!");
             Player playerKilled = __instance as Player;
 
+            if (hit == null || hit.GetAttacker() == null)
+            {
+                Logger.Log("Unknown death (/die command?)");
+                return;
+            }
             Character attacker = hit.GetAttacker();
             if (attacker.gameObject.name != "Player(Clone)") return;
 
