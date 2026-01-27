@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.4.1
+
+* Fixed log error when using "die" console command
+
 ## 1.4.0
 
 Added:
