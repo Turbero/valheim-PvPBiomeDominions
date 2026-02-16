@@ -403,7 +403,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             var levelText = GetTextEntryComponent(levelGO, "Level");
             levelText.text = "LVL: ???"; //init value
 
-            //Player Guild icon (if installed)
+            //Player Guild icon
             var guildGO = new GameObject("Player_Guild", typeof(RectTransform), typeof(Image));
             guildGO.transform.SetParent(entry.transform, false);
             RectTransform guildRt = guildGO.GetComponent<RectTransform>();
@@ -513,7 +513,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
 
         public void UpdatePlayerRelevantInfo(RPC_PlayerRelevantInfo playerRelevantInfo)
         {
-            Logger.Log($"[UpdatePlayerRelevantInfo] playerEntry found: name {playerRelevantInfo.playerName}, level {playerRelevantInfo.level}, guildId {playerRelevantInfo.guildId}, isPvP {playerRelevantInfo.isPvP}");
+            Logger.Log($"[UpdatePlayerRelevantInfo] playerEntry found: name {playerRelevantInfo.playerName}, level {playerRelevantInfo.level}, isPvP {playerRelevantInfo.isPvP}, guildId {playerRelevantInfo.guildId}");
             
             //It has to exist at this point
             PlayerEntry playerEntry = cachedPlayerEntries.Find(p => p.name.Equals(playerRelevantInfo.playerName));

@@ -19,7 +19,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>C:\Users\Turbero\AppData\Roaming\Thunderstore Mod Manager\DataFolder\Valheim\profiles\Default\BepInEx\plugins\turbero-PvPBiomeDominions</OutputPath>
+    <OutputPath>..\..\..\AppData\Roaming\Thunderstore Mod Manager\DataFolder\Valheim\profiles\Default\BepInEx\plugins\turbero-PvPBiomeDominions</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -76,7 +76,7 @@
       <HintPath>..\..\Libs\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>..\..\Libs\pre-CallToArms\UnityEngine.ImageConversionModule.dll</HintPath>
+      <HintPath>..\..\Libs\backup-pre-callToArms\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
       <HintPath>..\..\Libs\UnityEngine.TextRenderingModule.dll</HintPath>

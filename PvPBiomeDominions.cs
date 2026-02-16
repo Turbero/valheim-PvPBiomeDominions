@@ -6,6 +6,7 @@ namespace PvPBiomeDominions
 {
     [BepInPlugin(GUID, NAME, VERSION)]
     [BepInDependency("org.bepinex.plugins.groups", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("org.bepinex.plugins.guilds", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("Azumatt.WardIsLove", BepInDependency.DependencyFlags.SoftDependency)]
     public class PvPBiomeDominions : BaseUnityPlugin
     {
