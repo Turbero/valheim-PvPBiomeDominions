@@ -92,6 +92,7 @@
     <Compile Include="Helpers\ImageManager.cs" />
     <Compile Include="Helpers\Marketplace_API.cs" />
     <Compile Include="Helpers\ModCompat.cs" />
+    <Compile Include="Helpers\SE_PvPSpawnImmunity.cs" />
     <Compile Include="Helpers\SpriteExtractor.cs" />
     <Compile Include="Helpers\WardIsLove\WardIsLovePlugin.cs" />
     <Compile Include="Helpers\WardIsLove\WardMonoscript.cs" />

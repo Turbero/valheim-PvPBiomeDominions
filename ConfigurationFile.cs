@@ -76,6 +76,8 @@ namespace PvPBiomeDominions
         private static ConfigEntry<PvPBiomeRule> pvpRuleInAshlands;
         private static ConfigEntry<PvPBiomeRule> pvpRuleInDeepNorth;
         private static ConfigEntry<PvPBiomeRule> pvpRuleInOcean;
+        public static ConfigEntry<float> waitingTimeBeforeUpdatingBiomePvPStatus;
+        public static ConfigEntry<float> waitingTimeAfterDyingToFightPlayersAgain; 
         public static ConfigEntry<Toggle> wardCreationInMeadows;
         public static ConfigEntry<Toggle> wardCreationInBlackForest;
         public static ConfigEntry<Toggle> wardCreationInSwamp;
@@ -193,7 +195,7 @@ namespace PvPBiomeDominions
                 mapPlayersListSize = config("1 - General", "Map Players List Size", new Vector2(440, 620), "Width/Height for the map players list size (default: x=420, y=620)", false);
                 mapPinColoring = config("1 - General", "Map Pins PvP Coloring", true, "Enable/disable the pins coloring in the player maps according to their pvp status", false);
                 maxPlayerNamesCharactersInList = config("1 - General", "Max Player Names Number of Characters In List", 15, "Limits the player name shown in the map players list and replace by '...' when too long to avoid overlap with other elements", false);
-        		showMessageWhenLootingYourTombstone = config("1 - General", "Show Message When Looting Your Tombstone", true, "Enable/disable showing alert in your screen when your tombstone is being looted.");
+                pvpMinimapPlayersListRefresh = config("1 - General", "Map Players List Refresh", 10, new ConfigDescription("Time in seconds to refresh the players list in the map."));
 
                 pvpAdminExempt = config("2 - PvP Settings", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the pvp biomes rules."));
                 pvpRuleInWards = config("2 - PvP Settings", "PvP Rule In Wards (override biome)", PvPWardRule.FollowBiomeRule, new ConfigDescription("Set up the pvp rule inside wards, overriding biome rules if it's needed. Possible values: Pvp,Pve,PlayerChoice,FollowBiomeRule"));
@@ -206,10 +208,12 @@ namespace PvPBiomeDominions
                 pvpRuleInAshlands = config("2 - PvP Settings", "Biome 7 - Ashlands Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Ashlands. Possible values: Pvp,Pve,PlayerChoice."));
                 pvpRuleInDeepNorth = config("2 - PvP Settings", "Biome 8 - Deep North Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Deep North. Possible values: Pvp,Pve,PlayerChoice."));
                 pvpRuleInOcean = config("2 - PvP Settings", "Biome 9 - Ocean Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Ocean. Possible values: Pvp,Pve,PlayerChoice."));
+                showMessageWhenLootingYourTombstone = config("2 - PvP Settings", "Show Message When Looting Your Tombstone", true, "Enable/disable showing alert in your screen when your tombstone is being looted.");
                 pvpTombstoneLootAlertMessage = config("2 - PvP Settings", "Tombstone Looting Alert Message", "<color=red>{0} is looting your tombstone!</color>", new ConfigDescription("Shows alert on tombstone owner screen when being looted by a different player"));
                 pvpTombstoneDestroyAlertMessage = config("2 - PvP Settings", "Tombstone Destroy Alert Message", "<color=red>{0} sacked and destroyed your tombstone!</color>", new ConfigDescription("Shows alert on tombstone owner screen when destroyed by a different player"));
-                pvpMinimapPlayersListRefresh = config("2 - PvP Settings", "Map Players List Refresh", 10, new ConfigDescription("Time in seconds to refresh the players list in the map."));
-                    
+                waitingTimeBeforeUpdatingBiomePvPStatus = config("2 - PvP Settings", "Waiting Time Before Updating Biome PvP Status (seconds)", 0f, new ConfigDescription("Set up the waiting time before swapping to PvE or PvP area and take effect"));
+                waitingTimeAfterDyingToFightPlayersAgain = config("2 - PvP Settings", "Waiting Time After Dying To Fight Players Again (minutes)", 5f, new ConfigDescription("Grant a grace period before people can kill you or you can kill them again"));
+                
                 positionAdminExempt = config("3 - Map Position", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the 'Position Always On' rule.")); 
                 positionRuleInWards = config("3 - Map Position", "Position Rule In Wards (override biome)", PositionSharingWardRule.FollowBiomeRule, new ConfigDescription("Set up the position sharing in wards, overriding biome rules if it's needed. Possible values: HidePlayer,ShowPlayer,PlayerChoice,FollowBiomeRule"));
                 positionRuleInMeadows = config("3 - Map Position", "Biome 1 - Meadows Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing rule in Meadows. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));

@@ -15,6 +15,7 @@ namespace PvPBiomeDominions.Helpers
         private static readonly string minimapLargeCheckMarkPath = "large/PublicPanel/PublicPosition/Background/Checkmark";
 
         [HarmonyPatch(typeof(Player), nameof(Player.OnSpawned))]
+        [HarmonyPriority(Priority.First)]
         public static class PlayerOnSpawnedPatch
         {
             public static void Postfix(Player __instance)
