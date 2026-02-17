@@ -2,6 +2,7 @@
 using BepInEx;
 using System;
 using System.IO;
+using PvPBiomeDominions.Helpers;
 using PvPBiomeDominions.PositionManagement;
 using ServerSync;
 using TMPro;
@@ -113,6 +114,8 @@ namespace PvPBiomeDominions
         public static ConfigEntry<string> playersListPanelButtonText;
         public static ConfigEntry<string> playersMapListTitle;
         public static ConfigEntry<string> wardCreationNotAllowed;
+        public static ConfigEntry<string> pvpSpawnProtection;
+        public static ConfigEntry<string> pvpSpawnProtectionDescription;
 
         public static PvPBiomeRule getCurrentBiomeRulePvPRule()
         {
@@ -232,6 +235,8 @@ namespace PvPBiomeDominions
                 playersListPanelButtonText = config("5 - Translations", "Players List Panel Button Text", "Show/Hide list", new ConfigDescription("Button name used to show/hide the players panel list in the minimap."));
                 playersMapListTitle = config("5 - Translations", "Players Map List Title", "Players", new ConfigDescription("Title of the map players list with connected count."));
                 wardCreationNotAllowed = config("5 - Translations", "Ward Creation Not Allowed", "Ward Creation is not allowed in this biome", new ConfigDescription("Title of the map players list with connected count."));
+                pvpSpawnProtection = config("5 - Translations", "PvP Spawn Protection", "PvP Spawn Protection", new ConfigDescription("Title of the pvp protection buff text after dying by a player."));
+                pvpSpawnProtectionDescription = config("5 - Translations", "PvP Spawn Protection Description", "You are temporarily immune to PvP damage.", new ConfigDescription("Description of the pvp protection buff text after dying by a player."));
 
                 wardCreationInMeadows = config("6 - Ward Creation", "Ward Creation 1 - Meadows Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Meadows."));
                 wardCreationInBlackForest = config("6 - Ward Creation", "Ward Creation 2 - Black Forest Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Black Forest."));
@@ -282,6 +287,20 @@ namespace PvPBiomeDominions
                 MinimapUpdatePatch.panel.showHidePanelButton.GetComponentInChildren<TextMeshProUGUI>().text = playersListPanelButtonText.Value;
                 MinimapUpdatePatch.panel.panelRT.anchoredPosition = mapPlayersListPosition.Value;
                 MinimapUpdatePatch.panel.panelRT.sizeDelta = mapPlayersListSize.Value;
+            }
+            
+            //Refresh PvP Buff text
+            if (Player.m_localPlayer != null)
+            {
+                foreach (var se in Player.m_localPlayer.GetSEMan().GetStatusEffects())
+                {
+                    if (se.name.Equals(nameof(SE_PvPSpawnImmunity)))
+                    {
+                        se.m_name = pvpSpawnProtection.Value;
+                        se.m_tooltip = pvpSpawnProtectionDescription.Value;
+                        se.m_cooldown = waitingTimeAfterDyingToFightPlayersAgain.Value;
+                    }
+                }
             }
         }
 
