@@ -3,7 +3,6 @@ using System.Linq;
 using HarmonyLib;
 using PvPBiomeDominions.Helpers;
 using PvPBiomeDominions.PositionManagement;
-using UnityEngine;
 
 namespace PvPBiomeDominions.PvPManagement
 {
@@ -16,53 +15,9 @@ namespace PvPBiomeDominions.PvPManagement
         }
     }
     
-
-    [HarmonyPatch(typeof(Player), nameof(Player.OnSpawned))]
-    public class SE_PvPSpawnProtectionPatch
-    {
-        public static void Postfix(Player __instance)
-        {
-            if (ConfigurationFile.waitingTimeAfterDyingToFightPlayersAgain.Value > 0)
-            {
-                Logger.Log("Adding PvP Buff Protection to "+__instance.GetPlayerName());
-                var se = ScriptableObject.CreateInstance<SE_PvPSpawnImmunity>();
-                se.m_ttl = ConfigurationFile.waitingTimeAfterDyingToFightPlayersAgain.Value * 60;
-
-                __instance.GetSEMan().AddStatusEffect(se);
-            }
-        }
-    }
-    
     [HarmonyPatch(typeof(Character), nameof(Character.ApplyDamage))]
     public class PvPKillCountPatch
     {
-        [HarmonyPrefix]
-        public static bool CheckPvPProtectionBuff(Character __instance, HitData hit)
-        {
-            Logger.Log("[CheckPvPProtectionBuff] Prefix. Damage received to character type: " + __instance.GetType());
-            //Buff PvP protection Check
-            if (__instance != null && __instance is Player)
-            {
-                Character attacker = hit.GetAttacker();
-                if (attacker is Player attackerPlayer)
-                {
-                    Logger.Log("[CheckPvPProtectionBuff] Prefix. Player vs Player detected");
-                    if (__instance.GetSEMan().HaveStatusEffect(SE_PvPSpawnImmunity.HASH))
-                    {
-                        Logger.Log("Player that received hit has PvP protection buff and cannot be damaged by players yet!");
-                        return false;
-                    }
-
-                    if (attackerPlayer!.GetSEMan().HaveStatusEffect(SE_PvPSpawnImmunity.HASH))
-                    {
-                        Logger.Log("Player that attacks has PvP protection buff and cannot damage players yet!");
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        
         [HarmonyPostfix]
         public static void ApplyReceivedDamageToCharacter(Character __instance, HitData hit)
         {

@@ -108,6 +108,7 @@
     <Compile Include="PvPManagement\PvPKillCountPatch.cs" />
     <Compile Include="PvPManagement\PvPLevelsPatch.cs" />
     <Compile Include="PvPManagement\PvPPatch.cs" />
+    <Compile Include="PvPManagement\PvPProtectionBuffPatch.cs" />
     <Compile Include="PvPManagement\PvPWardPatch.cs" />
     <Compile Include="PvPManagement\TombStoneAlertsPatch.cs" />
     <Compile Include="RPC\RPC_PlayerRelevantInfo.cs" />
