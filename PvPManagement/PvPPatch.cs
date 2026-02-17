@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using System;
+using System.Threading.Tasks;
+using HarmonyLib;
 using PvPBiomeDominions.Helpers.WardIsLove;
 
 namespace PvPBiomeDominions.PvPManagement
@@ -46,7 +48,14 @@ namespace PvPBiomeDominions.PvPManagement
             }
             InventoryGui.instance.m_pvp.interactable = false;
 
-            SetupPvP(InventoryGui.instance, currentBiomeBiomeRule == ConfigurationFile.PvPBiomeRule.Pvp);
+            //Introduce delay before taking effect
+            _ = WaitForSecondsAsync(InventoryGui.instance, currentBiomeBiomeRule == ConfigurationFile.PvPBiomeRule.Pvp);
+        }
+        
+        private static async Task WaitForSecondsAsync(InventoryGui invGUI, bool isPvPOn)
+        {
+            await Task.Delay((int)(Math.Max(0f, ConfigurationFile.waitingTimeBeforeUpdatingBiomePvPStatus.Value) * 1000)); // to milliseconds
+            SetupPvP(invGUI, isPvPOn);
         }
         
         private static void SetupPvP(InventoryGui invGUI, bool isPvPOn)
