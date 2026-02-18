@@ -292,13 +292,26 @@ namespace PvPBiomeDominions
             //Refresh PvP Buff text
             if (Player.m_localPlayer != null)
             {
-                foreach (var se in Player.m_localPlayer.GetSEMan().GetStatusEffects())
+                if (waitingTimeAfterDyingToFightPlayersAgain.Value > 0)
                 {
-                    if (se.name.Equals(nameof(SE_PvPSpawnImmunity)))
+                    foreach (var se in Player.m_localPlayer.GetSEMan().GetStatusEffects())
                     {
-                        se.m_name = pvpSpawnProtection.Value;
-                        se.m_tooltip = pvpSpawnProtectionDescription.Value;
-                        se.m_cooldown = waitingTimeAfterDyingToFightPlayersAgain.Value;
+                        if (se.name.Equals(nameof(SE_PvPSpawnImmunity)))
+                        {
+                            se.m_name = pvpSpawnProtection.Value;
+                            se.m_tooltip = pvpSpawnProtectionDescription.Value;
+                            se.m_ttl = Math.Max(0.01f, waitingTimeAfterDyingToFightPlayersAgain.Value * 60f);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var se in Player.m_localPlayer.GetSEMan().GetStatusEffects())
+                    {
+                        if (se.name.Equals(nameof(SE_PvPSpawnImmunity)))
+                        {
+                            se.m_ttl = 0.01f;
+                        }
                     }
                 }
             }
