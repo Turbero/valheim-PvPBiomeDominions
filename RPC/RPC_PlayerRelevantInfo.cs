@@ -5,7 +5,8 @@ namespace PvPBiomeDominions.RPC
         public string playerName;
         public int level;
         public bool isPvP;
-        public int guildId;
+        public string guildName;
+        public int guildIconId;
 
         public string GetLevelText()
         {
@@ -17,7 +18,8 @@ namespace PvPBiomeDominions.RPC
             pkg.Write(playerName);
             pkg.Write(level);
             pkg.Write(isPvP);
-            pkg.Write(guildId);
+            pkg.Write(guildName);
+            pkg.Write(guildIconId);
             return pkg;
         }
 
@@ -28,7 +30,8 @@ namespace PvPBiomeDominions.RPC
                 playerName = pkg.ReadString(),
                 level = pkg.ReadInt(),
                 isPvP = pkg.ReadBool(),
-                guildId = pkg.ReadInt(),
+                guildName = pkg.ReadString(),
+                guildIconId = pkg.ReadInt()
             };
             return info;
         }

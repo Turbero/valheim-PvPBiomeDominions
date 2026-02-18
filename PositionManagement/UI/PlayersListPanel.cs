@@ -14,8 +14,9 @@ namespace PvPBiomeDominions.PositionManagement.UI
     {
         public string name;
         public int level;
-        public int guildId;
         public bool isPvP;
+        public string guildName;
+        public int guildIconId;
         
         public Image iconPlayer;
         public TextMeshProUGUI killsTimesUI;
@@ -410,6 +411,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             guildRt.sizeDelta = new Vector2(32, 32);
             guildRt.anchoredPosition = new Vector2(Groups.API.IsLoaded() ? 195 : 135, 0);
             Image imageGuild = guildGO.GetComponent<Image>();
+            //TODO tooltip with guild.name
             
             playerEntriesObjects.Add(entry);
 
@@ -465,12 +467,11 @@ namespace PvPBiomeDominions.PositionManagement.UI
                     levelText.text = "LVL: " + playerEntry.GetLevelText();
                     
                     // 3) Guild icon
-                    Guilds.Guild guild = Guilds.API.GetGuild(playerEntry.guildId);
-                    if (guild != null)
+                    if (playerEntry.guildIconId != -1)
                     {
-                        imageGuild.sprite = Guilds.API.GetGuildIconById(guild.General.icon);
+                        imageGuild.sprite = Guilds.API.GetGuildIconById(playerEntry.guildIconId);
                     }
-                    guildGO.SetActive(Guilds.API.IsLoaded() && guild != null);
+                    guildGO.SetActive(Guilds.API.IsLoaded() && playerEntry.guildIconId != -1);
                 }
                 else
                 {
@@ -487,8 +488,9 @@ namespace PvPBiomeDominions.PositionManagement.UI
             {
                 name = info.m_name,
                 level = 0, //default
-                guildId = -1, //default
                 isPvP = false, //default
+                guildName = "", //default
+                guildIconId = -1, //default
                 iconPlayer = playerIcon,
                 killsTimesUI = killsValue,
                 killedByTimesUI = killedByValue,
@@ -513,10 +515,15 @@ namespace PvPBiomeDominions.PositionManagement.UI
 
         public void UpdatePlayerRelevantInfo(RPC_PlayerRelevantInfo playerRelevantInfo)
         {
-            Logger.Log($"[UpdatePlayerRelevantInfo] playerEntry found: name {playerRelevantInfo.playerName}, level {playerRelevantInfo.level}, isPvP {playerRelevantInfo.isPvP}, guildId {playerRelevantInfo.guildId}");
+            Logger.Log($"[UpdatePlayerRelevantInfo] playerRelevantInfo: name {playerRelevantInfo.playerName}, level {playerRelevantInfo.level}, isPvP {playerRelevantInfo.isPvP}, guildName {playerRelevantInfo.guildName}, guildIconId {playerRelevantInfo.guildIconId}");
             
             //It has to exist at this point
             PlayerEntry playerEntry = cachedPlayerEntries.Find(p => p.name.Equals(playerRelevantInfo.playerName));
+            if (playerEntry == null)
+            {
+                Logger.LogWarning("[UpdatePlayerRelevantInfo] playerEntry "+playerRelevantInfo.playerName+" not found.");
+                return;
+            }
 
             //Icon (UI)
             if (playerEntry.iconPlayer != null && Groups.API.GroupPlayers().FindIndex(p => p.name.Equals(playerRelevantInfo.playerName)) >= 0)
@@ -525,9 +532,12 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 playerEntry.iconPlayer.sprite = ImageManager.spriteGroupIconImage;
             }
             else
-                playerEntry.iconPlayer.sprite = playerRelevantInfo.isPvP 
+            {
+                Logger.Log("[UpdatePlayerRelevantInfo] isNotInGroup");
+                playerEntry.iconPlayer.sprite = playerRelevantInfo.isPvP
                     ? ImageManager.getSpriteIconVanillaImage()
                     : ImageManager.spriteBlueIconImage;
+            }
 
             //isPvP
             playerEntry.isPvP = playerRelevantInfo.isPvP;
@@ -560,12 +570,21 @@ namespace PvPBiomeDominions.PositionManagement.UI
             //Level (UI)
             if (playerEntry.levelUI != null)
                 playerEntry.levelUI.text = "LVL: " + playerRelevantInfo.GetLevelText();
-            
+
             //Guild
-            playerEntry.guildId = playerRelevantInfo.guildId;
+            playerEntry.guildName = playerRelevantInfo.guildName;
             //GuildIcon (UI)
-            if (playerEntry.guildIconUI != null && playerEntry.guildId != -1)
-                playerEntry.guildIconUI.sprite = Guilds.API.GetGuildIconById(Guilds.API.GetGuild(playerEntry.guildId)!.General.icon);
+            playerEntry.guildIconId = playerRelevantInfo.guildIconId;
+            if (playerEntry.guildIconUI != null && playerEntry.guildIconId != -1)
+            {
+                Sprite spriteGuild = Guilds.API.GetGuildIconById(playerEntry.guildIconId);
+                if (spriteGuild == null)
+                {
+                    Logger.LogWarning("Not sprite found for guildIconId "+playerEntry.guildIconId);
+                    return;
+                }
+                playerEntry.guildIconUI.sprite = spriteGuild;
+            }
 
             //TODO Minimap icon visibility refresh
             //Minimap.instance.m_

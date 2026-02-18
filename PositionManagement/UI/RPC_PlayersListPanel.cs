@@ -38,8 +38,9 @@ namespace PvPBiomeDominions.PositionManagement.UI
             {
                 playerName = localPlayer.GetPlayerName(),
                 level = EpicMMOSystem_API.GetLevel(),
-                guildId = guild != null ? guild.General.icon : -1,
-                isPvP = localPlayer.IsPVPEnabled()
+                isPvP = localPlayer.IsPVPEnabled(),
+                guildName = guild != null ? guild.Name : "",
+                guildIconId = guild != null ? guild.General.icon : -1
             };
             ZPackage pkg = playerRelevantInfo.GetPackage();
             
@@ -54,10 +55,8 @@ namespace PvPBiomeDominions.PositionManagement.UI
             Player localPlayer = Player.m_localPlayer;
             Logger.Log("[RPC_ResponsePlayerRelevantInfo] RPC sent to " + localPlayer.GetPlayerName() + " from " + playerSender.m_name);
 
-            RPC_PlayerRelevantInfo playerRelevantInfo = RPC_PlayerRelevantInfo.FromPackage(pkg);
-            Logger.Log($"[RPC_ResponsePlayerRelevantInfo] playerRelevantInfo received: playerName {playerRelevantInfo.playerName} level: {playerRelevantInfo.level} and isPvP{playerRelevantInfo.isPvP}");
-            
-            MinimapUpdatePatch.panel.UpdatePlayerRelevantInfo(playerRelevantInfo);
+            if (MinimapUpdatePatch.panel != null && MinimapUpdatePatch.panel.panelRoot != null)
+                MinimapUpdatePatch.panel.UpdatePlayerRelevantInfo(RPC_PlayerRelevantInfo.FromPackage(pkg));
         }
     }
 }
