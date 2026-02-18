@@ -3,16 +3,25 @@
 PVP Biome Dominions is a mod that allows creating rules for:
 - PVP control
 - Position sharing management
+- Ward Creation
 
 based on the current biome of the player. You can apply different combat rules to Meadows, Black Forest, etc even for Ocean!
 
 In addition, a list of the current players will be shown on the left side of the big map when you open it up with a summary of the current player statuses.
 
+## Compatibility
+
+This mod has been created with compatibility for the next mods:
+
+* WardIsLove: thor wards will follow the rule configured in the wards options
+* Marketplace: rules are skipped while in the territory of the server marketplace
+* EpicMMO: player levels are visible in the map players list
+* Groups: player icons are colored and shown at the top in the map players list
+* Guilds: player guild icons are shown at the end of each row in the map players list
+
 ## Usage instructions
 
 Generate the configuration file "Turbero.PvPBiomeDominions.cfg" that will be created once the mod is executed for first time. Then, edit the file or use a ConfigurationManager mod to apply the rules to each biome.
-
-![](https://i.imgur.com/AM5JrUI.png)
 
 ### -- PvP Settings Configuration --
 
@@ -62,12 +71,20 @@ Alternatively, admins can bypass these rules if the check is On.
 
 ![](https://i.imgur.com/SZUbMu5.png)
 
-## Compatibility
+### -- Full Configuration screenshots --
 
-This mod has been created with compatibility for the next mods:
+![](https://i.imgur.com/23EIXo1.png)
 
-* WardIsLove: thor wards will follow the rule configured in the wards options
-* Marketplace: rules are skipped while in the territory of the server marketplace
+![](https://i.imgur.com/cv8extN.png)
+
+![](https://i.imgur.com/gGeqBhB.png)
+
+![](https://i.imgur.com/56i4XZs.png)
+
+![](https://i.imgur.com/35wSQAb.png)
+
+![](https://i.imgur.com/oplOZHW.png)
+
 
 ## About myself
 
