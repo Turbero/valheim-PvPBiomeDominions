@@ -1,5 +1,20 @@
 ### CHANGELOG
 
+## 1.5.0
+
+Added:
+* GuildsAPI integration. Now guild icons of each player are shown at the end of each data player row.
+* new option to configure a small delay between biomes when PvP status changes (to avoid abusing running to PvE area to be safe). Delay is zero by default (disabled). Adjust as you need.
+* new option to give a pvp immunity buff for some minutes before being able to engage in pvp battle after dying (disabled by default). Damage done and received is zero while this buff is active.
+
+Changed some configurations:
+* Added translations for pvp immunity buff
+* "Show Message When Looting Your Tombstone" moved to "2 - PvP Settings" category
+* "Map Players List Refresh" moved to "1 - General"
+
+Fixed:
+* some console issues when showing some UI elements for first time
+
 ## 1.4.1
 
 * Fixed log error when using "die" console command
