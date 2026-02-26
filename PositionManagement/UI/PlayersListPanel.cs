@@ -411,8 +411,11 @@ namespace PvPBiomeDominions.PositionManagement.UI
             guildRt.sizeDelta = new Vector2(32, 32);
             guildRt.anchoredPosition = new Vector2(Groups.API.IsLoaded() ? 195 : 135, 0);
             Image imageGuild = guildGO.GetComponent<Image>();
-            //TODO tooltip with guild.name
-            
+            //Tooltip with guild.name
+            UITooltip guildTooltip = guildGO.AddComponent<UITooltip>();
+            guildTooltip.m_tooltipPrefab = GameObject.Instantiate(
+                InventoryGui.instance.transform.Find("root/Info/Skills").GetComponent<UITooltip>().m_tooltipPrefab);
+
             playerEntriesObjects.Add(entry);
 
             killsValue.text = "0";
@@ -435,6 +438,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 if (guild != null)
                 {
                     imageGuild.sprite = Guilds.API.GetGuildIconById(guild.General.icon);
+                    guildTooltip.m_text = guild.Name;
                 }
                 guildGO.SetActive(Guilds.API.IsLoaded() && guild != null);
                 return;
@@ -470,6 +474,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
                     if (playerEntry.guildIconId != -1)
                     {
                         imageGuild.sprite = Guilds.API.GetGuildIconById(playerEntry.guildIconId);
+                        guildTooltip.m_text = playerEntry.guildName;
                     }
                     guildGO.SetActive(Guilds.API.IsLoaded() && playerEntry.guildIconId != -1);
                 }
