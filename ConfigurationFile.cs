@@ -117,6 +117,9 @@ namespace PvPBiomeDominions
         public static ConfigEntry<string> pvpSpawnProtection;
         public static ConfigEntry<string> pvpSpawnProtectionDescription;
 
+        public static ConfigEntry<string> greenSkullPlayersMapList;
+        public static ConfigEntry<string> redSkullPlayersMapList;
+
         public static PvPBiomeRule getCurrentBiomeRulePvPRule()
         {
             if (!EnvMan.instance) return PvPBiomeRule.PlayerChoose;
@@ -237,6 +240,8 @@ namespace PvPBiomeDominions
                 wardCreationNotAllowed = config("5 - Translations", "Ward Creation Not Allowed", "Ward Creation is not allowed in this biome", new ConfigDescription("Title of the map players list with connected count."));
                 pvpSpawnProtection = config("5 - Translations", "PvP Spawn Protection", "PvP Spawn Protection", new ConfigDescription("Title of the pvp protection buff text after dying by a player."));
                 pvpSpawnProtectionDescription = config("5 - Translations", "PvP Spawn Protection Description", "You are temporarily immune to PvP damage.", new ConfigDescription("Description of the pvp protection buff text after dying by a player."));
+                greenSkullPlayersMapList = config("5 - Translations", "Players Map List Green Skull Tooltip", "Number of times you killed this player.", new ConfigDescription("Tooltip text of the green skull icon in the map players list."));
+                redSkullPlayersMapList = config("5 - Translations", "Players Map List Red Skull Tooltip", "Number of times you were killed by this player.", new ConfigDescription("Tooltip text of the red skull icon in the map players list."));
 
                 wardCreationInMeadows = config("6 - Ward Creation", "Ward Creation 1 - Meadows Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Meadows."));
                 wardCreationInBlackForest = config("6 - Ward Creation", "Ward Creation 2 - Black Forest Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Black Forest."));

@@ -367,6 +367,10 @@ namespace PvPBiomeDominions.PositionManagement.UI
             Image killsIcon = killsIconGO.GetComponent<Image>();
             killsIcon.sprite = killsIconSprite;
             killsIcon.color = new Color32(0, 255, 0, 255);
+            UITooltip killsIconGOTooltip = killsIconGO.AddComponent<UITooltip>();
+            killsIconGOTooltip.m_tooltipPrefab = GameObject.Instantiate(
+                InventoryGui.instance.transform.Find("root/Info/Skills").GetComponent<UITooltip>().m_tooltipPrefab);
+            killsIconGOTooltip.m_text = ConfigurationFile.greenSkullPlayersMapList.Value;
 
             var killsValueGO = new GameObject("Player_Kills_" + info.m_name, typeof(RectTransform), typeof(TextMeshProUGUI));
             killsValueGO.transform.SetParent(entry.transform, false);
@@ -386,6 +390,10 @@ namespace PvPBiomeDominions.PositionManagement.UI
             Image killedByIcon = killedByIconGO.GetComponent<Image>();
             killedByIcon.sprite = killsIconSprite;
             killedByIcon.color = new Color32(255, 0, 0, 255);
+            UITooltip killedByIconGOTooltip = killedByIconGO.AddComponent<UITooltip>();
+            killedByIconGOTooltip.m_tooltipPrefab = GameObject.Instantiate(
+                InventoryGui.instance.transform.Find("root/Info/Skills").GetComponent<UITooltip>().m_tooltipPrefab);
+            killedByIconGOTooltip.m_text = ConfigurationFile.redSkullPlayersMapList.Value;
             
             var killedByValueGO = new GameObject("Player_KilledBy_" + info.m_name, typeof(RectTransform), typeof(TextMeshProUGUI));
             killedByValueGO.transform.SetParent(entry.transform, false);
