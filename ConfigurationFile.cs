@@ -116,9 +116,13 @@ namespace PvPBiomeDominions
         public static ConfigEntry<string> wardCreationNotAllowed;
         public static ConfigEntry<string> pvpSpawnProtection;
         public static ConfigEntry<string> pvpSpawnProtectionDescription;
-
         public static ConfigEntry<string> greenSkullPlayersMapList;
         public static ConfigEntry<string> redSkullPlayersMapList;
+        
+        //Tombstones
+        public static ConfigEntry<Toggle> noItemLoss;
+        public static ConfigEntry<Toggle> keepEquipped;
+        public static ConfigEntry<Toggle> keepHotbar;
 
         public static PvPBiomeRule getCurrentBiomeRulePvPRule()
         {
@@ -254,6 +258,10 @@ namespace PvPBiomeDominions
                 wardCreationInOcean = config("6 - Ward Creation", "Ward Creation 9 - Ocean Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Ocean."));
                 wardModsPrefabIds = config("6 - Ward Creation", "Ward Creation Mods PrefabIds", "Thorward", new ConfigDescription("Comma-separated list of extra ward pieces from other mods to include in the ward creation check (default = Thorward)."));
 
+                noItemLoss = config("7 - Tombstones", "No Items Loss On Death", Toggle.Off, new ConfigDescription("If on, no items will be lost upon death by all means whatsoever and hence tombstone won't be created."));
+                keepEquipped = config("7 - Tombstones", "Keep Equipped Items On Death", Toggle.Off, new ConfigDescription("If on, equipped items such as armors, weapons, utilities... will keep with the dead player and won't go to the tombstone."));
+                keepHotbar = config("7 - Tombstones", "Keep Hotbar Items On Death", Toggle.Off, new ConfigDescription("If on, items in the hotbar from slot 1 to 8 will keep with the dead player and won't go to the tombstone."));
+                
                 SetupWatcher();
             }
         }

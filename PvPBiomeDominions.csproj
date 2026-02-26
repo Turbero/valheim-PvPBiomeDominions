@@ -113,6 +113,7 @@
     <Compile Include="PvPManagement\TombStoneAlertsPatch.cs" />
     <Compile Include="RPC\RPC_PlayerRelevantInfo.cs" />
     <Compile Include="RPC\RPC_Register.cs" />
+    <Compile Include="TombstoneManagement\CreateTombstoneRulesPatch.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Directory.Build.props" />
