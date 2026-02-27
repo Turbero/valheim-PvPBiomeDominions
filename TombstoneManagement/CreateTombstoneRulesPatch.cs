@@ -21,17 +21,13 @@ namespace PvPBiomeDominions.TombstoneManagement
 				string prefabName = Utils.GetPrefabName(item.m_dropPrefab);
 				bool isHotbar = item.m_gridPos.y == 0;
 				string invSection = isHotbar ? "hotbar" : "inventory";
-				bool flag = ConfigurationFile.noItemLoss.Value == ConfigurationFile.Toggle.On;
-				bool flag2 = item.m_equipped && ConfigurationFile.keepEquipped.Value == ConfigurationFile.Toggle.On;
-				bool flag3 = isHotbar && ConfigurationFile.keepHotbar.Value == ConfigurationFile.Toggle.On;
-				if (flag || flag2 || flag3)
+				bool itemLossFlag = getFlagByPvPStatus("noItemLoss", __instance);
+				bool keepEquippedFlag = item.m_equipped && getFlagByPvPStatus("keepEquipped", __instance);
+				bool hotbarFlag = isHotbar && getFlagByPvPStatus("keepHotbar", __instance);
+				if (itemLossFlag || keepEquippedFlag || hotbarFlag)
 				{
 					__state.Add(item, item.m_equipped);
-					string reason = flag 
-						? "noItemLoss setting" 
-						: flag2 
-							? "keepEquipped setting" 
-							: "keepHotbar setting";
+					string reason = getReason(itemLossFlag, keepEquippedFlag);
 					Logger.Log("Keeping " + prefabName + " in " + invSection + " due to the " + reason + ".");
 					continue;
 				}
@@ -41,6 +37,34 @@ namespace PvPBiomeDominions.TombstoneManagement
 			GameManager.SetPrivateValue(inventory, "m_inventory", list);
 		}
 
+		private static bool getFlagByPvPStatus(string configName, Player player)
+		{
+			if (player.IsPVPEnabled())
+			{
+				if (configName.Equals("noItemLoss"))
+					return ConfigurationFile.pvpNoItemLoss.Value == ConfigurationFile.Toggle.On;
+				if (configName.Equals("keepEquipped"))
+					return ConfigurationFile.pvpKeepEquipped.Value == ConfigurationFile.Toggle.On;
+				if (configName.Equals("keepHotbar"))
+					return ConfigurationFile.pvpKeepHotbar.Value == ConfigurationFile.Toggle.On;
+			} else
+			{
+				if (configName.Equals("noItemLoss"))
+					return ConfigurationFile.pveNoItemLoss.Value == ConfigurationFile.Toggle.On;
+				if (configName.Equals("keepEquipped"))
+					return ConfigurationFile.pveKeepEquipped.Value == ConfigurationFile.Toggle.On;
+				if (configName.Equals("keepHotbar"))
+					return ConfigurationFile.pveKeepHotbar.Value == ConfigurationFile.Toggle.On;
+			}
+			return false;
+		}
+
+		private static string getReason(bool itemLossFlag, bool keepEquippedFlag)
+		{
+			return itemLossFlag ? "noItemLoss setting" 
+				: keepEquippedFlag  ? "keepEquipped setting" : "keepHotbar setting";
+		}
+
 		[HarmonyPriority(Priority.VeryLow)]
 		private static void Postfix(Player __instance, Dictionary<ItemDrop.ItemData, bool> __state)
 		{
@@ -48,11 +72,13 @@ namespace PvPBiomeDominions.TombstoneManagement
 			List<ItemDrop.ItemData> inventoryList = GameManager.GetPrivateValue(inventory, "m_inventory") as List<ItemDrop.ItemData>;
 			foreach (KeyValuePair<ItemDrop.ItemData, bool> item in __state)
 			{
-				Logger.Log("Adding " + (item.Key.m_dropPrefab).name + " back to inventory.");
+				var itemDropPrefabName = item.Key.m_dropPrefab.name;
+				Logger.Log("Adding " + itemDropPrefabName + " back to inventory.");
 				inventoryList?.Add(item.Key);
-				Logger.Log($"Item {item.Key.m_dropPrefab.name} was equipped: {item.Value}");
-				if (item.Value && (!item.Key.m_dropPrefab.name.StartsWith("BBH") || !item.Key.m_dropPrefab.name.EndsWith("Quiver")))
+				Logger.Log($"Item {itemDropPrefabName} was equipped: {item.Value}");
+				if (item.Value && (!itemDropPrefabName.StartsWith("BBH") || !itemDropPrefabName.EndsWith("Quiver")))
 				{
+					Logger.Log($"REequipping item {itemDropPrefabName}");
 					__instance.UnequipItem(item.Key, false);
 					__instance.EquipItem(item.Key, false);
 				}
