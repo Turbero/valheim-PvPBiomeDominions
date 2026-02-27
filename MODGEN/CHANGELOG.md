@@ -1,5 +1,24 @@
 ### CHANGELOG
 
+## 1.6.0
+
+New tombstone configuration features:
+* Added new section to configure the items that will go into tombstones when the player dies. You can choose any combination of the next options (all disabled by default):
+  * no item loss (will override the rest)
+  * keep equipped
+  * keep hotbar (slot 1 to 8)
+* These options can be configured for PvE and PvP areas separately. For example: you can configure to keep all your items if dying in PvE but losing all but armor in PvP.
+* Added new option to handle a list of prefabNames of items to exclude from all selected tombstone rules. For example: you can enable "keep equipped" to keep your armor but add exception for BeltStrength, Demister, Wishbone, any backpack id from mods... which will always drop.
+* Added new option to allow looting the tombstones of other players depending on the PvE/PvP player status (by default you can loot everything everywhere)
+
+Others:
+* Added tooltip to guild icons with guild names and green/red skull icons for clarification
+* Added option to hide "day x" message at the beginning of each day (default = false, activate manually in the .cfg file)
+
+Fixed:
+* temporary white square in guild icon until this is loaded
+* console issue first time a player logs in into a world
+
 ## 1.5.0
 
 Added:
