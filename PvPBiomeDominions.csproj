@@ -97,6 +97,7 @@
     <Compile Include="Helpers\WardIsLove\WardIsLovePlugin.cs" />
     <Compile Include="Helpers\WardIsLove\WardMonoscript.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="PositionManagement\DayMessagePatch.cs" />
     <Compile Include="PositionManagement\MinimapUpdatePatch.cs" />
     <Compile Include="PositionManagement\PositionPatch.cs" />
     <Compile Include="PositionManagement\UI\PlayersListPanel.cs" />

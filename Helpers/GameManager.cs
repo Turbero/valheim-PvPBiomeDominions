@@ -25,6 +25,16 @@ namespace PvPBiomeDominions.Helpers
         {
             obj.GetType().GetField(name, bindingAttr)?.SetValue(obj, value);
         }
+        
+        public static object GetPrivateMethod(object obj, string name, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.NonPublic)
+        {
+            return obj.GetType().GetMethod(name, bindingAttr)?.Invoke(obj, null);
+        }
+        
+        public static int GetCurrentDay()
+        {
+            return (int) GetPrivateMethod(EnvMan.instance, "GetCurrentDay");
+        }
 
         public static bool isInfoPVP(ZNet.PlayerInfo info)
         {

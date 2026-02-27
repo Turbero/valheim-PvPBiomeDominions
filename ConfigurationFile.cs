@@ -92,6 +92,7 @@ namespace PvPBiomeDominions
         public static ConfigEntry<string> pvpTombstoneLootAlertMessage;
         public static ConfigEntry<string> pvpTombstoneDestroyAlertMessage;
         public static ConfigEntry<int> pvpMinimapPlayersListRefresh;
+        public static ConfigEntry<Toggle> dayMessageOff;
 
         //Position management
         public static ConfigEntry<Toggle> positionAdminExempt;
@@ -211,7 +212,8 @@ namespace PvPBiomeDominions
                 mapPinColoring = config("1 - General", "Map Pins PvP Coloring", true, "Enable/disable the pins coloring in the player maps according to their pvp status", false);
                 maxPlayerNamesCharactersInList = config("1 - General", "Max Player Names Number of Characters In List", 15, "Limits the player name shown in the map players list and replace by '...' when too long to avoid overlap with other elements", false);
                 pvpMinimapPlayersListRefresh = config("1 - General", "Map Players List Refresh", 10, new ConfigDescription("Time in seconds to refresh the players list in the map."));
-
+                dayMessageOff = config("1 - General", "Turn off Day Message", Toggle.Off, "If on, the mod will disable the day count message when attempting to display it on the player's screen.");
+                
                 pvpAdminExempt = config("2 - PvP Settings", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the pvp biomes rules."));
                 pvpRuleInWards = config("2 - PvP Settings", "PvP Rule In Wards (override biome)", PvPWardRule.FollowBiomeRule, new ConfigDescription("Set up the pvp rule inside wards, overriding biome rules if it's needed. Possible values: Pvp,Pve,PlayerChoice,FollowBiomeRule"));
                 pvpRuleInMeadows = config("2 - PvP Settings", "Biome 1 - Meadows Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Meadows. Possible values: Pvp,Pve,PlayerChoice."));
