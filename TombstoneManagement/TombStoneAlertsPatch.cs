@@ -8,6 +8,19 @@ namespace PvPBiomeDominions.PvPManagement
         [HarmonyPatch(typeof(Container), "Interact")]
         public class Container_Interact_Patch
         {
+            static bool Prefix(Container __instance, Humanoid character)
+            {
+                if (character is Player thief)
+                {
+                    bool canLoot = thief.IsPVPEnabled()
+                        ? ConfigurationFile.pvpAllowLootOtherTombstones.Value == ConfigurationFile.Toggle.On
+                        : ConfigurationFile.pveAllowLootOtherTombstones.Value == ConfigurationFile.Toggle.On;
+                    if (!canLoot)
+                        MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, ConfigurationFile.forbidLootOtherTombstonesMessage.Value);
+                    return canLoot;
+                }
+                return true; 
+            }
             static void Postfix(Container __instance, Humanoid character, bool hold, bool alt, ref bool __result)
             {
                 if (!ConfigurationFile.showMessageWhenLootingYourTombstone.Value || ConfigurationFile.pvpTombstoneLootAlertMessage.Value == string.Empty) return;

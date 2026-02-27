@@ -91,6 +91,7 @@ namespace PvPBiomeDominions
         public static ConfigEntry<string> wardModsPrefabIds;
         public static ConfigEntry<string> pvpTombstoneLootAlertMessage;
         public static ConfigEntry<string> pvpTombstoneDestroyAlertMessage;
+        public static ConfigEntry<string> forbidLootOtherTombstonesMessage;
         public static ConfigEntry<int> pvpMinimapPlayersListRefresh;
         public static ConfigEntry<Toggle> dayMessageOff;
 
@@ -121,10 +122,12 @@ namespace PvPBiomeDominions
         public static ConfigEntry<string> redSkullPlayersMapList;
         
         //Tombstones
+        public static ConfigEntry<Toggle> pveAllowLootOtherTombstones;
         public static ConfigEntry<Toggle> pveNoItemLoss;
         public static ConfigEntry<Toggle> pveKeepEquipped;
         public static ConfigEntry<Toggle> pveKeepHotbar;
         public static ConfigEntry<string> pveExceptionPrefabIds;
+        public static ConfigEntry<Toggle> pvpAllowLootOtherTombstones;
         public static ConfigEntry<Toggle> pvpNoItemLoss;
         public static ConfigEntry<Toggle> pvpKeepEquipped;
         public static ConfigEntry<Toggle> pvpKeepHotbar;
@@ -252,6 +255,7 @@ namespace PvPBiomeDominions
                 redSkullPlayersMapList = config("5 - Translations", "Players Map List Red Skull Tooltip", "Number of times you were killed by this player.", new ConfigDescription("Tooltip text of the red skull icon in the map players list."));
                 pvpTombstoneLootAlertMessage = config("5 - Translations", "Tombstone Looting Alert Message", "<color=red>{0} is looting your tombstone!</color>", new ConfigDescription("Shows alert on tombstone owner screen when being looted by a different player"));
                 pvpTombstoneDestroyAlertMessage = config("5 - Translations", "Tombstone Destroy Alert Message", "<color=red>{0} sacked and destroyed your tombstone!</color>", new ConfigDescription("Shows alert on tombstone owner screen when destroyed by a different player"));
+                forbidLootOtherTombstonesMessage = config("5 - Translations", "Forbid Loot Other Tombstones Message", "Looting other tombstones is <color=red>FORBIDDEN</color> in this biome!", new ConfigDescription("Message to show when tombstones cannot be looted in the current biome."));
 
                 wardCreationInMeadows = config("6 - Ward Creation", "Ward Creation 1 - Meadows Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Meadows."));
                 wardCreationInBlackForest = config("6 - Ward Creation", "Ward Creation 2 - Black Forest Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Black Forest."));
@@ -264,10 +268,12 @@ namespace PvPBiomeDominions
                 wardCreationInOcean = config("6 - Ward Creation", "Ward Creation 9 - Ocean Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Ocean."));
                 wardModsPrefabIds = config("6 - Ward Creation", "Ward Creation Mods PrefabIds", "Thorward", new ConfigDescription("Comma-separated list of extra ward pieces from other mods to include in the ward creation check (default = Thorward)."));
 
+                pveAllowLootOtherTombstones = config("7 - Tombstones", "PvE - Allow Loot Other Tombstones", Toggle.On, new ConfigDescription("If on, in PvE areas all tombstones can be looted."));
                 pveNoItemLoss = config("7 - Tombstones", "PvE - No Items Loss On Death", Toggle.Off, new ConfigDescription("If on, in PvE areas no items will be lost upon death by all means whatsoever and hence tombstone won't be created."));
                 pveKeepEquipped = config("7 - Tombstones", "PvE - Keep Equipped Items On Death", Toggle.Off, new ConfigDescription("If on, in PvE areas equipped items such as armors, weapons, utilities... will keep with the dead player and won't go to the tombstone."));
                 pveKeepHotbar = config("7 - Tombstones", "PvE - Keep Hotbar Items On Death", Toggle.Off, new ConfigDescription("If on, in PvE areas items in the hotbar from slot 1 to 8 will keep with the dead player and won't go to the tombstone."));
                 pveExceptionPrefabIds = config("7 - Tombstones", "PvE - Exception PrefabIds", "", new ConfigDescription("Comma-separated list with prefab ids of items that will still go to the tombstone despite the set rules in PvE areas."));
+                pvpAllowLootOtherTombstones = config("7 - Tombstones", "PvP - Allow Loot Other Tombstones", Toggle.On, new ConfigDescription("If on, in PvP areas all tombstones can be looted."));
                 pvpNoItemLoss = config("7 - Tombstones", "PvP - No Items Loss On Death", Toggle.Off, new ConfigDescription("If on, in PvP areas no items will be lost upon death by all means whatsoever and hence tombstone won't be created."));
                 pvpKeepEquipped = config("7 - Tombstones", "PvP - Keep Equipped Items On Death", Toggle.Off, new ConfigDescription("If on, in PvP areas equipped items such as armors, weapons, utilities... will keep with the dead player and won't go to the tombstone."));
                 pvpKeepHotbar = config("7 - Tombstones", "PvP - Keep Hotbar Items On Death", Toggle.Off, new ConfigDescription("If on, in PvP areas items in the hotbar from slot 1 to 8 will keep with the dead player and won't go to the tombstone."));
