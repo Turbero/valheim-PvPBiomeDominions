@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using PvPBiomeDominions.Helpers;
@@ -15,7 +16,11 @@ namespace PvPBiomeDominions.TombstoneManagement
 			__state = new Dictionary<ItemDrop.ItemData, bool>();
 
 			Inventory inventory = GameManager.GetPrivateValue(__instance, "m_inventory") as Inventory;
-			List<ItemDrop.ItemData> inventoryList = GameManager.GetPrivateValue(inventory, "m_inventory") as List<ItemDrop.ItemData>; 
+			List<ItemDrop.ItemData> inventoryList = GameManager.GetPrivateValue(inventory, "m_inventory") as List<ItemDrop.ItemData>;
+			List<string> exceptionsList = __instance.IsPVPEnabled()
+				? ConfigurationFile.pvpExceptionPrefabIds.Value.Split(',').Select(x => x).ToList()
+				: ConfigurationFile.pveExceptionPrefabIds.Value.Split(',').Select(x => x).ToList();
+			Logger.Log("If some objects are saved, this list will be excluded: " + exceptionsList);
 			foreach (ItemDrop.ItemData item in inventoryList!)
 			{
 				string prefabName = Utils.GetPrefabName(item.m_dropPrefab);
@@ -24,7 +29,8 @@ namespace PvPBiomeDominions.TombstoneManagement
 				bool itemLossFlag = getFlagByPvPStatus("noItemLoss", __instance);
 				bool keepEquippedFlag = item.m_equipped && getFlagByPvPStatus("keepEquipped", __instance);
 				bool hotbarFlag = isHotbar && getFlagByPvPStatus("keepHotbar", __instance);
-				if (itemLossFlag || keepEquippedFlag || hotbarFlag)
+				bool isInExceptionList = exceptionsList.Contains(prefabName);
+				if ((itemLossFlag || keepEquippedFlag || hotbarFlag) && !isInExceptionList)
 				{
 					__state.Add(item, item.m_equipped);
 					string reason = getReason(itemLossFlag, keepEquippedFlag);
@@ -32,7 +38,7 @@ namespace PvPBiomeDominions.TombstoneManagement
 					continue;
 				}
 				list.Add(item);
-				Logger.Log("Dropping " + prefabName + " from " + invSection + ".");
+				Logger.Log("Dropping " + prefabName + " from " + invSection + (isInExceptionList ? " (excluded)" : "") + ".");
 			}
 			GameManager.SetPrivateValue(inventory, "m_inventory", list);
 		}
