@@ -1,6 +1,5 @@
 using System.IO;
 using System.Reflection;
-using HarmonyLib;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,21 +8,10 @@ namespace PvPBiomeDominions.Helpers
     public class ImageManager
     {
         private static Sprite spriteIconVanillaImage;
-        public static Sprite spriteBlueIconImage;
-        public static Sprite spriteGroupIconImage;
+        private static Sprite spriteBlueIconImage;
+        private static Sprite spriteGroupIconImage;
         
         private static readonly string minimapLargeCheckMarkPath = "large/PublicPanel/PublicPosition/Background/Checkmark";
-
-        [HarmonyPatch(typeof(Player), nameof(Player.OnSpawned))]
-        [HarmonyPriority(Priority.First)]
-        public static class PlayerOnSpawnedPatch
-        {
-            public static void Postfix(Player __instance)
-            {
-                Logger.Log("Initializing sprites...");
-                InitSprites();
-            }
-        }
 
         public static Sprite getSpriteIconVanillaImage()
         {
@@ -31,6 +19,24 @@ namespace PvPBiomeDominions.Helpers
                 InitVanillaSprite();
                 
             return spriteIconVanillaImage;
+        }
+
+        public static Sprite getSpriteIconPVEImage()
+        {
+            if (spriteBlueIconImage == null)
+            {
+                InitBlueIconSprite();
+            }
+
+            return spriteBlueIconImage;
+        }
+
+        public static Sprite getSpriteGroupIconImage()
+        {
+            if (spriteGroupIconImage == null)
+                InitGroupIconSprite();
+
+            return spriteGroupIconImage;
         }
 
         public static void UpdateMapSelectorIcon()
@@ -50,23 +56,8 @@ namespace PvPBiomeDominions.Helpers
             }
         }
 
-        private static void InitSprites()
+        private static void InitGroupIconSprite()
         {
-            InitVanillaSprite();
-            
-            spriteBlueIconImage = LoadSpriteFromEmbedded("icons.minimap-valheim-icon-base.png");
-            Color[] bluePixels = loadTexture("icons.minimap-valheim-icon-base.png").GetPixels();
-            for (int i = 0; i < bluePixels.Length; ++i)
-            {
-                if (bluePixels[i].r > 0.5 && bluePixels[i].b < 0.5 && bluePixels[i].g < 0.5)
-                {
-                    bluePixels[i] = new Color32(0, 188, 255, 196);
-                }
-            }
-            spriteBlueIconImage.texture.SetPixels(bluePixels);
-            spriteBlueIconImage.texture.Apply();
-            Logger.LogInfo("Blue(PvE) sprite loaded.");
-            
             spriteGroupIconImage = LoadSpriteFromEmbedded("icons.minimap-valheim-icon-base.png");
             Color[] groupPixels = loadTexture("icons.minimap-valheim-icon-base.png").GetPixels();
             for (int i = 0; i < groupPixels.Length; ++i)
@@ -81,9 +72,25 @@ namespace PvPBiomeDominions.Helpers
             Logger.LogInfo("Green(Group) sprite loaded.");
         }
 
+        private static void InitBlueIconSprite()
+        {
+            spriteBlueIconImage = LoadSpriteFromEmbedded("icons.minimap-valheim-icon-base.png");
+            Color[] bluePixels = loadTexture("icons.minimap-valheim-icon-base.png").GetPixels();
+            for (int i = 0; i < bluePixels.Length; ++i)
+            {
+                if (bluePixels[i].r > 0.5 && bluePixels[i].b < 0.5 && bluePixels[i].g < 0.5)
+                {
+                    bluePixels[i] = new Color32(0, 188, 255, 196);
+                }
+            }
+            spriteBlueIconImage.texture.SetPixels(bluePixels);
+            spriteBlueIconImage.texture.Apply();
+            Logger.LogInfo("Blue(PvE) sprite loaded.");
+        }
+
         private static void InitVanillaSprite()
         {
-            var sprite = Minimap.instance.transform.Find(minimapLargeCheckMarkPath)?.GetComponent<Image>().sprite;
+            var sprite = Minimap.instance.transform.Find(minimapLargeCheckMarkPath)?.GetComponent<Image>()?.sprite;
             if (sprite != null)
             {
                 spriteIconVanillaImage = sprite;

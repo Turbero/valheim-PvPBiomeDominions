@@ -414,12 +414,13 @@ namespace PvPBiomeDominions.PositionManagement.UI
 
             //Player Guild icon
             var guildGO = new GameObject("Player_Guild", typeof(RectTransform), typeof(Image));
+            guildGO.SetActive(false);
             guildGO.transform.SetParent(entry.transform, false);
             RectTransform guildRt = guildGO.GetComponent<RectTransform>();
             guildRt.sizeDelta = new Vector2(32, 32);
             guildRt.anchoredPosition = new Vector2(Groups.API.IsLoaded() ? 195 : 135, 0);
             Image imageGuild = guildGO.GetComponent<Image>();
-            //Tooltip with guild.name
+            //Guild icon tooltip
             UITooltip guildTooltip = guildGO.AddComponent<UITooltip>();
             guildTooltip.m_tooltipPrefab = GameObject.Instantiate(
                 InventoryGui.instance.transform.Find("root/Info/Skills").GetComponent<UITooltip>().m_tooltipPrefab);
@@ -434,9 +435,9 @@ namespace PvPBiomeDominions.PositionManagement.UI
             {
                 //1) Icon
                 if (isInCurrentGroup)
-                    playerIcon.sprite = ImageManager.spriteGroupIconImage;
+                    playerIcon.sprite = ImageManager.getSpriteGroupIconImage();
                 else
-                    playerIcon.sprite = Player.m_localPlayer.IsPVPEnabled() ? ImageManager.getSpriteIconVanillaImage() : ImageManager.spriteBlueIconImage;
+                    playerIcon.sprite = Player.m_localPlayer.IsPVPEnabled() ? ImageManager.getSpriteIconVanillaImage() : ImageManager.getSpriteIconPVEImage();
                 
                 // 2) Level
                 levelText.text = $"LVL: {EpicMMOSystem_API.GetLevel()}";
@@ -448,7 +449,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
                     imageGuild.sprite = Guilds.API.GetGuildIconById(guild.General.icon);
                     guildTooltip.m_text = guild.Name;
                 }
-                guildGO.SetActive(Guilds.API.IsLoaded() && guild != null);
+                guildGO.SetActive(Guilds.API.IsLoaded() && guild != null && imageGuild.sprite != null);
                 return;
             }
 
@@ -471,9 +472,9 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 {
                     //1) Icon
                     if (isInCurrentGroup)
-                        playerIcon.sprite = ImageManager.spriteGroupIconImage;
+                        playerIcon.sprite = ImageManager.getSpriteGroupIconImage();
                     else
-                        playerIcon.sprite = playerEntry.isPvP ? ImageManager.getSpriteIconVanillaImage() : ImageManager.spriteBlueIconImage;
+                        playerIcon.sprite = playerEntry.isPvP ? ImageManager.getSpriteIconVanillaImage() : ImageManager.getSpriteIconPVEImage();
 
                     // 2) Level
                     levelText.text = "LVL: " + playerEntry.GetLevelText();
@@ -484,7 +485,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
                         imageGuild.sprite = Guilds.API.GetGuildIconById(playerEntry.guildIconId);
                         guildTooltip.m_text = playerEntry.guildName;
                     }
-                    guildGO.SetActive(Guilds.API.IsLoaded() && playerEntry.guildIconId != -1);
+                    guildGO.SetActive(Guilds.API.IsLoaded() && playerEntry.guildIconId != -1 && imageGuild.sprite != null);
                 }
                 else
                 {
@@ -542,14 +543,14 @@ namespace PvPBiomeDominions.PositionManagement.UI
             if (playerEntry.iconPlayer != null && Groups.API.GroupPlayers().FindIndex(p => p.name.Equals(playerRelevantInfo.playerName)) >= 0)
             {
                 Logger.Log("[UpdatePlayerRelevantInfo] isInGroup");
-                playerEntry.iconPlayer.sprite = ImageManager.spriteGroupIconImage;
+                playerEntry.iconPlayer.sprite = ImageManager.getSpriteGroupIconImage();
             }
             else
             {
                 Logger.Log("[UpdatePlayerRelevantInfo] isNotInGroup");
                 playerEntry.iconPlayer.sprite = playerRelevantInfo.isPvP
                     ? ImageManager.getSpriteIconVanillaImage()
-                    : ImageManager.spriteBlueIconImage;
+                    : ImageManager.getSpriteIconPVEImage();
             }
 
             //isPvP
