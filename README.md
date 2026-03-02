@@ -4,6 +4,7 @@ PVP Biome Dominions is a mod that allows creating rules for:
 - PVP control
 - Position sharing management
 - Ward Creation
+- Tombstone management
 
 based on the current biome of the player. You can apply different combat rules to Meadows, Black Forest, etc even for Ocean!
 
@@ -18,6 +19,7 @@ This mod has been created with compatibility for the next mods:
 * EpicMMO: player levels are visible in the map players list
 * Groups: player icons are colored and shown at the top in the map players list
 * Guilds: player guild icons are shown at the end of each row in the map players list
+* Expand World: you can use custom biome names created by Expand World mods
 
 ## Usage instructions
 
@@ -79,12 +81,11 @@ Alternatively, admins can bypass these rules if the check is On.
 
 ![](https://i.imgur.com/gGeqBhB.png)
 
-![](https://i.imgur.com/56i4XZs.png)
+![](https://i.imgur.com/ATMDqJZ.png)
 
 ![](https://i.imgur.com/35wSQAb.png)
 
 ![](https://i.imgur.com/oplOZHW.png)
-
 
 ## About myself
 
