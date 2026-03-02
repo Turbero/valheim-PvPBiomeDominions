@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using PvPBiomeDominions.Helpers;
 using PvPBiomeDominions.PositionManagement;
+using PvPBiomeDominions.RulesManagement;
 using ServerSync;
 using TMPro;
 using UnityEngine;
@@ -17,33 +18,6 @@ namespace PvPBiomeDominions
             On = 1,
             Off = 0
         }
-        public enum PvPBiomeRule
-        {
-            Pve = 0,
-            Pvp = 1,
-            PlayerChoose = 2
-        }
-        public enum PvPWardRule
-        {
-            Pve = 0,
-            Pvp = 1,
-            PlayerChoose = 2,
-            FollowBiomeRule = 3
-        }
-        public enum PositionSharingBiomeRule
-        {
-            HidePlayer = 0,
-            ShowPlayer = 1,
-            PlayerChoice = 2
-        }
-        public enum PositionSharingWardRule
-        {
-            HidePlayer = 0,
-            ShowPlayer = 1,
-            PlayerChoice = 2,
-            FollowBiomeRule = 3
-        }
-        
         private static ConfigEntry<bool> _serverConfigLocked = null;
 
         public static ConfigEntry<bool> debug;
@@ -68,17 +42,53 @@ namespace PvPBiomeDominions
         //PVP Management
         public static ConfigEntry<Toggle> pvpAdminExempt;
         public static ConfigEntry<PvPWardRule> pvpRuleInWards;
-        private static ConfigEntry<PvPBiomeRule> pvpRuleInMeadows;
-        private static ConfigEntry<PvPBiomeRule> pvpRuleInBlackForest;
-        private static ConfigEntry<PvPBiomeRule> pvpRuleInSwamp;
-        private static ConfigEntry<PvPBiomeRule> pvpRuleInMountain;
-        private static ConfigEntry<PvPBiomeRule> pvpRuleInPlains;
-        private static ConfigEntry<PvPBiomeRule> pvpRuleInMistlands;
-        private static ConfigEntry<PvPBiomeRule> pvpRuleInAshlands;
-        private static ConfigEntry<PvPBiomeRule> pvpRuleInDeepNorth;
-        private static ConfigEntry<PvPBiomeRule> pvpRuleInOcean;
+        public static ConfigEntry<PvPBiomeRule> pvpRuleInMeadows;
+        public static ConfigEntry<PvPBiomeRule> pvpRuleInBlackForest;
+        public static ConfigEntry<PvPBiomeRule> pvpRuleInSwamp;
+        public static ConfigEntry<PvPBiomeRule> pvpRuleInMountain;
+        public static ConfigEntry<PvPBiomeRule> pvpRuleInPlains;
+        public static ConfigEntry<PvPBiomeRule> pvpRuleInMistlands;
+        public static ConfigEntry<PvPBiomeRule> pvpRuleInAshlands;
+        public static ConfigEntry<PvPBiomeRule> pvpRuleInDeepNorth;
+        public static ConfigEntry<PvPBiomeRule> pvpRuleInOcean;
         public static ConfigEntry<float> waitingTimeBeforeUpdatingBiomePvPStatus;
         public static ConfigEntry<float> waitingTimeAfterDyingToFightPlayersAgain; 
+        public static ConfigEntry<string> pvpTombstoneLootAlertMessage;
+        public static ConfigEntry<string> pvpTombstoneDestroyAlertMessage;
+        public static ConfigEntry<string> forbidLootOtherTombstonesMessage;
+        public static ConfigEntry<int> pvpMinimapPlayersListRefresh;
+        public static ConfigEntry<Toggle> dayMessageOff;
+
+        //Position management
+        public static ConfigEntry<Toggle> positionAdminExempt;
+        public static ConfigEntry<PositionSharingWardRule> positionRuleInWards;
+        public static ConfigEntry<PositionSharingBiomeRule> positionRuleInMeadows;
+        public static ConfigEntry<PositionSharingBiomeRule> positionRuleInBlackForest;
+        public static ConfigEntry<PositionSharingBiomeRule> positionRuleInSwamp;
+        public static ConfigEntry<PositionSharingBiomeRule> positionRuleInMountain;
+        public static ConfigEntry<PositionSharingBiomeRule> positionRuleInPlains;
+        public static ConfigEntry<PositionSharingBiomeRule> positionRuleInMistlands;
+        public static ConfigEntry<PositionSharingBiomeRule> positionRuleInAshlands;
+        public static ConfigEntry<PositionSharingBiomeRule> positionRuleInDeepNorth;
+        public static ConfigEntry<PositionSharingBiomeRule> positionRuleInOcean;
+        
+        //Other mods integration
+        public static ConfigEntry<Toggle> pvpWackyEpicMMOLevelDifferenceLimitEnabled;
+        public static ConfigEntry<int> pvpWackyEpicMMOLevelDifferenceLimitValue;
+        public static ConfigEntry<string> pvpRuleInCustomBiomes;
+        public static ConfigEntry<string> positionRuleInCustomBiomes;
+        public static ConfigEntry<string> wardCreationForbiddenInCustomBiomes;
+        
+        //Translations
+        public static ConfigEntry<string> playersListPanelButtonText;
+        public static ConfigEntry<string> playersMapListTitle;
+        public static ConfigEntry<string> wardCreationNotAllowed;
+        public static ConfigEntry<string> pvpSpawnProtection;
+        public static ConfigEntry<string> pvpSpawnProtectionDescription;
+        public static ConfigEntry<string> greenSkullPlayersMapList;
+        public static ConfigEntry<string> redSkullPlayersMapList;
+        
+        //Wards creation
         public static ConfigEntry<Toggle> wardCreationInMeadows;
         public static ConfigEntry<Toggle> wardCreationInBlackForest;
         public static ConfigEntry<Toggle> wardCreationInSwamp;
@@ -89,37 +99,6 @@ namespace PvPBiomeDominions
         public static ConfigEntry<Toggle> wardCreationInDeepNorth;
         public static ConfigEntry<Toggle> wardCreationInOcean;
         public static ConfigEntry<string> wardModsPrefabIds;
-        public static ConfigEntry<string> pvpTombstoneLootAlertMessage;
-        public static ConfigEntry<string> pvpTombstoneDestroyAlertMessage;
-        public static ConfigEntry<string> forbidLootOtherTombstonesMessage;
-        public static ConfigEntry<int> pvpMinimapPlayersListRefresh;
-        public static ConfigEntry<Toggle> dayMessageOff;
-
-        //Position management
-        public static ConfigEntry<Toggle> positionAdminExempt;
-        public static ConfigEntry<PositionSharingWardRule> positionRuleInWards;
-        private static ConfigEntry<PositionSharingBiomeRule> positionRuleInMeadows;
-        private static ConfigEntry<PositionSharingBiomeRule> positionRuleInBlackForest;
-        private static ConfigEntry<PositionSharingBiomeRule> positionRuleInSwamp;
-        private static ConfigEntry<PositionSharingBiomeRule> positionRuleInMountain;
-        private static ConfigEntry<PositionSharingBiomeRule> positionRuleInPlains;
-        private static ConfigEntry<PositionSharingBiomeRule> positionRuleInMistlands;
-        private static ConfigEntry<PositionSharingBiomeRule> positionRuleInAshlands;
-        private static ConfigEntry<PositionSharingBiomeRule> positionRuleInDeepNorth;
-        private static ConfigEntry<PositionSharingBiomeRule> positionRuleInOcean;
-        
-        //Other mods integration
-        public static ConfigEntry<Toggle> pvpWackyEpicMMOLevelDifferenceLimitEnabled;
-        public static ConfigEntry<int> pvpWackyEpicMMOLevelDifferenceLimitValue;
-        
-        //Translations
-        public static ConfigEntry<string> playersListPanelButtonText;
-        public static ConfigEntry<string> playersMapListTitle;
-        public static ConfigEntry<string> wardCreationNotAllowed;
-        public static ConfigEntry<string> pvpSpawnProtection;
-        public static ConfigEntry<string> pvpSpawnProtectionDescription;
-        public static ConfigEntry<string> greenSkullPlayersMapList;
-        public static ConfigEntry<string> redSkullPlayersMapList;
         
         //Tombstones
         public static ConfigEntry<Toggle> pveAllowLootOtherTombstones;
@@ -132,74 +111,6 @@ namespace PvPBiomeDominions
         public static ConfigEntry<Toggle> pvpKeepEquipped;
         public static ConfigEntry<Toggle> pvpKeepHotbar;
         public static ConfigEntry<string> pvpExceptionPrefabIds;
-
-        public static PvPBiomeRule getCurrentBiomeRulePvPRule()
-        {
-            if (!EnvMan.instance) return PvPBiomeRule.PlayerChoose;
-            
-            Heightmap.Biome biome = EnvMan.instance.GetCurrentBiome();
-            switch (biome)
-            {
-                case Heightmap.Biome.Meadows: return pvpRuleInMeadows.Value;
-                case Heightmap.Biome.BlackForest: return pvpRuleInBlackForest.Value;
-                case Heightmap.Biome.Swamp: return pvpRuleInSwamp.Value;
-                case Heightmap.Biome.Mountain: return pvpRuleInMountain.Value;
-                case Heightmap.Biome.Plains: return pvpRuleInPlains.Value;
-                case Heightmap.Biome.Mistlands: return pvpRuleInMistlands.Value;
-                case Heightmap.Biome.AshLands: return pvpRuleInAshlands.Value;
-                case Heightmap.Biome.DeepNorth: return pvpRuleInDeepNorth.Value;
-                case Heightmap.Biome.Ocean: return pvpRuleInOcean.Value;
-            }
-
-            return PvPBiomeRule.PlayerChoose;
-        }
-        
-        public static PositionSharingBiomeRule getCurrentBiomeRulePosition()
-        {
-            if (!EnvMan.instance) return PositionSharingBiomeRule.PlayerChoice;
-            return getBiomeRulePosition(EnvMan.instance.GetCurrentBiome());
-        }
-        
-        public static PositionSharingBiomeRule getBiomeRulePosition(Heightmap.Biome biome)
-        {
-            if (!EnvMan.instance) return PositionSharingBiomeRule.PlayerChoice;
-            
-            switch (biome)
-            {
-                case Heightmap.Biome.Meadows: return positionRuleInMeadows.Value;
-                case Heightmap.Biome.BlackForest: return positionRuleInBlackForest.Value;
-                case Heightmap.Biome.Swamp: return positionRuleInSwamp.Value;
-                case Heightmap.Biome.Mountain: return positionRuleInMountain.Value;
-                case Heightmap.Biome.Plains: return positionRuleInPlains.Value;
-                case Heightmap.Biome.Mistlands: return positionRuleInMistlands.Value;
-                case Heightmap.Biome.AshLands: return positionRuleInAshlands.Value;
-                case Heightmap.Biome.DeepNorth: return positionRuleInDeepNorth.Value;
-                case Heightmap.Biome.Ocean: return positionRuleInOcean.Value;
-            }
-
-            return PositionSharingBiomeRule.PlayerChoice;
-        }
-        
-        public static bool IsWardCreationAllowedInCurrentBiomeRule()
-        {
-            if (!EnvMan.instance) return true;
-            
-            Heightmap.Biome biome = EnvMan.instance.GetCurrentBiome();
-            switch (biome)
-            {
-                case Heightmap.Biome.Meadows: return wardCreationInMeadows.Value == Toggle.On;
-                case Heightmap.Biome.BlackForest: return wardCreationInBlackForest.Value == Toggle.On;
-                case Heightmap.Biome.Swamp: return wardCreationInSwamp.Value == Toggle.On;
-                case Heightmap.Biome.Mountain: return wardCreationInMountain.Value == Toggle.On;
-                case Heightmap.Biome.Plains: return wardCreationInPlains.Value == Toggle.On;
-                case Heightmap.Biome.Mistlands: return wardCreationInMistlands.Value == Toggle.On;
-                case Heightmap.Biome.AshLands: return wardCreationInAshlands.Value == Toggle.On;
-                case Heightmap.Biome.DeepNorth: return wardCreationInDeepNorth.Value == Toggle.On;
-                case Heightmap.Biome.Ocean: return wardCreationInOcean.Value == Toggle.On;
-            }
-
-            return true;
-        }
 
         internal static void LoadConfig(BaseUnityPlugin plugin)
         {
@@ -245,7 +156,10 @@ namespace PvPBiomeDominions
                 
                 pvpWackyEpicMMOLevelDifferenceLimitEnabled = config("4 - Mods integration", "Max Level Difference to damage in PvP areas - Activation", Toggle.Off, new ConfigDescription("Activate the limits the difference of levels between players to damage each other in pvp areas."));
                 pvpWackyEpicMMOLevelDifferenceLimitValue = config("4 - Mods integration", "Max Level Difference to damage in PvP areas - Value", 100, new ConfigDescription("Limits the difference of levels between players to damage each other in pvp areas (default = 100)."));
-                
+                pvpRuleInCustomBiomes = config("4 - Mods integration", "Custom Biomes - PvP Rules", "", new ConfigDescription("Comma-separated list of custom biome pvp rules. Use colon to indicate the rule. Examples: Wonderland:Pve,Warland:Pvp,Doubtland:PlayerChoose"));
+                positionRuleInCustomBiomes = config("4 - Mods integration", "Custom Biomes - Position Sharing Rules", "", new ConfigDescription("Comma-separated list of position sharing custom biome rules. Use colon to indicate the rule. Examples: Wonderland:ShowPlayer,Warland:HidePlayer,Doubtland:PlayerChoice"));
+                wardCreationForbiddenInCustomBiomes = config("4 - Mods integration", "Custom Biomes - Ward forbidden", "", new ConfigDescription("Comma-separated list of custom biomes where wards are forbidden. Example: Warland,AmazoniaLand"));
+
                 playersListPanelButtonText = config("5 - Translations", "Players List Panel Button Text", "Show/Hide list", new ConfigDescription("Button name used to show/hide the players panel list in the minimap."));
                 playersMapListTitle = config("5 - Translations", "Players Map List Title", "Players", new ConfigDescription("Title of the map players list with connected count."));
                 wardCreationNotAllowed = config("5 - Translations", "Ward Creation Not Allowed", "Ward Creation is not allowed in this biome", new ConfigDescription("Title of the map players list with connected count."));
