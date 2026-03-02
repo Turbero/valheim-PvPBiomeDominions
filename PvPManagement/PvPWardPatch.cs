@@ -1,4 +1,5 @@
 using HarmonyLib;
+using PvPBiomeDominions.RulesManagement;
 
 namespace PvPBiomeDominions.PvPManagement
 {
@@ -11,7 +12,7 @@ namespace PvPBiomeDominions.PvPManagement
             if (name.ToLowerInvariant().Contains("guard_stone") || ConfigurationFile.wardModsPrefabIds.Value.ToLowerInvariant().Contains(name.ToLowerInvariant()))
             {
                 Logger.Log("Ward creation detected. Checking...");
-                if (!ConfigurationFile.IsWardCreationAllowedInCurrentBiomeRule())
+                if (!WardRuleManagement.IsWardCreationAllowedInCurrentBiomeRule())
                 {
                     Logger.Log("Not allowed in current biome.");
                     __instance.Message(MessageHud.MessageType.Center, ConfigurationFile.wardCreationNotAllowed.Value);

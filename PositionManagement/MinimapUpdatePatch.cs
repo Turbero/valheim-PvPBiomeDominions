@@ -4,6 +4,7 @@ using HarmonyLib;
 using PvPBiomeDominions.Helpers;
 using PvPBiomeDominions.Helpers.WardIsLove;
 using PvPBiomeDominions.PositionManagement.UI;
+using PvPBiomeDominions.RulesManagement;
 using UnityEngine;
 
 namespace PvPBiomeDominions.PositionManagement
@@ -41,12 +42,12 @@ namespace PvPBiomeDominions.PositionManagement
             // First ward rule
             bool isInsideWard = WardIsLovePlugin.IsInsideWard();
             var wardPositionRule = ConfigurationFile.positionRuleInWards.Value;
-            if (isInsideWard && wardPositionRule != ConfigurationFile.PositionSharingWardRule.FollowBiomeRule)
+            if (isInsideWard && wardPositionRule != PositionSharingWardRule.FollowBiomeRule)
             {
-                if (wardPositionRule == ConfigurationFile.PositionSharingWardRule.PlayerChoice)
+                if (wardPositionRule == PositionSharingWardRule.PlayerChoice)
                     return;
                 
-                __instance.m_publicPosition.isOn = wardPositionRule == ConfigurationFile.PositionSharingWardRule.ShowPlayer;
+                __instance.m_publicPosition.isOn = wardPositionRule == PositionSharingWardRule.ShowPlayer;
                 return;
             }
 
@@ -61,11 +62,11 @@ namespace PvPBiomeDominions.PositionManagement
             
             //Heightmap.Biome minimapBiome = (Heightmap.Biome) mBiome;
             Heightmap.Biome minimapBiome = Player.m_localPlayer.GetCurrentBiome();
-            ConfigurationFile.PositionSharingBiomeRule biomePositionBiomeRule = ConfigurationFile.getBiomeRulePosition(minimapBiome);
-            if (biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.PlayerChoice)
+            PositionSharingBiomeRule biomePositionBiomeRule = PositionRuleManagement.getBiomeRulePosition(minimapBiome);
+            if (biomePositionBiomeRule == PositionSharingBiomeRule.PlayerChoice)
                 return;
             
-            __instance.m_publicPosition.isOn = biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.ShowPlayer;
+            __instance.m_publicPosition.isOn = biomePositionBiomeRule == PositionSharingBiomeRule.ShowPlayer;
             
             if (__instance.m_publicPosition.isOn)
                 ImageManager.UpdateMapSelectorIcon();

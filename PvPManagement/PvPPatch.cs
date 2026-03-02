@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using HarmonyLib;
 using PvPBiomeDominions.Helpers.WardIsLove;
+using PvPBiomeDominions.RulesManagement;
 
 namespace PvPBiomeDominions.PvPManagement
 {
@@ -28,20 +29,20 @@ namespace PvPBiomeDominions.PvPManagement
             // Apply insideWard rule first
             bool isInsideWard = WardIsLovePlugin.IsInsideWard();
             var wardPvPRule = ConfigurationFile.pvpRuleInWards.Value;
-            if (isInsideWard && wardPvPRule != ConfigurationFile.PvPWardRule.FollowBiomeRule) {
-                if (wardPvPRule == ConfigurationFile.PvPWardRule.PlayerChoose)
+            if (isInsideWard && wardPvPRule != PvPWardRule.FollowBiomeRule) {
+                if (wardPvPRule == PvPWardRule.PlayerChoose)
                 {
                     InventoryGui.instance.m_pvp.interactable = true;
                     return;
                 }
                 InventoryGui.instance.m_pvp.interactable = false;
-                SetupPvP(InventoryGui.instance, wardPvPRule == ConfigurationFile.PvPWardRule.Pvp);
+                SetupPvP(InventoryGui.instance, wardPvPRule == PvPWardRule.Pvp);
                 return;
             }
             
             // Then check biome rule
-            ConfigurationFile.PvPBiomeRule currentBiomeBiomeRule = ConfigurationFile.getCurrentBiomeRulePvPRule();
-            if (currentBiomeBiomeRule == ConfigurationFile.PvPBiomeRule.PlayerChoose)
+            PvPBiomeRule currentBiomeBiomeRule = PvPRuleManagement.getCurrentBiomeRulePvPRule();
+            if (currentBiomeBiomeRule == PvPBiomeRule.PlayerChoose)
             {
                 InventoryGui.instance.m_pvp.interactable = true;
                 return;
@@ -49,7 +50,7 @@ namespace PvPBiomeDominions.PvPManagement
             InventoryGui.instance.m_pvp.interactable = false;
 
             //Introduce delay before taking effect
-            _ = WaitForSecondsAsync(InventoryGui.instance, currentBiomeBiomeRule == ConfigurationFile.PvPBiomeRule.Pvp);
+            _ = WaitForSecondsAsync(InventoryGui.instance, currentBiomeBiomeRule == PvPBiomeRule.Pvp);
         }
         
         private static async Task WaitForSecondsAsync(InventoryGui invGUI, bool isPvPOn)

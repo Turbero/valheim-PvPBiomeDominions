@@ -1,6 +1,7 @@
 using HarmonyLib;
 using PvPBiomeDominions.Helpers;
 using PvPBiomeDominions.Helpers.WardIsLove;
+using PvPBiomeDominions.RulesManagement;
 
 namespace PvPBiomeDominions.PositionManagement
 {
@@ -15,21 +16,21 @@ namespace PvPBiomeDominions.PositionManagement
             // Ward rule first
             bool isInsideWard = WardIsLovePlugin.IsInsideWard();
             var wardPositionRule = ConfigurationFile.positionRuleInWards.Value;
-            if (isInsideWard && wardPositionRule != ConfigurationFile.PositionSharingWardRule.FollowBiomeRule)
+            if (isInsideWard && wardPositionRule != PositionSharingWardRule.FollowBiomeRule)
             {
-                if (wardPositionRule == ConfigurationFile.PositionSharingWardRule.PlayerChoice)
+                if (wardPositionRule == PositionSharingWardRule.PlayerChoice)
                     return;
                 
-                ___m_publicReferencePosition = wardPositionRule == ConfigurationFile.PositionSharingWardRule.ShowPlayer;
+                ___m_publicReferencePosition = wardPositionRule == PositionSharingWardRule.ShowPlayer;
                 return;
             }
             
             // Then biome rule
-            ConfigurationFile.PositionSharingBiomeRule biomePositionBiomeRule = ConfigurationFile.getCurrentBiomeRulePosition();
-            if (biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.PlayerChoice)
+            PositionSharingBiomeRule biomePositionBiomeRule = PositionRuleManagement.getCurrentBiomeRulePosition();
+            if (biomePositionBiomeRule == PositionSharingBiomeRule.PlayerChoice)
                 return;
             
-            ___m_publicReferencePosition = biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.ShowPlayer;
+            ___m_publicReferencePosition = biomePositionBiomeRule == PositionSharingBiomeRule.ShowPlayer;
             
             if (___m_publicReferencePosition)
                 ImageManager.UpdateMapSelectorIcon();
@@ -47,23 +48,23 @@ namespace PvPBiomeDominions.PositionManagement
             // First ward rule
             bool isInsideWard = WardIsLovePlugin.IsInsideWard();
             var wardPositionRule = ConfigurationFile.positionRuleInWards.Value;
-            if (isInsideWard && wardPositionRule != ConfigurationFile.PositionSharingWardRule.FollowBiomeRule)
+            if (isInsideWard && wardPositionRule != PositionSharingWardRule.FollowBiomeRule)
             {
-                if (wardPositionRule == ConfigurationFile.PositionSharingWardRule.PlayerChoice)
+                if (wardPositionRule == PositionSharingWardRule.PlayerChoice)
                     return;
 
                 GameManager.SetPrivateValue(ZNet.instance, "m_publicReferencePosition",
-                    wardPositionRule == ConfigurationFile.PositionSharingWardRule.ShowPlayer);
+                    wardPositionRule == PositionSharingWardRule.ShowPlayer);
                 return;
             }
 
             // Then biome rule
-            ConfigurationFile.PositionSharingBiomeRule biomePositionBiomeRule = ConfigurationFile.getCurrentBiomeRulePosition();
-            if (biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.PlayerChoice)
+            PositionSharingBiomeRule biomePositionBiomeRule = PositionRuleManagement.getCurrentBiomeRulePosition();
+            if (biomePositionBiomeRule == PositionSharingBiomeRule.PlayerChoice)
                 return;
             
             GameManager.SetPrivateValue(ZNet.instance, "m_publicReferencePosition",
-                biomePositionBiomeRule == ConfigurationFile.PositionSharingBiomeRule.ShowPlayer);
+                biomePositionBiomeRule == PositionSharingBiomeRule.ShowPlayer);
             
             if (ZNet.instance.IsReferencePositionPublic())
                 ImageManager.UpdateMapSelectorIcon();
