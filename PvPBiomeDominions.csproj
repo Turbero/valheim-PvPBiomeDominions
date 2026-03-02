@@ -113,6 +113,9 @@
     <Compile Include="PvPManagement\PvPWardPatch.cs" />
     <Compile Include="RPC\RPC_PlayerRelevantInfo.cs" />
     <Compile Include="RPC\RPC_Register.cs" />
+    <Compile Include="RulesManagement\PositionRuleManagement.cs" />
+    <Compile Include="RulesManagement\PvPRuleManagement.cs" />
+    <Compile Include="RulesManagement\WardRuleManagement.cs" />
     <Compile Include="TombstoneManagement\CreateTombstoneRulesPatch.cs" />
     <Compile Include="TombstoneManagement\TombStoneAlertsPatch.cs" />
   </ItemGroup>
