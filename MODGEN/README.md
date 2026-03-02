@@ -87,6 +87,8 @@ Alternatively, admins can bypass these rules if the check is On.
 
 ![](https://i.imgur.com/oplOZHW.png)
 
+![](https://i.imgur.com/hRMKv56.png)
+
 ## About myself
 
 DISCORD: Turbero (Turbero#3465)
