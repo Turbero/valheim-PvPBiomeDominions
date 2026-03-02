@@ -1,5 +1,10 @@
 ### CHANGELOG
 
+## 1.6.1
+
+* Added config options to set up pvp, position sharing and ward rules in custom biomes with Expand World mods under "Mods integration" config file section
+* Small code refactoring
+
 ## 1.6.0
 
 New tombstone configuration features:
