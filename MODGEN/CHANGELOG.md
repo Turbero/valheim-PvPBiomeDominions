@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.6.3
+
+* Custom biome pvp/position configurations are separated by semicolon, and wards by comma. Fixed configuration notes (they were wrong but the mod was working as intended)
+
 ## 1.6.2
 
 * Fixed issue with pve/pvp icon color introduced in previous version, sorry! 
