@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.6.2
+
+* Fixed issue with pve/pvp icon color introduced in previous version, sorry! 
+
 ## 1.6.1
 
 * Added config options to set up pvp, position sharing and ward rules in custom biomes with Expand World mods under "Mods integration" config file section
