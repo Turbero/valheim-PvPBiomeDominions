@@ -19,8 +19,10 @@ namespace PvPBiomeDominions.PositionManagement
         public static void Postfix(Minimap __instance)
         {
             if (!__instance) return;
-            
             if (Player.m_localPlayer == null) return;
+
+            //To obtain red vanilla icon before being changed by the mod
+            ImageManager.getSpriteIconVanillaImage();
 
             // ---------- MAP PLAYERS LIST ---------- //
             HandlePlayersListPanel(__instance);
