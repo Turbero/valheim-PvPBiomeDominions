@@ -10,7 +10,10 @@ namespace PvPBiomeDominions.PvPManagement
         {
             static bool Prefix(Container __instance, Humanoid character)
             {
-                if (character is Player thief)
+                if (!ConfigurationFile.showMessageWhenLootingYourTombstone.Value || ConfigurationFile.pvpTombstoneLootAlertMessage.Value == string.Empty) return true;
+
+                TombStone tomb = __instance.GetComponentInParent<TombStone>();
+                if (tomb != null && character is Player thief)
                 {
                     bool canLoot = thief.IsPVPEnabled()
                         ? ConfigurationFile.pvpAllowLootOtherTombstones.Value == ConfigurationFile.Toggle.On
