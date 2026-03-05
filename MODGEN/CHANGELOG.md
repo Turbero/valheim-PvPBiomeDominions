@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.6.4
+
+* Fixed tombstone rules to apply only to tombstones (it was applying to all containers by mistake)
+
 ## 1.6.3
 
 * Custom biome pvp/position configurations are separated by semicolon, and wards by comma. Fixed configuration notes (they were wrong but the mod was working as intended)
