@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.6.5
+
+* Fixed issue with tombstone looting rules when the player inventory is not empty before looting his own tombstone
+
 ## 1.6.4
 
 * Fixed tombstone rules to apply only to tombstones (it was applying to all containers by mistake)
