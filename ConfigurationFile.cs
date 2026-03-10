@@ -53,8 +53,8 @@ namespace PvPBiomeDominions
         public static ConfigEntry<PvPBiomeRule> pvpRuleInOcean;
         public static ConfigEntry<float> waitingTimeBeforeUpdatingBiomePvPStatus;
         public static ConfigEntry<float> waitingTimeAfterDyingToFightPlayersAgain; 
-        public static ConfigEntry<string> pvpTombstoneLootAlertMessage;
-        public static ConfigEntry<string> pvpTombstoneDestroyAlertMessage;
+        public static ConfigEntry<string> tombstoneLootAlertMessage;
+        public static ConfigEntry<string> tombstoneDestroyAlertMessage;
         public static ConfigEntry<string> forbidLootOtherTombstonesMessage;
         public static ConfigEntry<int> pvpMinimapPlayersListRefresh;
         public static ConfigEntry<Toggle> dayMessageOff;
@@ -167,8 +167,8 @@ namespace PvPBiomeDominions
                 pvpSpawnProtectionDescription = config("5 - Translations", "PvP Spawn Protection Description", "You are temporarily immune to PvP damage.", new ConfigDescription("Description of the pvp protection buff text after dying by a player."));
                 greenSkullPlayersMapList = config("5 - Translations", "Players Map List Green Skull Tooltip", "Number of times you killed this player.", new ConfigDescription("Tooltip text of the green skull icon in the map players list."));
                 redSkullPlayersMapList = config("5 - Translations", "Players Map List Red Skull Tooltip", "Number of times you were killed by this player.", new ConfigDescription("Tooltip text of the red skull icon in the map players list."));
-                pvpTombstoneLootAlertMessage = config("5 - Translations", "Tombstone Looting Alert Message", "<color=red>{0} is looting your tombstone!</color>", new ConfigDescription("Shows alert on tombstone owner screen when being looted by a different player"));
-                pvpTombstoneDestroyAlertMessage = config("5 - Translations", "Tombstone Destroy Alert Message", "<color=red>{0} sacked and destroyed your tombstone!</color>", new ConfigDescription("Shows alert on tombstone owner screen when destroyed by a different player"));
+                tombstoneLootAlertMessage = config("5 - Translations", "Tombstone Looting Alert Message", "<color=red>{0} is looting your tombstone!</color>", new ConfigDescription("Shows alert on tombstone owner screen when being looted by a different player"));
+                tombstoneDestroyAlertMessage = config("5 - Translations", "Tombstone Destroy Alert Message", "<color=red>{0} sacked and destroyed your tombstone!</color>", new ConfigDescription("Shows alert on tombstone owner screen when destroyed by a different player"));
                 forbidLootOtherTombstonesMessage = config("5 - Translations", "Forbid Loot Other Tombstones Message", "Looting other tombstones is <color=red>FORBIDDEN</color> in this biome!", new ConfigDescription("Message to show when tombstones cannot be looted in the current biome."));
 
                 wardCreationInMeadows = config("6 - Ward Creation", "Ward Creation 1 - Meadows Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Meadows."));
