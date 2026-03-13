@@ -2,6 +2,7 @@ using System;
 using HarmonyLib;
 using PvPBiomeDominions.PositionManagement.UI;
 using PvPBiomeDominions.PvPManagement;
+using PvPBiomeDominions.TombstoneManagement;
 
 namespace PvPBiomeDominions.RPC
 {

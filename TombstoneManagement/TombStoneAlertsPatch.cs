@@ -1,7 +1,7 @@
 using System.Linq;
 using HarmonyLib;
 
-namespace PvPBiomeDominions.PvPManagement
+namespace PvPBiomeDominions.TombstoneManagement
 {
     public class TombStoneAlertsPatch
     {
@@ -10,7 +10,8 @@ namespace PvPBiomeDominions.PvPManagement
         {
             static bool Prefix(Container __instance, Humanoid character, bool hold, bool alt)
             {
-                if (!ConfigurationFile.showMessageWhenLootingYourTombstone.Value || ConfigurationFile.tombstoneLootAlertMessage.Value == string.Empty)
+                if (ConfigurationFile.showMessageWhenLootingYourTombstone.Value == ConfigurationFile.Toggle.Off ||
+                    ConfigurationFile.tombstoneLootAlertMessage.Value == string.Empty)
                     return true;
 
                 TombStone tomb = __instance.GetComponentInParent<TombStone>();
@@ -36,7 +37,7 @@ namespace PvPBiomeDominions.PvPManagement
             }
             static void Postfix(Container __instance, Humanoid character, bool hold, bool alt, ref bool __result)
             {
-                if (!ConfigurationFile.showMessageWhenLootingYourTombstone.Value ||
+                if (ConfigurationFile.showMessageWhenLootingYourTombstone.Value == ConfigurationFile.Toggle.Off ||
                     ConfigurationFile.tombstoneLootAlertMessage.Value == string.Empty ||
                     !__result) return;
 
@@ -59,7 +60,7 @@ namespace PvPBiomeDominions.PvPManagement
         {
             static void Postfix(Container __instance, Humanoid character, ref bool __result)
             {
-                if (!ConfigurationFile.showMessageWhenLootingYourTombstone.Value ||
+                if (ConfigurationFile.showMessageWhenLootingYourTombstone.Value == ConfigurationFile.Toggle.Off ||
                     ConfigurationFile.tombstoneDestroyAlertMessage.Value == string.Empty ||
                     !__result) return;
 
