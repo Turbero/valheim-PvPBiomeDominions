@@ -1,5 +1,14 @@
 ### CHANGELOG
 
+## 1.6.6
+
+* Reorganized section "Tombstones" into "Tombstones (General)", "Tombstones PvE" and "Tombstones PvP" (delete and recreate .cfg file if any confusion)
+
+* Added two new config options under Tombstone management section for PvE and PvP death map pin rules to manage the behavior:
+  * Default → no changes (behaves like vanilla: always added to the map)
+  * Remove When Looting Or Empty → pin is removed when player removes the whole content of the tombstone plus if he dies with inventory empty no pin is created
+  * No Pins → no pins are created in the map regardless the player inventory
+
 ## 1.6.5
 
 * Fixed issue with tombstone looting rules when the player inventory is not empty before looting his own tombstone
