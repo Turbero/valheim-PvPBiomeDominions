@@ -27,7 +27,8 @@ namespace PvPBiomeDominions
         public static ConfigEntry<bool> mapPinColoring;
         public static ConfigEntry<int> maxPlayerNamesCharactersInList;
         public static ConfigEntry<Toggle> showMessageWhenLootingYourTombstone;
-        public static ConfigEntry<DeathPinMapRule> deathPinMapRule;
+        public static ConfigEntry<DeathPinMapRule> pveDeathPinMapRule;
+        public static ConfigEntry<DeathPinMapRule> pvpDeathPinMapRule;
         
 
         public static ConfigFile configFile;
@@ -188,14 +189,15 @@ namespace PvPBiomeDominions
                 pveNoItemLoss = config("7 - Tombstones", "PvE - No Items Loss On Death", Toggle.Off, new ConfigDescription("If on, in PvE areas no items will be lost upon death by all means whatsoever and hence tombstone won't be created."));
                 pveKeepEquipped = config("7 - Tombstones", "PvE - Keep Equipped Items On Death", Toggle.Off, new ConfigDescription("If on, in PvE areas equipped items such as armors, weapons, utilities... will keep with the dead player and won't go to the tombstone."));
                 pveKeepHotbar = config("7 - Tombstones", "PvE - Keep Hotbar Items On Death", Toggle.Off, new ConfigDescription("If on, in PvE areas items in the hotbar from slot 1 to 8 will keep with the dead player and won't go to the tombstone."));
+                pveDeathPinMapRule = config("7 - Tombstones", "PvE - Death Pin Map Rule", DeathPinMapRule.Default, "Enable/disable how to remove your death pin in the map automatically in pve biomes.");
                 pveExceptionPrefabIds = config("7 - Tombstones", "PvE - Exception PrefabIds", "", new ConfigDescription("Comma-separated list with prefab ids of items that will still go to the tombstone despite the set rules in PvE areas."));
                 pvpAllowLootOtherTombstones = config("7 - Tombstones", "PvP - Allow Loot Other Tombstones", Toggle.On, new ConfigDescription("If on, in PvP areas all tombstones can be looted."));
                 pvpNoItemLoss = config("7 - Tombstones", "PvP - No Items Loss On Death", Toggle.Off, new ConfigDescription("If on, in PvP areas no items will be lost upon death by all means whatsoever and hence tombstone won't be created."));
                 pvpKeepEquipped = config("7 - Tombstones", "PvP - Keep Equipped Items On Death", Toggle.Off, new ConfigDescription("If on, in PvP areas equipped items such as armors, weapons, utilities... will keep with the dead player and won't go to the tombstone."));
                 pvpKeepHotbar = config("7 - Tombstones", "PvP - Keep Hotbar Items On Death", Toggle.Off, new ConfigDescription("If on, in PvP areas items in the hotbar from slot 1 to 8 will keep with the dead player and won't go to the tombstone."));
                 pvpExceptionPrefabIds = config("7 - Tombstones", "PvP - Exception PrefabIds", "", new ConfigDescription("Comma-separated list with prefab ids of items that will still go to the tombstone despite the set rules in PvP areas."));
+                pvpDeathPinMapRule = config("7 - Tombstones", "PvP - Death Pin Map Rule", DeathPinMapRule.Default, "Enable/disable how to remove your death pin in the map automatically in pvp biomes.");
                 showMessageWhenLootingYourTombstone = config("7 - Tombstones", "Show Message When Looting Your Tombstone", Toggle.On, "Enable/disable showing alert in your screen when your tombstone is being looted.");
-                deathPinMapRule = config("7 - Tombstones", "Death Pin Map Rule", DeathPinMapRule.Default, "Enable/disable how to remove your death pin in the map automatically.");
                 
                 SetupWatcher();
             }

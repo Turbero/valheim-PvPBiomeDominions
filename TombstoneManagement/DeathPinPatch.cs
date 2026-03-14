@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using HarmonyLib;
 using PvPBiomeDominions.Helpers;
+using PvPBiomeDominions.RulesManagement;
 using UnityEngine;
 
 namespace PvPBiomeDominions.TombstoneManagement
@@ -14,10 +15,27 @@ namespace PvPBiomeDominions.TombstoneManagement
 	
 	class PinManagement
 	{
-		public static void RemovePlayerPin(Component __instance, bool inventoryWasEmpty = false)
+		public static DeathPinMapRule GetCurrentDeathPinMapRule()
 		{
-			if (inventoryWasEmpty) return;
-			
+			PvPBiomeRule rule = PvPRuleManagement.getCurrentBiomeRulePvPRule();
+			if (rule == PvPBiomeRule.Pvp)
+				return ConfigurationFile.pvpDeathPinMapRule.Value;
+			if (rule == PvPBiomeRule.Pve)
+				return ConfigurationFile.pveDeathPinMapRule.Value;
+
+			if (Player.m_localPlayer == null)
+			{
+				Logger.Log("Local player null! Default...");
+				return DeathPinMapRule.Default;
+			}
+
+			//PlayerChoose
+			return Player.m_localPlayer.IsPVPEnabled() 
+				? ConfigurationFile.pvpDeathPinMapRule.Value 
+				: ConfigurationFile.pveDeathPinMapRule.Value;
+		}
+		public static void RemovePlayerPin(Component __instance)
+		{
 			//Find suitable pin
 			Minimap.PinData playerPin = FindPlayerPin(__instance.transform.position, 10f);
 			if (playerPin is not { m_type: Minimap.PinType.Death })
@@ -73,10 +91,10 @@ namespace PvPBiomeDominions.TombstoneManagement
 	{
 		private static void Postfix(Player __instance)
 		{
-			if (PlayerCreateTombStonePatch.playerInventoryWasEmpty && ConfigurationFile.deathPinMapRule.Value == DeathPinMapRule.RemoveWhenLootingOrEmpty)
+			if (PlayerCreateTombStonePatch.playerInventoryWasEmpty && PinManagement.GetCurrentDeathPinMapRule() == DeathPinMapRule.RemoveWhenLootingOrEmpty)
 			{
-				Logger.Log("No pin when player inventory is empty.");
-				PinManagement.RemovePlayerPin(__instance, PlayerCreateTombStonePatch.playerInventoryWasEmpty);
+				Logger.Log("No pin when player inventory is empty. Will remove asap.");
+				PinManagement.RemovePlayerPin(__instance);
 				PlayerCreateTombStonePatch.playerInventoryWasEmpty = false;
 			}
 		}
@@ -101,7 +119,7 @@ namespace PvPBiomeDominions.TombstoneManagement
 	{
 		private static bool Prefix(Minimap __instance, Vector3 pos, Minimap.PinType type, string name, bool save, bool isChecked, long ownerID = 0L)
 		{
-			if (ConfigurationFile.deathPinMapRule.Value == DeathPinMapRule.NoPins)
+			if (PinManagement.GetCurrentDeathPinMapRule() == DeathPinMapRule.NoPins)
 				return type != Minimap.PinType.Death;
 			return true;
 		}
@@ -113,7 +131,7 @@ namespace PvPBiomeDominions.TombstoneManagement
 	{
 		private static void Prefix(TombStone __instance)
 		{
-			if (ConfigurationFile.deathPinMapRule.Value == DeathPinMapRule.Default)
+			if (PinManagement.GetCurrentDeathPinMapRule() == DeathPinMapRule.Default)
 				return;
 			
 			PinManagement.RemovePlayerPin(__instance);
