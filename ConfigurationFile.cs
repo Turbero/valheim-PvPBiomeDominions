@@ -120,16 +120,16 @@ namespace PvPBiomeDominions
             {
                 configFile = plugin.Config;
 
-                _serverConfigLocked = config("1 - General", "Lock Configuration", true, "If on, the configuration is locked and can be changed by server admins only.");
+                _serverConfigLocked = config("1 - General", "Lock Configuration", true, new ConfigDescription("If on, the configuration is locked and can be changed by server admins only."));
                 _ = ConfigSync.AddLockingConfigEntry(_serverConfigLocked);
 
-                debug = config("1 - General", "DebugMode", false, "Enabling/Disabling the debugging in the console (default = false)", false);
-                mapPlayersListPosition = config("1 - General", "Map Players List Position", new Vector2(-563, 100), "Left corner position for the map players list (default: x=-568, y=100)", false);
-                mapPlayersListSize = config("1 - General", "Map Players List Size", new Vector2(440, 620), "Width/Height for the map players list size (default: x=420, y=620)", false);
-                mapPinColoring = config("1 - General", "Map Pins PvP Coloring", true, "Enable/disable the pins coloring in the player maps according to their pvp status", false);
-                maxPlayerNamesCharactersInList = config("1 - General", "Max Player Names Number of Characters In List", 15, "Limits the player name shown in the map players list and replace by '...' when too long to avoid overlap with other elements", false);
+                debug = config("1 - General", "DebugMode", false, new ConfigDescription("Enabling/Disabling the debugging in the console (default = false)"), false);
+                mapPlayersListPosition = config("1 - General", "Map Players List Position", new Vector2(-563, 100), new ConfigDescription("Left corner position for the map players list (default: x=-568, y=100)"), false);
+                mapPlayersListSize = config("1 - General", "Map Players List Size", new Vector2(440, 620), new ConfigDescription("Width/Height for the map players list size (default: x=420, y=620)"), false);
+                mapPinColoring = config("1 - General", "Map Pins PvP Coloring", true, new ConfigDescription("Enable/disable the pins coloring in the player maps according to their pvp status"), false);
+                maxPlayerNamesCharactersInList = config("1 - General", "Max Player Names Number of Characters In List", 15, new ConfigDescription("Limits the player name shown in the map players list and replace by '...' when too long to avoid overlap with other elements"), false);
                 pvpMinimapPlayersListRefresh = config("1 - General", "Map Players List Refresh", 10, new ConfigDescription("Time in seconds to refresh the players list in the map."));
-                dayMessageOff = config("1 - General", "Turn off Day Message", Toggle.Off, "If on, the mod will disable the day count message when attempting to display it on the player's screen.");
+                dayMessageOff = config("1 - General", "Turn off Day Message", Toggle.Off, new ConfigDescription("If on, the mod will disable the day count message when attempting to display it on the player's screen."));
                 
                 pvpAdminExempt = config("2 - PvP Settings", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the pvp biomes rules."));
                 pvpRuleInWards = config("2 - PvP Settings", "PvP Rule In Wards (override biome)", PvPWardRule.FollowBiomeRule, new ConfigDescription("Set up the pvp rule inside wards, overriding biome rules if it's needed. Possible values: Pvp,Pve,PlayerChoice,FollowBiomeRule"));
@@ -185,19 +185,19 @@ namespace PvPBiomeDominions
                 wardCreationInOcean = config("6 - Ward Creation", "Ward Creation 9 - Ocean Rule", Toggle.On, new ConfigDescription("Enable/disable if the player can place wards in Ocean."));
                 wardModsPrefabIds = config("6 - Ward Creation", "Ward Creation Mods PrefabIds", "Thorward", new ConfigDescription("Comma-separated list of extra ward pieces from other mods to include in the ward creation check (default = Thorward)."));
 
-                pveAllowLootOtherTombstones = config("7 - Tombstones", "PvE - Allow Loot Other Tombstones", Toggle.On, new ConfigDescription("If on, in PvE areas all tombstones can be looted."));
-                pveNoItemLoss = config("7 - Tombstones", "PvE - No Items Loss On Death", Toggle.Off, new ConfigDescription("If on, in PvE areas no items will be lost upon death by all means whatsoever and hence tombstone won't be created."));
-                pveKeepEquipped = config("7 - Tombstones", "PvE - Keep Equipped Items On Death", Toggle.Off, new ConfigDescription("If on, in PvE areas equipped items such as armors, weapons, utilities... will keep with the dead player and won't go to the tombstone."));
-                pveKeepHotbar = config("7 - Tombstones", "PvE - Keep Hotbar Items On Death", Toggle.Off, new ConfigDescription("If on, in PvE areas items in the hotbar from slot 1 to 8 will keep with the dead player and won't go to the tombstone."));
-                pveDeathPinMapRule = config("7 - Tombstones", "PvE - Death Pin Map Rule", DeathPinMapRule.Default, "Enable/disable how to remove your death pin in the map automatically in pve biomes.");
-                pveExceptionPrefabIds = config("7 - Tombstones", "PvE - Exception PrefabIds", "", new ConfigDescription("Comma-separated list with prefab ids of items that will still go to the tombstone despite the set rules in PvE areas."));
-                pvpAllowLootOtherTombstones = config("7 - Tombstones", "PvP - Allow Loot Other Tombstones", Toggle.On, new ConfigDescription("If on, in PvP areas all tombstones can be looted."));
-                pvpNoItemLoss = config("7 - Tombstones", "PvP - No Items Loss On Death", Toggle.Off, new ConfigDescription("If on, in PvP areas no items will be lost upon death by all means whatsoever and hence tombstone won't be created."));
-                pvpKeepEquipped = config("7 - Tombstones", "PvP - Keep Equipped Items On Death", Toggle.Off, new ConfigDescription("If on, in PvP areas equipped items such as armors, weapons, utilities... will keep with the dead player and won't go to the tombstone."));
-                pvpKeepHotbar = config("7 - Tombstones", "PvP - Keep Hotbar Items On Death", Toggle.Off, new ConfigDescription("If on, in PvP areas items in the hotbar from slot 1 to 8 will keep with the dead player and won't go to the tombstone."));
-                pvpExceptionPrefabIds = config("7 - Tombstones", "PvP - Exception PrefabIds", "", new ConfigDescription("Comma-separated list with prefab ids of items that will still go to the tombstone despite the set rules in PvP areas."));
-                pvpDeathPinMapRule = config("7 - Tombstones", "PvP - Death Pin Map Rule", DeathPinMapRule.Default, "Enable/disable how to remove your death pin in the map automatically in pvp biomes.");
-                showMessageWhenLootingYourTombstone = config("7 - Tombstones", "Show Message When Looting Your Tombstone", Toggle.On, "Enable/disable showing alert in your screen when your tombstone is being looted.");
+                showMessageWhenLootingYourTombstone = config("7 - Tombstones", "Show Message When Looting Your Tombstone", Toggle.On, new ConfigDescription("Enable/disable showing alert in your screen when your tombstone is being looted."));
+                pveAllowLootOtherTombstones = config("7.1 - Tombstones PvE", "PvE - Allow Loot Other Tombstones", Toggle.On, new ConfigDescription("If on, in PvE areas all tombstones can be looted."));
+                pveNoItemLoss = config("7.1 - Tombstones PvE", "PvE - No Items Loss On Death", Toggle.Off, new ConfigDescription("If on, in PvE areas no items will be lost upon death by all means whatsoever and hence tombstone won't be created."));
+                pveKeepEquipped = config("7.1 - Tombstones PvE", "PvE - Keep Equipped Items On Death", Toggle.Off, new ConfigDescription("If on, in PvE areas equipped items such as armors, weapons, utilities... will keep with the dead player and won't go to the tombstone."));
+                pveKeepHotbar = config("7.1 - Tombstones PvE", "PvE - Keep Hotbar Items On Death", Toggle.Off, new ConfigDescription("If on, in PvE areas items in the hotbar from slot 1 to 8 will keep with the dead player and won't go to the tombstone."));
+                pveExceptionPrefabIds = config("7.1 - Tombstones PvE", "PvE - Exception PrefabIds", "", new ConfigDescription("Comma-separated list with prefab ids of items that will still go to the tombstone despite the set rules in PvE areas."));
+                pveDeathPinMapRule = config("7.1 - Tombstones PvE", "Death Pin Map Rule in PvE", DeathPinMapRule.Default, new ConfigDescription("Enable/disable how to remove your death pin in the map automatically in pve biomes."));
+                pvpAllowLootOtherTombstones = config("7.2 - Tombstones PvP", "PvP - Allow Loot Other Tombstones", Toggle.On, new ConfigDescription("If on, in PvP areas all tombstones can be looted."));
+                pvpNoItemLoss = config("7.2 - Tombstones PvP", "PvP - No Items Loss On Death", Toggle.Off, new ConfigDescription("If on, in PvP areas no items will be lost upon death by all means whatsoever and hence tombstone won't be created."));
+                pvpKeepEquipped = config("7.2 - Tombstones PvP", "PvP - Keep Equipped Items On Death", Toggle.Off, new ConfigDescription("If on, in PvP areas equipped items such as armors, weapons, utilities... will keep with the dead player and won't go to the tombstone."));
+                pvpKeepHotbar = config("7.2 - Tombstones PvP", "PvP - Keep Hotbar Items On Death", Toggle.Off, new ConfigDescription("If on, in PvP areas items in the hotbar from slot 1 to 8 will keep with the dead player and won't go to the tombstone."));
+                pvpExceptionPrefabIds = config("7.2 - Tombstones PvP", "PvP - Exception PrefabIds", "", new ConfigDescription("Comma-separated list with prefab ids of items that will still go to the tombstone despite the set rules in PvP areas."));
+                pvpDeathPinMapRule = config("7.2 - Tombstones PvP", "Death Pin Map Rule in PvP", DeathPinMapRule.Default, new ConfigDescription("Enable/disable how to remove your death pin in the map automatically in pvp biomes."));
                 
                 SetupWatcher();
             }
