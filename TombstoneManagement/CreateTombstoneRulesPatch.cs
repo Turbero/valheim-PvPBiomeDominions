@@ -20,7 +20,8 @@ namespace PvPBiomeDominions.TombstoneManagement
 			List<string> exceptionsList = __instance.IsPVPEnabled()
 				? ConfigurationFile.pvpExceptionPrefabIds.Value.Split(',').Select(x => x).ToList()
 				: ConfigurationFile.pveExceptionPrefabIds.Value.Split(',').Select(x => x).ToList();
-			Logger.Log("If some objects are saved, this list will be excluded: " + exceptionsList);
+			if (exceptionsList.Count > 0)
+				Logger.Log("This list will be excluded: " + exceptionsList);
 			foreach (ItemDrop.ItemData item in inventoryList!)
 			{
 				string prefabName = Utils.GetPrefabName(item.m_dropPrefab);
