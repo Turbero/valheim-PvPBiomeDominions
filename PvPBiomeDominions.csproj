@@ -117,6 +117,7 @@
     <Compile Include="RulesManagement\PvPRuleManagement.cs" />
     <Compile Include="RulesManagement\WardRuleManagement.cs" />
     <Compile Include="TombstoneManagement\CreateTombstoneRulesPatch.cs" />
+    <Compile Include="TombstoneManagement\DeathPinPatch.cs" />
     <Compile Include="TombstoneManagement\TombStoneAlertsPatch.cs" />
   </ItemGroup>
   <ItemGroup>

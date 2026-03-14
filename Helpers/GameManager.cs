@@ -26,9 +26,14 @@ namespace PvPBiomeDominions.Helpers
             obj.GetType().GetField(name, bindingAttr)?.SetValue(obj, value);
         }
         
-        public static object GetPrivateMethod(object obj, string name, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.NonPublic)
+        public static object GetPrivateMethod(object obj, string name, object[] parameters = null, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.NonPublic)
         {
-            return obj.GetType().GetMethod(name, bindingAttr)?.Invoke(obj, null);
+            return obj.GetType().GetMethod(name, bindingAttr)?.Invoke(obj, parameters);
+        }
+        
+        public static void RunPrivateMethod(object obj, string name, object[] parameters = null, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.NonPublic)
+        {
+            obj.GetType().GetMethod(name, bindingAttr)?.Invoke(obj, parameters);
         }
         
         public static int GetCurrentDay()
