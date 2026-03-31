@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.6.7
+
+* Added controller support fur UI map buttons
+
 ## 1.6.6
 
 * Reorganized section "Tombstones" into "Tombstones (General)", "Tombstones PvE" and "Tombstones PvP" (delete and recreate .cfg file if any confusion)

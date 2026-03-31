@@ -158,6 +158,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 GameObject.Instantiate(InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton").gameObject,
                     minimap.transform.Find("large"));
             showHidePanelButtonGO.name = "PlayersListPanelButton";
+            ControllerUtils.BindGamePad(showHidePanelButtonGO.transform, KeyCode.JoystickButton4, new Vector2(-172, 0));
             RectTransform showHidePanelButtonRt = showHidePanelButtonGO.GetComponent<RectTransform>();
             showHidePanelButtonRt.anchoredPosition = new Vector2(-680, 45);
             showHidePanelButton = showHidePanelButtonGO.GetComponent<Button>();
@@ -177,6 +178,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 GameObject.Instantiate(InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton").gameObject,
                     minimap.transform.Find("large"));
             azSortButtonGO.name = "PlayersListPanelAZButton";
+            ControllerUtils.BindGamePad(azSortButtonGO.transform, KeyCode.JoystickButton5, Vector2.zero);
             RectTransform azSortButtonRt = azSortButtonGO.GetComponent<RectTransform>();
             azSortButtonRt.anchoredPosition = new Vector2(-555, 45);
             azSortButtonRt.sizeDelta = new Vector2(70, 46);

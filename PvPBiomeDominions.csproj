@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationFile.cs" />
+    <Compile Include="ControllerUtils.cs" />
     <Compile Include="Helpers\EpicMMOSystem_API.cs" />
     <Compile Include="Helpers\GameManager.cs" />
     <Compile Include="Helpers\ImageManager.cs" />
