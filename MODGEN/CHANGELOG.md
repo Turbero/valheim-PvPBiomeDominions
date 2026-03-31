@@ -2,7 +2,7 @@
 
 ## 1.6.7
 
-* Added controller support fur UI map buttons
+* Added controller support fur UI map buttons.
 
 ## 1.6.6
 
