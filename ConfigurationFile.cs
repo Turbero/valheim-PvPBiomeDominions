@@ -114,6 +114,11 @@ namespace PvPBiomeDominions
         public static ConfigEntry<Toggle> pvpKeepEquipped;
         public static ConfigEntry<Toggle> pvpKeepHotbar;
         public static ConfigEntry<string> pvpExceptionPrefabIds;
+        
+        //Communication
+        public static ConfigEntry<Toggle> logoutInChatMessage;
+        public static ConfigEntry<string> logoutMessage;
+        public static ConfigEntry<Toggle> welcomeInChatMessage;
 
         internal static void LoadConfig(BaseUnityPlugin plugin)
         {
@@ -199,6 +204,10 @@ namespace PvPBiomeDominions
                 pvpExceptionPrefabIds = config("7.2 - Tombstones PvP", "PvP - Exception PrefabIds", "", new ConfigDescription("Comma-separated list with prefab ids of items that will still go to the tombstone despite the set rules in PvP areas."));
                 pvpDeathPinMapRule = config("7.2 - Tombstones PvP", "Death Pin Map Rule in PvP", DeathPinMapRule.Default, new ConfigDescription("Enable/disable how to remove your death pin in the map automatically in pvp biomes."));
                 
+                logoutInChatMessage = config("8 - Communication", "Logout In Chat Message", Toggle.Off, new ConfigDescription("Decide when the player must send the welcome message automatically in the chat for everyone when logging out."));
+                logoutMessage = config("8 - Communication", "Logout Message", "{0} said bye for now.", new ConfigDescription("Message to show in the chat when a player leaves the world."));
+                welcomeInChatMessage = config("8 - Communication", "Welcome In Chat Message", Toggle.On, new ConfigDescription("Decide when the player must send the welcome message automatically in the chat for everyone when logging in."));
+
                 SetupWatcher();
             }
         }
@@ -223,9 +232,9 @@ namespace PvPBiomeDominions
                 configFile.Reload();
                 SettingsChanged(null, null);
             }
-            catch
+            catch (Exception ex)
             {
-                Logger.LogError($"There was an issue loading {ConfigFileName}");
+                Logger.LogError($"There was an issue loading {ConfigFileName}. {ex}");
             }
         }
 

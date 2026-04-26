@@ -54,9 +54,15 @@
     <Reference Include="Guilds">
       <HintPath>Libs\GuildsAPI.dll</HintPath>
     </Reference>
+    <Reference Include="gui_framework">
+      <HintPath>..\..\Libs\gui_framework.dll</HintPath>
+    </Reference>
     <Reference Include="ServerSync, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libs\External\ServerSync.dll</HintPath>
+    </Reference>
+    <Reference Include="Splatform">
+      <HintPath>..\..\Libs\Splatform.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -86,6 +92,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommunicationManagement\LoginPatch.cs" />
+    <Compile Include="CommunicationManagement\LogoutPatch.cs" />
     <Compile Include="ConfigurationFile.cs" />
     <Compile Include="ControllerUtils.cs" />
     <Compile Include="Helpers\EpicMMOSystem_API.cs" />
@@ -112,8 +120,10 @@
     <Compile Include="PvPManagement\PvPPatch.cs" />
     <Compile Include="PvPManagement\PvPProtectionBuffPatch.cs" />
     <Compile Include="PvPManagement\PvPWardPatch.cs" />
+    <Compile Include="RPC\RPC_Communication.cs" />
     <Compile Include="RPC\RPC_PlayerRelevantInfo.cs" />
     <Compile Include="RPC\RPC_Register.cs" />
+    <Compile Include="RPC\RPC_TombstoneAlertPlayer.cs" />
     <Compile Include="RulesManagement\PositionRuleManagement.cs" />
     <Compile Include="RulesManagement\PvPRuleManagement.cs" />
     <Compile Include="RulesManagement\WardRuleManagement.cs" />
