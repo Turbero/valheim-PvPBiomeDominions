@@ -116,7 +116,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PvPManagement\MapUpdatePlayerPinsPatch.cs" />
     <Compile Include="PvPManagement\PvPKillCountPatch.cs" />
-    <Compile Include="PvPManagement\PvPLevelsPatch.cs" />
     <Compile Include="PvPManagement\PvPPatch.cs" />
     <Compile Include="PvPManagement\PvPProtectionBuffPatch.cs" />
     <Compile Include="PvPManagement\PvPWardPatch.cs" />
