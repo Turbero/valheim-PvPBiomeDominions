@@ -76,8 +76,6 @@ namespace PvPBiomeDominions
         public static ConfigEntry<PositionSharingBiomeRule> positionRuleInOcean;
         
         //Other mods integration
-        public static ConfigEntry<Toggle> pvpWackyEpicMMOLevelDifferenceLimitEnabled;
-        public static ConfigEntry<int> pvpWackyEpicMMOLevelDifferenceLimitValue;
         public static ConfigEntry<string> pvpRuleInCustomBiomes;
         public static ConfigEntry<string> positionRuleInCustomBiomes;
         public static ConfigEntry<string> wardCreationForbiddenInCustomBiomes;
@@ -162,8 +160,6 @@ namespace PvPBiomeDominions
                 positionRuleInDeepNorth = config("3 - Map Position", "Biome 8 - Deep North Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing in Deep North. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
                 positionRuleInOcean = config("3 - Map Position", "Biome 9 - Ocean Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing in Ocean. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
                 
-                pvpWackyEpicMMOLevelDifferenceLimitEnabled = config("4 - Mods integration", "Max Level Difference to damage in PvP areas - Activation", Toggle.Off, new ConfigDescription("Activate the limits the difference of levels between players to damage each other in pvp areas."));
-                pvpWackyEpicMMOLevelDifferenceLimitValue = config("4 - Mods integration", "Max Level Difference to damage in PvP areas - Value", 100, new ConfigDescription("Limits the difference of levels between players to damage each other in pvp areas (default = 100)."));
                 pvpRuleInCustomBiomes = config("4 - Mods integration", "Custom Biomes - PvP Rules", "", new ConfigDescription("Semicolon-separated list of custom biome pvp rules. Use colon to indicate the rule. Examples: Wonderland:Pve;Warland:Pvp;Doubtland:PlayerChoose"));
                 positionRuleInCustomBiomes = config("4 - Mods integration", "Custom Biomes - Position Sharing Rules", "", new ConfigDescription("Semicolon-separated list of position sharing custom biome rules. Use colon to indicate the rule. Examples: Wonderland:ShowPlayer;Warland:HidePlayer;Doubtland:PlayerChoice"));
                 wardCreationForbiddenInCustomBiomes = config("4 - Mods integration", "Custom Biomes - Ward forbidden", "", new ConfigDescription("Comma-separated list of custom biomes where wards are forbidden. Example: Warland,AmazoniaLand"));
