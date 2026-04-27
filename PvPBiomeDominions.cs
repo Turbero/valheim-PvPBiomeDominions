@@ -12,7 +12,7 @@ namespace PvPBiomeDominions
     {
         public const string GUID = "Turbero.PvPBiomeDominions";
         public const string NAME = "PvP Biome Dominions";
-        public const string VERSION = "1.6.7";
+        public const string VERSION = "1.7.0";
 
         private readonly Harmony harmony = new Harmony(GUID);
 

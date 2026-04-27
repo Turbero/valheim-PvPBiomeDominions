@@ -1,8 +1,8 @@
 {
   "name": "PvPBiomeDominions",
-  "version_number": "1.6.7",
+  "version_number": "1.7.0",
   "website_url": "https://github.com/Turbero/valheim-PvPBiomeDominions",
-  "description": "Create specific rules per biome and wards for PvP control and Position Sharing management. Decide who can loot what and where as well. Perfect for PvE/PvP worlds. Configure the rules for each of them and create the world you want.",
+  "description": "Create specific rules for each biome for PvP control, Position Sharing, Ward Creation and more. Decide who can loot what and where as well. Perfect for PvE/PvP worlds. Configure the rules create the world you want.",
   "dependencies": [
     "denikson-BepInExPack_Valheim-5.4.2333"
   ]

@@ -1,5 +1,13 @@
 ### CHANGELOG
 
+## 1.7.0
+
+* Added new section "8 - Communication" to decide if an automatic message should be sent when logging in or out:
+  * The welcome message is the vanilla one (enabled by default), the logout message is a new option in the .cfg file (disabled by default)
+  * The logout message can be customized with player name using the wildcard "{0}".
+  * both messages can be enabled or disabled
+* Removed EpicMMOLevelDifference options (better use the native options in that mod)
+
 ## 1.6.7
 
 * Added controller support fur UI map buttons.
