@@ -5,6 +5,7 @@ PVP Biome Dominions is a mod that allows creating rules for:
 - Position sharing management
 - Ward Creation
 - Tombstone management
+- Automatic messages when logging in and out
 
 based on the current biome of the player. You can apply different combat rules to Meadows, Black Forest, etc even for Ocean!
 
@@ -73,6 +74,44 @@ Alternatively, admins can bypass these rules if the check is On.
 
 ![](https://i.imgur.com/SZUbMu5.png)
 
+### -- Ward Creation Configuration --
+
+Here you can find each existing biome in the game to configure if a ward can be created
+
+If you want to use a custom mod guard stone, add the ids in the field "wardModsPrefabIds" separated by comma ("Thorward" by default for WardIsLove mod)
+
+### -- Tombstone management --
+
+Here you can find options to configure which items will be recovered from tombstone after dying in each biome in PvE and PvP biomes.
+The next options are available to toggle on/off:
+
+* Show Message When Looting Your Tombstone
+* PvE Biomes:
+  * PvE - Allow Loot Other Tombstones
+  * PvE - No Items Loss On Death
+  * PvE - Keep Equipped Items On Death
+  * PvE - Keep Hotbar Items On Death
+  * PvE - Exception PrefabIds
+  * Death Pin Map Rule in PvE. The behaviour can be:
+    * Default
+    * Remove When Looting Or Empty
+    * No Pins
+* PvP Biomes:
+  * PvP - Allow Loot Other Tombstones
+  * PvP - No Items Loss On Death
+  * PvP - Keep Equipped Items On Death
+  * PvP - Keep Hotbar Items On Death
+  * PvP - Exception PrefabIds
+  * Death Pin Map Rule in PvP. The behaviour can be:
+    * Default
+    * Remove When Looting Or Empty
+    * No Pins
+
+### -- Automatic messages when logging in and out --
+
+Here you can find options to enable/disable the login message and additionally configure a logout message, in case you want to keep the privacy in your server world
+
+
 ### -- Full Configuration screenshots --
 
 ![](https://i.imgur.com/23EIXo1.png)
@@ -87,7 +126,9 @@ Alternatively, admins can bypass these rules if the check is On.
 
 ![](https://i.imgur.com/oplOZHW.png)
 
-![](https://i.imgur.com/hRMKv56.png)
+![](https://i.imgur.com/xNGipOF.png)
+
+![](https://i.imgur.com/yVIC1Z1.png)
 
 ## About myself
 
