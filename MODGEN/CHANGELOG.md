@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.7.1
+
+* Fixed logout message to only print it when the logout option is enabled and the logout message is not blank in the configuration
+
 ## 1.7.0
 
 * Added new section "8 - Communication" to decide if an automatic message should be sent when logging in or out:
