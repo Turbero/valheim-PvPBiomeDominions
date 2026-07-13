@@ -12,7 +12,10 @@ namespace PvPBiomeDominions.CommunicationManagement
 			private static void Prefix(ZNetPeer peer, ref ZNet __instance)
 			{
 				if (!__instance.IsServer()) return;
-				ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, "RPC_LogoutMessage", peer.m_playerName);
+				
+				if (ConfigurationFile.logoutInChatMessage.Value == ConfigurationFile.Toggle.On &&
+				    !string.IsNullOrEmpty(ConfigurationFile.logoutMessage.Value))
+					ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, "RPC_LogoutMessage", peer.m_playerName);
 			}
 		}
 	}
