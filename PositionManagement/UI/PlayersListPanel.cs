@@ -10,37 +10,6 @@ using PlayerReference = Groups.PlayerReference;
 
 namespace PvPBiomeDominions.PositionManagement.UI
 {
-    public class PlayerEntry
-    {
-        public string name;
-        public int level;
-        public bool isPvP;
-        public string guildName;
-        public int guildIconId;
-        
-        public Image iconPlayer;
-        public TextMeshProUGUI killsTimesUI;
-        public TextMeshProUGUI killedByTimesUI;
-        public TextMeshProUGUI levelUI;
-        public Image guildIconUI;
-
-        public string GetLevelText()
-        {
-            return level > 0 ? level.ToString() : "???";
-        }
-    }
-
-    public enum PlayersListOrderType
-    {
-        ByName,
-        ByLevel
-    }
-    public enum PlayersListOrderDirection
-    {
-        ASC,
-        DESC
-    }
-    
     public class PlayersListPanel
     {
         private static readonly Vector2 ROW_SIZE_DELTA = new(230f, 24f);
@@ -469,25 +438,28 @@ namespace PvPBiomeDominions.PositionManagement.UI
                     killedByValue.text = knownTexts.GetValueSafe(GameManager.PREFIX_KILLEDBY + info.m_name);
                 
                 // -------- FILL FIELDS WITH CACHE -------- //
-                PlayerEntry playerEntry = cachedPlayerEntries.Find(pe => pe.name == info.m_name);
-                if (playerEntry != null)
+                PlayerEntry cachedPlayerEntry = cachedPlayerEntries.Find(pe => pe.name.Equals(info.m_name));
+                if (cachedPlayerEntry != null)
                 {
-                    //1) Icon
+                    //1) Icon 
                     if (isInCurrentGroup)
                         playerIcon.sprite = ImageManager.getSpriteGroupIconImage();
                     else
-                        playerIcon.sprite = playerEntry.isPvP ? ImageManager.getSpriteIconVanillaImage() : ImageManager.getSpriteIconPVEImage();
+                        playerIcon.sprite = cachedPlayerEntry.isPvP ? ImageManager.getSpriteIconVanillaImage() : ImageManager.getSpriteIconPVEImage();
 
                     // 2) Level
-                    levelText.text = "LVL: " + playerEntry.GetLevelText();
+                    levelText.text = "LVL: " + cachedPlayerEntry.GetLevelText();
                     
                     // 3) Guild icon
-                    if (playerEntry.guildIconId != -1)
+                    if (cachedPlayerEntry.guildIconId != -1)
                     {
-                        imageGuild.sprite = Guilds.API.GetGuildIconById(playerEntry.guildIconId);
-                        guildTooltip.m_text = playerEntry.guildName;
+                        imageGuild.sprite = Guilds.API.GetGuildIconById(cachedPlayerEntry.guildIconId);
+                        guildTooltip.m_text = cachedPlayerEntry.guildName;
                     }
-                    guildGO.SetActive(Guilds.API.IsLoaded() && playerEntry.guildIconId != -1 && imageGuild.sprite != null);
+                    guildGO.SetActive(Guilds.API.IsLoaded() && cachedPlayerEntry.guildIconId != -1 && imageGuild.sprite != null);
+                    
+                    //Rebind UI elements in cache
+                    cachedPlayerEntry.rebind(killsValue, killedByValue, playerIcon, imageGuild);
                 }
                 else
                 {

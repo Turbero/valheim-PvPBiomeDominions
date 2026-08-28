@@ -109,6 +109,8 @@
     <Compile Include="PositionManagement\DayMessagePatch.cs" />
     <Compile Include="PositionManagement\MinimapUpdatePatch.cs" />
     <Compile Include="PositionManagement\PositionPatch.cs" />
+    <Compile Include="PositionManagement\UI\PlayerEntry.cs" />
+    <Compile Include="PositionManagement\UI\PlayerListEnums.cs" />
     <Compile Include="PositionManagement\UI\PlayersListPanel.cs" />
     <Compile Include="PositionManagement\UI\RPC_PlayersListPanel.cs" />
     <Compile Include="PositionManagement\WelcomeMessagePatch.cs" />
