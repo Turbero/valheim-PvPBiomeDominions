@@ -131,11 +131,6 @@ namespace PvPBiomeDominions.PositionManagement.UI
             RectTransform showHidePanelButtonRt = showHidePanelButtonGO.GetComponent<RectTransform>();
             showHidePanelButtonRt.anchoredPosition = new Vector2(-680, 45);
             showHidePanelButton = showHidePanelButtonGO.GetComponent<Button>();
-            showHidePanelButton.onClick = new Button.ButtonClickedEvent();
-            showHidePanelButton.onClick.AddListener(() =>
-            {
-                panelRoot.SetActive(!panelRoot.activeSelf);
-            });
             TextMeshProUGUI buttonText = showHidePanelButton.GetComponentInChildren<TextMeshProUGUI>();
             buttonText.fontStyle = FontStyles.Normal;
             buttonText.color = new Color(1f, 0.7176f, 0.3603f);
@@ -172,6 +167,12 @@ namespace PvPBiomeDominions.PositionManagement.UI
                     orderDirection = PlayersListOrderDirection.ASC;
                 }
                 RefreshContent(ZNet.instance.GetPlayerList(), false);
+            });
+            showHidePanelButton.onClick = new Button.ButtonClickedEvent();
+            showHidePanelButton.onClick.AddListener(() =>
+            {
+                panelRoot.SetActive(!panelRoot.activeSelf);
+                azSortButtonGO.SetActive(panelRoot.activeSelf);
             });
 
             // LEVEL SORT BUTTON
