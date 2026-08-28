@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using PvPBiomeDominions.Helpers;
 using PvPBiomeDominions.RPC;
@@ -55,8 +56,19 @@ namespace PvPBiomeDominions.PositionManagement.UI
             Player localPlayer = Player.m_localPlayer;
             Logger.Log("[RPC_ResponsePlayerRelevantInfo] RPC sent to " + localPlayer.GetPlayerName() + " from " + playerSender.m_name);
 
-            if (MinimapUpdatePatch.panel != null && MinimapUpdatePatch.panel.panelRoot != null)
-                MinimapUpdatePatch.panel.UpdatePlayerRelevantInfo(RPC_PlayerRelevantInfo.FromPackage(pkg));
+            try
+            {
+                if (MinimapUpdatePatch.panel == null || MinimapUpdatePatch.panel.panelRoot == null)
+                    return;
+                if (Player.m_localPlayer == null)
+                    return;
+                MinimapUpdatePatch.panel.UpdatePlayerRelevantInfo(
+                    RPC_PlayerRelevantInfo.FromPackage(pkg));
+            }
+            catch (Exception e)
+            {
+                Logger.LogWarning("[RPC_ResponsePlayerRelevantInfo] " + e);
+            }
         }
     }
 }
