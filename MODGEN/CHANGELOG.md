@@ -1,5 +1,10 @@
 ### CHANGELOG
 
+## 1.7.2
+
+* Fixed some UI items in the map players list and added some exception protections.
+* Sort list button now shown/hidden along players list when clicking the show/hide list button
+
 ## 1.7.1
 
 * Fixed logout message to only print it when the logout option is enabled and the logout message is not blank in the configuration
