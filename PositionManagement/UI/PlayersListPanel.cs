@@ -45,6 +45,18 @@ namespace PvPBiomeDominions.PositionManagement.UI
 
             Image bgImage = panelRoot.GetComponent<Image>();
             bgImage.color = new Color(0, 0, 0, 0.5f);
+            
+            // --- LIST SIZE MANIPULATION ---
+            //Horizontal
+            addMapPlayerListButton("MoveListMoreLeft", new Vector2(-200, -20), "<<", KeyCode.Joystick1Button9, false, -5, 0);
+            addMapPlayerListButton("MoveListLeft", new Vector2(-165, -20), "<", KeyCode.Joystick1Button10, false, -1, 0);
+            addMapPlayerListButton("MoveListMoreRight", new Vector2(-130, -20), ">", KeyCode.Joystick1Button11, false, 1, 0);
+            addMapPlayerListButton("MoveListRight", new Vector2(-95, -20), ">>", KeyCode.Joystick1Button12, false, 5, 0);
+            //Vertical
+            addMapPlayerListButton("MoveListMoreUp", new Vector2(240, 125), "<<", KeyCode.Joystick1Button9, true, 0, 5);
+            addMapPlayerListButton("MoveListUp", new Vector2(240, 90), "<", KeyCode.Joystick1Button9, true, 0, 1);
+            addMapPlayerListButton("MoveListDown", new Vector2(240, 55), ">>", KeyCode.Joystick1Button9, true, 0, -1);
+            addMapPlayerListButton("MoveListMoreDown", new Vector2(240, 20), ">>", KeyCode.Joystick1Button9, true, 0, -5);
 
             // --- SCROLLRECT ---
             GameObject scrollObj = new GameObject("ScrollView", typeof(RectTransform), typeof(ScrollRect), typeof(Image));
@@ -117,6 +129,30 @@ namespace PvPBiomeDominions.PositionManagement.UI
             createButtons(minimap);
             
             killsIconSprite = minimap.m_largeRoot.transform.Find("IconPanel2/IconDeath").GetComponent<Image>().sprite;
+        }
+
+        private void addMapPlayerListButton(string name, Vector2 anchoredPosition, string text, KeyCode keyCode, bool spinClockwise90, int xChange, int yChange)
+        {
+            GameObject arrowButtonGO = GameObject.Instantiate(InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton").gameObject, panelRoot.transform, false);
+            arrowButtonGO.name = name;
+            arrowButtonGO.transform.SetParent(panelRoot.transform, false);
+            arrowButtonGO.GetComponent<RectTransform>().anchoredPosition = anchoredPosition;
+            arrowButtonGO.GetComponent<RectTransform>().sizeDelta = new Vector2(32, 32);
+            if (spinClockwise90)
+                arrowButtonGO.GetComponent<RectTransform>().localEulerAngles = new Vector3(0f, 0f, -90f);
+            ControllerUtils.BindGamePad(arrowButtonGO.transform, keyCode, Vector2.zero);
+            Button arrowButton = arrowButtonGO.GetComponent<Button>();
+            arrowButton.onClick = new Button.ButtonClickedEvent();
+            arrowButton.onClick.AddListener(() =>
+            {
+                panelRT.anchoredPosition = new Vector2(panelRT.anchoredPosition.x + xChange, panelRT.anchoredPosition.y + yChange); //Faster refresh
+                ConfigurationFile.mapPlayersListPosition.Value = panelRT.anchoredPosition; //Save in config
+            });
+            TextMeshProUGUI buttonText = arrowButton.GetComponentInChildren<TextMeshProUGUI>();
+            buttonText.fontStyle = FontStyles.Normal;
+            buttonText.color = new Color(1f, 0.7176f, 0.3603f);
+            buttonText.alignment = TextAlignmentOptions.Center;
+            buttonText.text = text;
         }
 
         private void createButtons(Minimap minimap)
