@@ -29,9 +29,20 @@ namespace PvPBiomeDominions.PositionManagement.UI
 
         private PlayersListOrderType orderType = PlayersListOrderType.ByName;
         private PlayersListOrderDirection orderDirection = PlayersListOrderDirection.ASC;
+
+        private readonly int offsetStandardRowElements;
         
         public PlayersListPanel(Minimap minimap)
         {
+            bool hasMMO = EpicMMOSystem_API.IsLoaded();
+            bool hasGuilds = Guilds.API.IsLoaded();
+            if (hasMMO && hasGuilds)
+                offsetStandardRowElements = 0;
+            else if (hasMMO || hasGuilds)
+                offsetStandardRowElements = 25;
+            else
+                offsetStandardRowElements = 50;
+            
             // === MAIN PANEL ===
             panelRoot = new GameObject("PlayersListPanel", typeof(RectTransform), typeof(Image));
             panelRoot.transform.SetParent(minimap.transform.Find("large"), false);
@@ -46,18 +57,6 @@ namespace PvPBiomeDominions.PositionManagement.UI
             Image bgImage = panelRoot.GetComponent<Image>();
             bgImage.color = new Color(0, 0, 0, 0.5f);
             
-            // --- LIST SIZE MANIPULATION ---
-            //Horizontal
-            addMapPlayerListButton("MoveListMoreLeft", new Vector2(-200, -20), "<<", KeyCode.Joystick1Button9, false, -5, 0);
-            addMapPlayerListButton("MoveListLeft", new Vector2(-165, -20), "<", KeyCode.Joystick1Button10, false, -1, 0);
-            addMapPlayerListButton("MoveListMoreRight", new Vector2(-130, -20), ">", KeyCode.Joystick1Button11, false, 1, 0);
-            addMapPlayerListButton("MoveListRight", new Vector2(-95, -20), ">>", KeyCode.Joystick1Button12, false, 5, 0);
-            //Vertical
-            addMapPlayerListButton("MoveListMoreUp", new Vector2(240, 125), "<<", KeyCode.Joystick1Button9, true, 0, 5);
-            addMapPlayerListButton("MoveListUp", new Vector2(240, 90), "<", KeyCode.Joystick1Button9, true, 0, 1);
-            addMapPlayerListButton("MoveListDown", new Vector2(240, 55), ">>", KeyCode.Joystick1Button9, true, 0, -1);
-            addMapPlayerListButton("MoveListMoreDown", new Vector2(240, 20), ">>", KeyCode.Joystick1Button9, true, 0, -5);
-
             // --- SCROLLRECT ---
             GameObject scrollObj = new GameObject("ScrollView", typeof(RectTransform), typeof(ScrollRect), typeof(Image));
             scrollObj.transform.SetParent(panelRoot.transform, false);
@@ -126,29 +125,62 @@ namespace PvPBiomeDominions.PositionManagement.UI
             scrollRect.verticalScrollbar = scrollbar;
             scrollRect.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
 
+            // --- LIST POSITION MANIPULATION ---
+            //Horizontal
+            addMapPlayerListButton("MoveListMoreLeft", new Vector2(-125, -20), "<<", KeyCode.Joystick1Button9, false, -5, 0, true, true);
+            addMapPlayerListButton("MoveListLeft", new Vector2(-90, -20), "<", KeyCode.Joystick1Button9, false, -1, 0, true);
+            addMapPlayerListButton("MoveListRight", new Vector2(-55, -20), ">", KeyCode.Joystick1Button9, false, 1, 0, true);
+            addMapPlayerListButton("MoveListMoreRight", new Vector2(-20, -20), ">>", KeyCode.Joystick1Button9, false, 5, 0, true);
+            //Vertical
+            addMapPlayerListButton("MoveListMoreUp", new Vector2(20f, -20), "<<", KeyCode.Joystick1Button9, true, 0, 5, true);
+            addMapPlayerListButton("MoveListUp", new Vector2(55f, -20), "<", KeyCode.Joystick1Button9, true, 0, 1, true);
+            addMapPlayerListButton("MoveListDown", new Vector2(90f, -20), ">", KeyCode.Joystick1Button9, true, 0, -1, true);
+            addMapPlayerListButton("MoveListMoreDown", new Vector2(125f, -20), ">>", KeyCode.Joystick1Button9, true, 0, -5, true);
+            
+            // --- LIST SIZE MANIPULATION ---
+            //Horizontal
+            addMapPlayerListButton("SizeListMoreLeft", new Vector2(-125, -55), "<<", KeyCode.Joystick1Button10, false, -5, 0, false, true);
+            addMapPlayerListButton("SizeListLeft", new Vector2(-90, -55), "<", KeyCode.Joystick1Button10, false, -1, 0, false);
+            addMapPlayerListButton("SizeListRight", new Vector2(-55, -55), ">", KeyCode.Joystick1Button10, false, 1, 0, false);
+            addMapPlayerListButton("SizeListMoreRight", new Vector2(-20, -55), ">>", KeyCode.Joystick1Button10, false, 5, 0, false);
+            //Vertical
+            addMapPlayerListButton("SizeListMoreUp", new Vector2(20, -55), "<<", KeyCode.Joystick1Button10, true, 0, 5, false);
+            addMapPlayerListButton("SizeListUp", new Vector2(55, -55), "<", KeyCode.Joystick1Button10, true, 0, 1, false);
+            addMapPlayerListButton("SizeListDown", new Vector2(90, -55), ">", KeyCode.Joystick1Button10, true, 0, -1, false);
+            addMapPlayerListButton("SizeListMoreDown", new Vector2(125, -55), ">>", KeyCode.Joystick1Button10, true, 0, -5, false);
+
             createButtons(minimap);
             
             killsIconSprite = minimap.m_largeRoot.transform.Find("IconPanel2/IconDeath").GetComponent<Image>().sprite;
         }
 
-        private void addMapPlayerListButton(string name, Vector2 anchoredPosition, string text, KeyCode keyCode, bool spinClockwise90, int xChange, int yChange)
+        private void addMapPlayerListButton(string name, Vector2 anchoredPosition, string text, KeyCode keyCode, bool spinClockwise90, int xChange, int yChange, bool positionBtn, bool hintActive = false)
         {
-            GameObject arrowButtonGO = GameObject.Instantiate(InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton").gameObject, panelRoot.transform, false);
-            arrowButtonGO.name = name;
-            arrowButtonGO.transform.SetParent(panelRoot.transform, false);
-            arrowButtonGO.GetComponent<RectTransform>().anchoredPosition = anchoredPosition;
-            arrowButtonGO.GetComponent<RectTransform>().sizeDelta = new Vector2(32, 32);
+            GameObject buttonGO = GameObject.Instantiate(InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton").gameObject, panelRoot.transform, false);
+            buttonGO.name = name;
+            buttonGO.transform.SetParent(panelRoot.transform, false);
+            buttonGO.GetComponent<RectTransform>().anchoredPosition = anchoredPosition;
+            buttonGO.GetComponent<RectTransform>().sizeDelta = new Vector2(32, 32);
+            ControllerUtils.BindGamePad(buttonGO.transform, keyCode, Vector2.zero, hintActive);
             if (spinClockwise90)
-                arrowButtonGO.GetComponent<RectTransform>().localEulerAngles = new Vector3(0f, 0f, -90f);
-            ControllerUtils.BindGamePad(arrowButtonGO.transform, keyCode, Vector2.zero);
-            Button arrowButton = arrowButtonGO.GetComponent<Button>();
-            arrowButton.onClick = new Button.ButtonClickedEvent();
-            arrowButton.onClick.AddListener(() =>
-            {
-                panelRT.anchoredPosition = new Vector2(panelRT.anchoredPosition.x + xChange, panelRT.anchoredPosition.y + yChange); //Faster refresh
-                ConfigurationFile.mapPlayersListPosition.Value = panelRT.anchoredPosition; //Save in config
-            });
-            TextMeshProUGUI buttonText = arrowButton.GetComponentInChildren<TextMeshProUGUI>();
+                buttonGO.GetComponent<RectTransform>().localEulerAngles = new Vector3(0f, 0f, -90f);
+            Button button = buttonGO.GetComponent<Button>();
+            button.onClick = new Button.ButtonClickedEvent();
+            if (positionBtn) {
+                button.onClick.AddListener(() =>
+                {
+                    panelRT.anchoredPosition = new Vector2(panelRT.anchoredPosition.x + xChange, panelRT.anchoredPosition.y + yChange); //Faster refresh
+                    ConfigurationFile.mapPlayersListPosition.Value = panelRT.anchoredPosition; //Save in config
+                });
+            } else {
+                button.onClick.AddListener(() =>
+                {
+                    panelRT.sizeDelta = new Vector2(panelRT.sizeDelta.x + xChange, panelRT.sizeDelta.y + yChange); //Faster refresh
+                    ConfigurationFile.mapPlayersListSize.Value = panelRT.sizeDelta; //Save in config
+                });
+            }
+
+            TextMeshProUGUI buttonText = button.GetComponentInChildren<TextMeshProUGUI>();
             buttonText.fontStyle = FontStyles.Normal;
             buttonText.color = new Color(1f, 0.7176f, 0.3603f);
             buttonText.alignment = TextAlignmentOptions.Center;
@@ -299,12 +331,20 @@ namespace PvPBiomeDominions.PositionManagement.UI
         private List<ZNet.PlayerInfo> sortList(List<ZNet.PlayerInfo> players)
         {
             if (orderType == PlayersListOrderType.ByName)
+            {
                 if (orderDirection == PlayersListOrderDirection.ASC)
                     return ZNet.instance.GetPlayerList().OrderBy(p => p.m_name).ToList();
                 else
                     return ZNet.instance.GetPlayerList().OrderBy(p => p.m_name).Reverse().ToList();
+            }
             else
-                return players; //TODO Sort by level
+            {
+                //TODO Pick levels from cache
+                
+                //TODO Put "???" at last
+                
+                return players;
+            }
         }
 
         private void AddTitleHeaderToScrollList(int playersCount)
@@ -351,7 +391,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             iconGO.transform.SetParent(entry.transform, false);
             RectTransform imagePlayerIconRt = iconGO.GetComponent<RectTransform>();
             imagePlayerIconRt.sizeDelta = new Vector2(32, 32);
-            imagePlayerIconRt.anchoredPosition = new Vector2(-200, 0);
+            imagePlayerIconRt.anchoredPosition = new Vector2(-200 + offsetStandardRowElements, 0);
             Image playerIcon = iconGO.GetComponent<Image>();
             playerIcon.sprite = ImageManager.getSpriteIconVanillaImage(); //by default
             
@@ -359,11 +399,18 @@ namespace PvPBiomeDominions.PositionManagement.UI
             var nameGO = new GameObject("Player_Name", typeof(RectTransform), typeof(TextMeshProUGUI));
             nameGO.transform.SetParent(entry.transform, false);
             RectTransform textRt = nameGO.GetComponent<RectTransform>();
-            textRt.anchoredPosition = new Vector2(-80, 0);
+            textRt.anchoredPosition = new Vector2(-80 + offsetStandardRowElements, 0);
             var nameText = GetTextEntryComponent(nameGO, "Name");
-            nameText.text = info.m_name.Length < ConfigurationFile.maxPlayerNamesCharactersInList.Value
-                ? info.m_name
-                : info.m_name.Substring(0, ConfigurationFile.maxPlayerNamesCharactersInList.Value - 3) + "...";
+            if (info.m_name.Length < ConfigurationFile.maxPlayerNamesCharactersInList.Value)
+            {
+                nameText.text = info.m_name;
+            } else {
+                nameText.text = info.m_name.Substring(0, ConfigurationFile.maxPlayerNamesCharactersInList.Value - 3) + "...";
+                UITooltip nameGOTooltip = nameGO.AddComponent<UITooltip>();
+                nameGOTooltip.m_tooltipPrefab = GameObject.Instantiate(
+                    InventoryGui.instance.transform.Find("root/Info/Skills").GetComponent<UITooltip>().m_tooltipPrefab);
+                nameGOTooltip.m_text = info.m_name;
+            }
             
             //Kills value in m_knownTexts
             var killsIconGO = new GameObject("Player_KillsIcon", typeof(RectTransform), typeof(Image));
@@ -371,7 +418,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             killsIconGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
             RectTransform killsIconRt = killsIconGO.GetComponent<RectTransform>();
             killsIconRt.sizeDelta = new Vector2(32, 32);
-            killsIconRt.anchoredPosition = new Vector2(-30, 0);
+            killsIconRt.anchoredPosition = new Vector2(-30 + offsetStandardRowElements, 0);
             Image killsIcon = killsIconGO.GetComponent<Image>();
             killsIcon.sprite = killsIconSprite;
             killsIcon.color = new Color32(0, 255, 0, 255);
@@ -385,7 +432,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             killsValueGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
             RectTransform killsValueGORt = killsValueGO.GetComponent<RectTransform>();
             killsValueGORt.sizeDelta = new Vector2(32, 32);
-            killsValueGORt.anchoredPosition = new Vector2(10, 0);
+            killsValueGORt.anchoredPosition = new Vector2(10 + offsetStandardRowElements, 0);
             TextMeshProUGUI killsValue = GetTextEntryComponent(killsValueGO, "Kills");
             
             //Killed value in m_knownTexts
@@ -394,7 +441,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             killedByIconGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
             RectTransform killedByIconRt = killedByIconGO.GetComponent<RectTransform>();
             killedByIconRt.sizeDelta = new Vector2(32, 32);
-            killedByIconRt.anchoredPosition = new Vector2(50, 0);
+            killedByIconRt.anchoredPosition = new Vector2(50 + offsetStandardRowElements, 0);
             Image killedByIcon = killedByIconGO.GetComponent<Image>();
             killedByIcon.sprite = killsIconSprite;
             killedByIcon.color = new Color32(255, 0, 0, 255);
@@ -408,7 +455,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             killedByValueGO.SetActive(info.m_name != Player.m_localPlayer.GetPlayerName());
             RectTransform killedByValueGORt = killedByValueGO.GetComponent<RectTransform>();
             killedByValueGORt.sizeDelta = new Vector2(32, 32);
-            killedByValueGORt.anchoredPosition = new Vector2(90, 0);
+            killedByValueGORt.anchoredPosition = new Vector2(90 + offsetStandardRowElements, 0);
             TextMeshProUGUI killedByValue = GetTextEntryComponent(killedByValueGO, "KilledBy");
 
             //MMO Level

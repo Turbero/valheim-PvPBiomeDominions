@@ -6,20 +6,19 @@ namespace PvPBiomeDominions
 {
     public class ControllerUtils
     {
-        public static void BindGamePad(Transform buttonGo, KeyCode gamepadKeyCode, Vector2 hintAnchoredPosition, InventoryGui inventoryGui = null)
+        public static void BindGamePad(Transform buttonGo, KeyCode gamepadKeyCode, Vector2 hintAnchoredPosition, bool hintVisible = true, InventoryGui inventoryGui = null)
         {
             UIGamePad uiGamePad = null;
             if (buttonGo.TryGetComponent(out uiGamePad))
             {
                 string gamepadKey = KeyCodeToString(gamepadKeyCode);
+                string text = hintVisible ? ZInput.instance.GetBoundKeyString(gamepadKey, true) : null;
                 if (ZInput.instance != null)
-                {
-                    uiGamePad.m_hint.GetComponentInChildren<TextMeshProUGUI>(true).text = ZInput.instance.GetBoundKeyString(gamepadKey, true);
-                }
+                    uiGamePad.m_hint.GetComponentInChildren<TextMeshProUGUI>(true).text = text;
                 else
                 {
                     ZInput.Initialize();
-                    uiGamePad.m_hint.GetComponentInChildren<TextMeshProUGUI>(true).text = ZInput.instance?.GetBoundKeyString(gamepadKey, true);
+                    uiGamePad.m_hint.GetComponentInChildren<TextMeshProUGUI>(true).text = text;
                 }
                 RectTransform hintRectTransform = uiGamePad.m_hint.GetComponent<RectTransform>();
                 if (hintAnchoredPosition != Vector2.zero || hintRectTransform.anchoredPosition != Vector2.zero)
@@ -27,9 +26,7 @@ namespace PvPBiomeDominions
                 uiGamePad.m_zinputKey = gamepadKey;
                 uiGamePad.m_keyCode = gamepadKeyCode;
                 if (inventoryGui != null && inventoryGui.m_crafting.TryGetComponent(out UIGroupHandler group))
-                {
                     SetPrivateValue(uiGamePad, "m_group", group);
-                }
             }
         }
         
