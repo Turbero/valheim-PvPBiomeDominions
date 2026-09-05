@@ -82,6 +82,7 @@ namespace PvPBiomeDominions
         
         //Translations
         public static ConfigEntry<string> playersListPanelButtonText;
+        public static ConfigEntry<string> playersListSizeArrangeButtonText;
         public static ConfigEntry<string> playersMapListTitle;
         public static ConfigEntry<string> wardCreationNotAllowed;
         public static ConfigEntry<string> pvpSpawnProtection;
@@ -165,6 +166,7 @@ namespace PvPBiomeDominions
                 wardCreationForbiddenInCustomBiomes = config("4 - Mods integration", "Custom Biomes - Ward forbidden", "", new ConfigDescription("Comma-separated list of custom biomes where wards are forbidden. Example: Warland,AmazoniaLand"));
 
                 playersListPanelButtonText = config("5 - Translations", "Players List Panel Button Text", "Show/Hide list", new ConfigDescription("Button name used to show/hide the players panel list in the minimap."));
+                playersListSizeArrangeButtonText = config("5 - Translations", "Players List Size Arrange Button Text", "Arrange list size", new ConfigDescription("Button name used to arrange the players panel list size in the minimap."));
                 playersMapListTitle = config("5 - Translations", "Players Map List Title", "Players", new ConfigDescription("Title of the map players list with connected count."));
                 wardCreationNotAllowed = config("5 - Translations", "Ward Creation Not Allowed", "Ward Creation is not allowed in this biome", new ConfigDescription("Title of the map players list with connected count."));
                 pvpSpawnProtection = config("5 - Translations", "PvP Spawn Protection", "PvP Spawn Protection", new ConfigDescription("Title of the pvp protection buff text after dying by a player."));
@@ -240,6 +242,7 @@ namespace PvPBiomeDominions
             if (MinimapUpdatePatch.panel != null)
             {
                 MinimapUpdatePatch.panel.showHidePanelButton.GetComponentInChildren<TextMeshProUGUI>().text = playersListPanelButtonText.Value;
+                MinimapUpdatePatch.panel.movePanelButton.GetComponentInChildren<TextMeshProUGUI>().text = playersListSizeArrangeButtonText.Value;
                 MinimapUpdatePatch.panel.panelRT.anchoredPosition = mapPlayersListPosition.Value;
                 MinimapUpdatePatch.panel.panelRT.sizeDelta = mapPlayersListSize.Value;
             }

@@ -6,6 +6,7 @@ using PvPBiomeDominions.RPC;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 using PlayerReference = Groups.PlayerReference;
 
 namespace PvPBiomeDominions.PositionManagement.UI
@@ -21,8 +22,11 @@ namespace PvPBiomeDominions.PositionManagement.UI
         private readonly Sprite killsIconSprite;
 
         public Button showHidePanelButton;
+        public Button movePanelButton;
         private Button azSortButton;
         private Button levelSortButton;
+
+        private readonly List<GameObject> moveListButtonGOs = new();
 
         private readonly List<GameObject> playerEntriesObjects = new();
         public readonly List<PlayerEntry> cachedPlayerEntries = new();
@@ -158,6 +162,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
         {
             GameObject buttonGO = GameObject.Instantiate(InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton").gameObject, panelRoot.transform, false);
             buttonGO.name = name;
+            buttonGO.SetActive(false); //Hidden by default
             buttonGO.transform.SetParent(panelRoot.transform, false);
             buttonGO.GetComponent<RectTransform>().anchoredPosition = anchoredPosition;
             buttonGO.GetComponent<RectTransform>().sizeDelta = new Vector2(32, 32);
@@ -185,6 +190,8 @@ namespace PvPBiomeDominions.PositionManagement.UI
             buttonText.color = new Color(1f, 0.7176f, 0.3603f);
             buttonText.alignment = TextAlignmentOptions.Center;
             buttonText.text = text;
+            
+            moveListButtonGOs.Add(buttonGO);
         }
 
         private void createButtons(Minimap minimap)
@@ -204,6 +211,29 @@ namespace PvPBiomeDominions.PositionManagement.UI
             buttonText.color = new Color(1f, 0.7176f, 0.3603f);
             buttonText.alignment = TextAlignmentOptions.Center;
             buttonText.text = ConfigurationFile.playersListPanelButtonText.Value;
+            
+            // MOVE BUTTON
+            GameObject movePanelButtonGO = GameObject.Instantiate(InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton").gameObject,
+                    minimap.transform.Find("large"));
+            movePanelButtonGO.name = "PlayersListMoveButton";
+            ControllerUtils.BindGamePad(movePanelButtonGO.transform, KeyCode.JoystickButton9, new Vector2(-172, 0), false);
+            RectTransform movePanelButtonRt = movePanelButtonGO.GetComponent<RectTransform>();
+            movePanelButtonRt.anchoredPosition = new Vector2(-680, 90);
+            movePanelButtonRt.sizeDelta = new Vector2(170, 46);
+            movePanelButton = movePanelButtonGO.GetComponent<Button>();
+            TextMeshProUGUI moveButtonText = movePanelButton.GetComponentInChildren<TextMeshProUGUI>();
+            moveButtonText.fontStyle = FontStyles.Normal;
+            moveButtonText.color = new Color(1f, 0.7176f, 0.3603f);
+            moveButtonText.alignment = TextAlignmentOptions.Center;
+            moveButtonText.text = ConfigurationFile.playersListSizeArrangeButtonText.Value;
+            movePanelButton.onClick = new Button.ButtonClickedEvent();
+            movePanelButton.onClick.AddListener(() =>
+            {
+                foreach (GameObject moveListButtonGO in moveListButtonGOs)
+                {
+                    moveListButtonGO.SetActive(!moveListButtonGO.activeSelf);
+                }
+            });
             
             // A-Z SORT BUTTON
             GameObject azSortButtonGO =
@@ -236,43 +266,45 @@ namespace PvPBiomeDominions.PositionManagement.UI
                 }
                 RefreshContent(ZNet.instance.GetPlayerList(), false);
             });
-            showHidePanelButton.onClick = new Button.ButtonClickedEvent();
-            showHidePanelButton.onClick.AddListener(() =>
-            {
-                panelRoot.SetActive(!panelRoot.activeSelf);
-                azSortButtonGO.SetActive(panelRoot.activeSelf);
-            });
-
+            
             // LEVEL SORT BUTTON
-            GameObject levelSortButtonGO =
-                GameObject.Instantiate(InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton").gameObject,
+            GameObject levelSortButtonGO = GameObject.Instantiate(InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton").gameObject,
                     minimap.transform.Find("large"));
-            levelSortButtonGO.SetActive(false); //TODO Show when sort by level is added
             levelSortButtonGO.name = "PlayersListPanelLevelButton";
+            levelSortButtonGO.SetActive(false); //TODO Fix
             RectTransform levelSortButtonRt = levelSortButtonGO.GetComponent<RectTransform>();
-            levelSortButtonRt.anchoredPosition = new Vector2(-480, 45);
+            levelSortButtonRt.anchoredPosition = new Vector2(-555, 90);
             levelSortButtonRt.sizeDelta = new Vector2(70, 46);
             levelSortButton = levelSortButtonGO.GetComponent<Button>();
-            TextMeshProUGUI levelSortbuttonText = levelSortButton.GetComponentInChildren<TextMeshProUGUI>();
-            levelSortbuttonText.fontStyle = FontStyles.Normal;
-            levelSortbuttonText.color = new Color(1f, 0.7176f, 0.3603f);
-            levelSortbuttonText.alignment = TextAlignmentOptions.Center;
-            levelSortbuttonText.text = "1-100";
+            TextMeshProUGUI levelSortButtonText = levelSortButton.GetComponentInChildren<TextMeshProUGUI>();
+            levelSortButtonText.fontStyle = FontStyles.Normal;
+            levelSortButtonText.color = new Color(1f, 0.7176f, 0.3603f);
+            levelSortButtonText.alignment = TextAlignmentOptions.Center;
+            levelSortButtonText.text = "1-100";
             levelSortButton.onClick = new Button.ButtonClickedEvent();
             levelSortButton.onClick.AddListener(() =>
             {
                 orderType = PlayersListOrderType.ByLevel;
-                if (levelSortbuttonText.text.Equals("1-100"))
+                if (levelSortButtonText.text.Equals("1-100"))
                 {
-                    levelSortbuttonText.text = "100-1";
+                    levelSortButtonText.text = "100-1";
                     orderDirection = PlayersListOrderDirection.DESC;
                 }
                 else
                 {
-                    levelSortbuttonText.text = "1-100";
+                    levelSortButtonText.text = "1-100";
                     orderDirection = PlayersListOrderDirection.ASC;
                 }
                 RefreshContent(ZNet.instance.GetPlayerList(), false);
+            });
+            
+            showHidePanelButton.onClick = new Button.ButtonClickedEvent();
+            showHidePanelButton.onClick.AddListener(() =>
+            {
+                panelRoot.SetActive(!panelRoot.activeSelf);
+                movePanelButtonGO.SetActive(panelRoot.activeSelf);
+                azSortButtonGO.SetActive(panelRoot.activeSelf);
+                levelSortButtonGO.SetActive(panelRoot.activeSelf && EpicMMOSystem_API.IsLoaded());
             });
         }
         
@@ -333,18 +365,32 @@ namespace PvPBiomeDominions.PositionManagement.UI
             if (orderType == PlayersListOrderType.ByName)
             {
                 if (orderDirection == PlayersListOrderDirection.ASC)
-                    return ZNet.instance.GetPlayerList().OrderBy(p => p.m_name).ToList();
+                    return players.OrderBy(p => p.m_name).ToList();
                 else
-                    return ZNet.instance.GetPlayerList().OrderBy(p => p.m_name).Reverse().ToList();
+                    return players.OrderBy(p => p.m_name).Reverse().ToList();
             }
             else
             {
-                //TODO Pick levels from cache
-                
-                //TODO Put "???" at last
-                
-                return players;
+                Dictionary<string, int> cachedLevels = cachedPlayerEntries.ToDictionary(
+                    entry => entry.name, 
+                    entry => entry.level <= 0 ? int.MaxValue : entry.level);
+                if (!cachedLevels.Keys.Contains(Player.m_localPlayer.GetPlayerName())) {
+                    cachedLevels.Add(Player.m_localPlayer.GetPlayerName(), EpicMMOSystem_API.GetLevel());
+                }
+                if (orderDirection == PlayersListOrderDirection.ASC)
+                    return players.OrderBy(p => getCachedLevel(p.m_name, cachedLevels) + p.m_name).ToList();
+                else
+                    return players.OrderBy(p => getCachedLevel(p.m_name, cachedLevels) + p.m_name).Reverse().ToList();
             }
+        }
+
+        private int getCachedLevel(string playerName, Dictionary<string, int> cachedLevels)
+        {
+            if (playerName.Equals(Player.m_localPlayer.GetPlayerName()))
+                return EpicMMOSystem_API.GetLevel();
+            if (cachedLevels.ContainsKey(playerName))
+                return cachedLevels[playerName];
+            return orderDirection == PlayersListOrderDirection.ASC ? int.MaxValue : int.MinValue;
         }
 
         private void AddTitleHeaderToScrollList(int playersCount)
