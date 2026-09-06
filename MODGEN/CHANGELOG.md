@@ -1,5 +1,12 @@
 ### CHANGELOG
 
+## 1.7.3
+
+* Additions to map players list:
+  * Added small buttons around the list box to manually adjust the position (first row) and size (second row) in-game for your convenience.
+  * Added tooltip to shortened names at the beginning of each row
+  * Added button to sort players list by level (only visible when WackyEpicMMOSystem is installed)
+
 ## 1.7.2
 
 * Fixed some UI items in the map players list and added some exception protections.
