@@ -271,7 +271,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             GameObject levelSortButtonGO = GameObject.Instantiate(InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton").gameObject,
                     minimap.transform.Find("large"));
             levelSortButtonGO.name = "PlayersListPanelLevelButton";
-            levelSortButtonGO.SetActive(false); //TODO Fix
+            levelSortButtonGO.SetActive(EpicMMOSystem_API.IsLoaded());
             RectTransform levelSortButtonRt = levelSortButtonGO.GetComponent<RectTransform>();
             levelSortButtonRt.anchoredPosition = new Vector2(-555, 90);
             levelSortButtonRt.sizeDelta = new Vector2(70, 46);
