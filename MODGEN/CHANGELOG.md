@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.7.5
+
+* ServerSync upgrade for version 1.0 compatibility
+
 ## 1.7.4
 
 * Recompiled for compatibility with version 1.0
