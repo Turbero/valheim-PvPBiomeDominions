@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.7.6
+
+* Fixed ServerSync
+
 ## 1.7.5
 
 * ServerSync upgrade for version 1.0 compatibility
