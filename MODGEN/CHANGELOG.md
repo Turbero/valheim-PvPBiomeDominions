@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.7.4
+
+* Recompiled for compatibility with version 1.0
+
 ## 1.7.3
 
 * Additions to map players list:
