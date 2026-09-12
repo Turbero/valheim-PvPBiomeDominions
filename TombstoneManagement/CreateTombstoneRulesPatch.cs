@@ -90,7 +90,7 @@ namespace PvPBiomeDominions.TombstoneManagement
 					__instance.EquipItem(item.Key, false);
 				}
 			}
-			typeof(Inventory).GetMethod("Changed", BindingFlags.Instance | BindingFlags.NonPublic)?.Invoke(inventory, null);
+			typeof(Inventory).GetMethod("Changed", BindingFlags.Instance | BindingFlags.NonPublic)?.Invoke(inventory, new object[]{true, Achievements.IsCheatedAtAll()});
 		}
 	}
 }
