@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.7.7
+
+* Fixed black screen when dying
+
 ## 1.7.6
 
 * Fixed ServerSync
