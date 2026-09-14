@@ -137,15 +137,15 @@ namespace PvPBiomeDominions
                 
                 pvpAdminExempt = config("2 - PvP Settings", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the pvp biomes rules."));
                 pvpRuleInWards = config("2 - PvP Settings", "PvP Rule In Wards (override biome)", PvPWardRule.FollowBiomeRule, new ConfigDescription("Set up the pvp rule inside wards, overriding biome rules if it's needed. Possible values: Pvp,Pve,PlayerChoice,FollowBiomeRule"));
-                pvpRuleInMeadows = config("2 - PvP Settings", "Biome 1 - Meadows Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Meadows. Possible values: Pvp,Pve,PlayerChoice."));
-                pvpRuleInBlackForest = config("2 - PvP Settings", "Biome 2 - Black Forest Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Black Forest. Possible values: Pvp,Pve,PlayerChoice."));
-                pvpRuleInSwamp = config("2 - PvP Settings", "Biome 3 - Swamp Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Swamp. Possible values: Pvp,Pve,PlayerChoice."));
-                pvpRuleInMountain = config("2 - PvP Settings", "Biome 4 - Mountain Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Mountain. Possible values: Pvp,Pve,PlayerChoice."));
-                pvpRuleInPlains = config("2 - PvP Settings", "Biome 5 - Plains Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Plains. Possible values: Pvp,Pve,PlayerChoice."));
-                pvpRuleInMistlands = config("2 - PvP Settings", "Biome 6 - Mistlands Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Mistlands. Possible values: Pvp,Pve,PlayerChoice."));
-                pvpRuleInAshlands = config("2 - PvP Settings", "Biome 7 - Ashlands Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Ashlands. Possible values: Pvp,Pve,PlayerChoice."));
-                pvpRuleInDeepNorth = config("2 - PvP Settings", "Biome 8 - Deep North Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Deep North. Possible values: Pvp,Pve,PlayerChoice."));
-                pvpRuleInOcean = config("2 - PvP Settings", "Biome 9 - Ocean Rule", PvPBiomeRule.Pvp, new ConfigDescription("Set up the pvp rule in Ocean. Possible values: Pvp,Pve,PlayerChoice."));
+                pvpRuleInMeadows = config("2 - PvP Settings", "Biome 1 - Meadows Rule", PvPBiomeRule.PlayerChoose, new ConfigDescription("Set up the pvp rule in Meadows. Possible values: Pvp,Pve,PlayerChoice."));
+                pvpRuleInBlackForest = config("2 - PvP Settings", "Biome 2 - Black Forest Rule", PvPBiomeRule.PlayerChoose, new ConfigDescription("Set up the pvp rule in Black Forest. Possible values: Pvp,Pve,PlayerChoice."));
+                pvpRuleInSwamp = config("2 - PvP Settings", "Biome 3 - Swamp Rule", PvPBiomeRule.PlayerChoose, new ConfigDescription("Set up the pvp rule in Swamp. Possible values: Pvp,Pve,PlayerChoice."));
+                pvpRuleInMountain = config("2 - PvP Settings", "Biome 4 - Mountain Rule", PvPBiomeRule.PlayerChoose, new ConfigDescription("Set up the pvp rule in Mountain. Possible values: Pvp,Pve,PlayerChoice."));
+                pvpRuleInPlains = config("2 - PvP Settings", "Biome 5 - Plains Rule", PvPBiomeRule.PlayerChoose, new ConfigDescription("Set up the pvp rule in Plains. Possible values: Pvp,Pve,PlayerChoice."));
+                pvpRuleInMistlands = config("2 - PvP Settings", "Biome 6 - Mistlands Rule", PvPBiomeRule.PlayerChoose, new ConfigDescription("Set up the pvp rule in Mistlands. Possible values: Pvp,Pve,PlayerChoice."));
+                pvpRuleInAshlands = config("2 - PvP Settings", "Biome 7 - Ashlands Rule", PvPBiomeRule.PlayerChoose, new ConfigDescription("Set up the pvp rule in Ashlands. Possible values: Pvp,Pve,PlayerChoice."));
+                pvpRuleInDeepNorth = config("2 - PvP Settings", "Biome 8 - Deep North Rule", PvPBiomeRule.PlayerChoose, new ConfigDescription("Set up the pvp rule in Deep North. Possible values: Pvp,Pve,PlayerChoice."));
+                pvpRuleInOcean = config("2 - PvP Settings", "Biome 9 - Ocean Rule", PvPBiomeRule.PlayerChoose, new ConfigDescription("Set up the pvp rule in Ocean. Possible values: Pvp,Pve,PlayerChoice."));
                 waitingTimeBeforeUpdatingBiomePvPStatus = config("2 - PvP Settings", "Waiting Time Before Updating Biome PvP Status (seconds)", 0f, new ConfigDescription("Set up the waiting time before swapping to PvE or PvP area and take effect"));
                 waitingTimeAfterDyingToFightPlayersAgain = config("2 - PvP Settings", "Waiting Time After Dying To Fight Players Again (minutes)", 5f, new ConfigDescription("Grant a grace period before people can kill you or you can kill them again"));
                 
