@@ -90,7 +90,7 @@ namespace PvPBiomeDominions.Helpers
 
         private static void InitVanillaSprite()
         {
-            var sprite = Minimap.instance.transform.Find(minimapLargeCheckMarkPath)?.GetComponent<Image>()?.sprite;
+            var sprite = GameManager.getSprite("mapicon_player_32");
             if (sprite != null)
             {
                 spriteIconVanillaImage = sprite;
