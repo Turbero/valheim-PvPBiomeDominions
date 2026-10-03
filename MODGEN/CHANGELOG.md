@@ -1,6 +1,10 @@
 ### CHANGELOG
 
-## 1.7.8
+## 1.7.9
+
+* Fixed issue with sorting button by level
+
+## 1.7.7
 
 * Fixed: vanilla icon not loading correctly sometimes and flooding the log with warnings when loading into a game
 * Changed: when installing the mod for first time the initial values of pvp rules in all biomes will be "PlayerChoose" (as in vanilla by default) instead of "Pvp". Change them as you wish once installed.
