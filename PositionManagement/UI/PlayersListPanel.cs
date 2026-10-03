@@ -378,9 +378,9 @@ namespace PvPBiomeDominions.PositionManagement.UI
                     cachedLevels.Add(Player.m_localPlayer.GetPlayerName(), EpicMMOSystem_API.GetLevel());
                 }
                 if (orderDirection == PlayersListOrderDirection.ASC)
-                    return players.OrderBy(p => getCachedLevel(p.m_name, cachedLevels) + p.m_name).ToList();
+                    return players.OrderBy(p => getCachedLevel(p.m_name, cachedLevels)).ToList();
                 else
-                    return players.OrderBy(p => getCachedLevel(p.m_name, cachedLevels) + p.m_name).Reverse().ToList();
+                    return players.OrderBy(p => getCachedLevel(p.m_name, cachedLevels)).Reverse().ToList();
             }
         }
 
