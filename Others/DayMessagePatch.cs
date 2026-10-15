@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 using PvPBiomeDominions.Helpers;
 using UnityEngine;
 
-namespace PvPBiomeDominions.PositionManagement
+namespace PvPBiomeDominions.Others
 {
 	[HarmonyPatch(typeof(Player), "Message")]
 	internal static class PlayerMessagePatch
