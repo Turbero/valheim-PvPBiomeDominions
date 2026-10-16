@@ -1,5 +1,18 @@
 ### CHANGELOG
 
+## 1.8.0
+
+New section "9 - Forbidden Rules" with list of prefab ids per biome:
+  * block equipping certain items in "9.1 - Forbidden Equipment" section (example: block feather cape in mountains, just an example!)
+  * block attacking with certain weapons in "9.2 - Forbidden Attack" section (example: block trollstav in meadows, poor newbies!)
+  * choose if the rules are ignored in wards
+  * select the scare effect when a player attempts to violate the rule: None, Burning, Frost, Lightning or Poison
+
+Others:
+  * "Turn off Day Message" moved to new section "1.1 - Miscellaneous" 
+  * Added option to decide how much water impact damage ships receive when sailing to section "1.1 - Miscellaneous"
+  * Added labels and tooltips to width/position arrange buttons in map player list
+  
 ## 1.7.9
 
 * Fixed issue with sorting button by level
