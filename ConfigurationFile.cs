@@ -12,6 +12,14 @@ using UnityEngine;
 
 namespace PvPBiomeDominions
 {
+    public enum ScareEffect
+    {
+        None,
+        Burning,
+        Frost,
+        Lightning,
+        Poison
+    }
     internal class ConfigurationFile
     {
         public enum Toggle
@@ -61,6 +69,7 @@ namespace PvPBiomeDominions
         public static ConfigEntry<string> forbidLootOtherTombstonesMessage;
         public static ConfigEntry<int> pvpMinimapPlayersListRefresh;
         public static ConfigEntry<Toggle> dayMessageOff;
+        public static ConfigEntry<float> waterImpactDamage;
 
         //Position management
         public static ConfigEntry<Toggle> positionAdminExempt;
@@ -79,6 +88,8 @@ namespace PvPBiomeDominions
         public static ConfigEntry<string> pvpRuleInCustomBiomes;
         public static ConfigEntry<string> positionRuleInCustomBiomes;
         public static ConfigEntry<string> wardCreationForbiddenInCustomBiomes;
+        public static ConfigEntry<string> forbiddenEquipmentInCustomBiomes;
+        public static ConfigEntry<string> forbiddenAttackInCustomBiomes;
         
         //Translations
         public static ConfigEntry<string> playersListPanelButtonText;
@@ -118,6 +129,36 @@ namespace PvPBiomeDominions
         public static ConfigEntry<Toggle> logoutInChatMessage;
         public static ConfigEntry<string> logoutMessage;
         public static ConfigEntry<Toggle> welcomeInChatMessage;
+        
+        //Forbidden Rules
+        public static ConfigEntry<ScareEffect> scareEffect;
+        public static ConfigEntry<int> scareEffectDuration;
+        
+        //Equipment
+        public static ConfigEntry<Toggle> forbiddenEquipmentAdminExempt;
+        public static ConfigEntry<Toggle> forbiddenEquipmentIgnoreInWards;
+        public static ConfigEntry<string> forbiddenEquipmentRuleInMeadows;
+        public static ConfigEntry<string> forbiddenEquipmentRuleInBlackForest;
+        public static ConfigEntry<string> forbiddenEquipmentRuleInSwamp;
+        public static ConfigEntry<string> forbiddenEquipmentRuleInMountain;
+        public static ConfigEntry<string> forbiddenEquipmentRuleInPlains;
+        public static ConfigEntry<string> forbiddenEquipmentRuleInMistlands;
+        public static ConfigEntry<string> forbiddenEquipmentRuleInAshlands;
+        public static ConfigEntry<string> forbiddenEquipmentRuleInDeepNorth;
+        public static ConfigEntry<string> forbiddenEquipmentRuleInOcean;
+        //Attack
+        public static ConfigEntry<Toggle> forbiddenAttackAdminExempt; 
+        public static ConfigEntry<Toggle> forbiddenAttackIgnoreInWards;
+        public static ConfigEntry<string> forbiddenAttackRuleInMeadows;
+        public static ConfigEntry<string> forbiddenAttackRuleInBlackForest;
+        public static ConfigEntry<string> forbiddenAttackRuleInSwamp;
+        public static ConfigEntry<string> forbiddenAttackRuleInMountain;
+        public static ConfigEntry<string> forbiddenAttackRuleInPlains;
+        public static ConfigEntry<string> forbiddenAttackRuleInMistlands;
+        public static ConfigEntry<string> forbiddenAttackRuleInAshlands;
+        public static ConfigEntry<string> forbiddenAttackRuleInDeepNorth;
+        public static ConfigEntry<string> forbiddenAttackRuleInOcean;
+               
 
         internal static void LoadConfig(BaseUnityPlugin plugin)
         {
@@ -133,10 +174,11 @@ namespace PvPBiomeDominions
                 mapPinColoring = config("1 - General", "Map Pins PvP Coloring", true, new ConfigDescription("Enable/disable the pins coloring in the player maps according to their pvp status"), false);
                 maxPlayerNamesCharactersInList = config("1 - General", "Max Player Names Number of Characters In List", 15, new ConfigDescription("Limits the player name shown in the map players list and replace by '...' when too long to avoid overlap with other elements"), false);
                 pvpMinimapPlayersListRefresh = config("1 - General", "Map Players List Refresh", 10, new ConfigDescription("Time in seconds to refresh the players list in the map."));
-                dayMessageOff = config("1 - General", "Turn off Day Message", Toggle.Off, new ConfigDescription("If on, the mod will disable the day count message when attempting to display it on the player's screen."));
-                
+                dayMessageOff = config("1.1 - Miscellaneous", "Turn off Day Message", Toggle.Off, new ConfigDescription("If on, the mod will disable the day count message when attempting to display it on the player's screen."));
+                waterImpactDamage = config("1.1 - Miscellaneous", "Water Impact Damage", 10f, new ConfigDescription("Water impact damage ships receive when sailing"));
+
                 pvpAdminExempt = config("2 - PvP Settings", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the pvp biomes rules."));
-                pvpRuleInWards = config("2 - PvP Settings", "PvP Rule In Wards (override biome)", PvPWardRule.FollowBiomeRule, new ConfigDescription("Set up the pvp rule inside wards, overriding biome rules if it's needed. Possible values: Pvp,Pve,PlayerChoice,FollowBiomeRule"));
+                pvpRuleInWards = config("2 - PvP Settings", "PvP Rule In Wards (override biome)", PvPWardRule.FollowBiomeRule, new ConfigDescription("Set up the pvp rule inside wards, overriding biome rules if it's needed. Possible values: Pvp,Pve,PlayerChoice,FollowBiomeRule."));
                 pvpRuleInMeadows = config("2 - PvP Settings", "Biome 1 - Meadows Rule", PvPBiomeRule.PlayerChoose, new ConfigDescription("Set up the pvp rule in Meadows. Possible values: Pvp,Pve,PlayerChoice."));
                 pvpRuleInBlackForest = config("2 - PvP Settings", "Biome 2 - Black Forest Rule", PvPBiomeRule.PlayerChoose, new ConfigDescription("Set up the pvp rule in Black Forest. Possible values: Pvp,Pve,PlayerChoice."));
                 pvpRuleInSwamp = config("2 - PvP Settings", "Biome 3 - Swamp Rule", PvPBiomeRule.PlayerChoose, new ConfigDescription("Set up the pvp rule in Swamp. Possible values: Pvp,Pve,PlayerChoice."));
@@ -149,7 +191,7 @@ namespace PvPBiomeDominions
                 waitingTimeBeforeUpdatingBiomePvPStatus = config("2 - PvP Settings", "Waiting Time Before Updating Biome PvP Status (seconds)", 0f, new ConfigDescription("Set up the waiting time before swapping to PvE or PvP area and take effect"));
                 waitingTimeAfterDyingToFightPlayersAgain = config("2 - PvP Settings", "Waiting Time After Dying To Fight Players Again (minutes)", 5f, new ConfigDescription("Grant a grace period before people can kill you or you can kill them again"));
                 
-                positionAdminExempt = config("3 - Map Position", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the 'Position Always On' rule.")); 
+                positionAdminExempt = config("3 - Map Position", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the 'Position Always On' rules.")); 
                 positionRuleInWards = config("3 - Map Position", "Position Rule In Wards (override biome)", PositionSharingWardRule.FollowBiomeRule, new ConfigDescription("Set up the position sharing in wards, overriding biome rules if it's needed. Possible values: HidePlayer,ShowPlayer,PlayerChoice,FollowBiomeRule"));
                 positionRuleInMeadows = config("3 - Map Position", "Biome 1 - Meadows Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing rule in Meadows. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
                 positionRuleInBlackForest = config("3 - Map Position", "Biome 2 - Black Forest Rule", PositionSharingBiomeRule.ShowPlayer, new ConfigDescription("Set up the position sharing in Black Forest. Possible values: HidePlayer,ShowPlayer,PlayerChoice."));
@@ -164,6 +206,8 @@ namespace PvPBiomeDominions
                 pvpRuleInCustomBiomes = config("4 - Mods integration", "Custom Biomes - PvP Rules", "", new ConfigDescription("Semicolon-separated list of custom biome pvp rules. Use colon to indicate the rule. Examples: Wonderland:Pve;Warland:Pvp;Doubtland:PlayerChoose"));
                 positionRuleInCustomBiomes = config("4 - Mods integration", "Custom Biomes - Position Sharing Rules", "", new ConfigDescription("Semicolon-separated list of position sharing custom biome rules. Use colon to indicate the rule. Examples: Wonderland:ShowPlayer;Warland:HidePlayer;Doubtland:PlayerChoice"));
                 wardCreationForbiddenInCustomBiomes = config("4 - Mods integration", "Custom Biomes - Ward forbidden", "", new ConfigDescription("Comma-separated list of custom biomes where wards are forbidden. Example: Warland,AmazoniaLand"));
+                forbiddenEquipmentInCustomBiomes = config("4 - Mods integration", "Custom Biomes - Forbidden Equipment Rules", "", new ConfigDescription("Semicolon-separated list of forbidden equip to use in custom biome rules. Use colon to separate the biome name and the comma-separated list of equip names. Example: Wonderland:StaffRedTroll,StaffSkeleton;Quietland:StaffRedTroll,StaffSkeleton"));
+                forbiddenAttackInCustomBiomes = config("4 - Mods integration", "Custom Biomes - Forbidden Attack Rules", "", new ConfigDescription("Semicolon-separated list of forbidden weapons to use in attacks in custom biome rules. Use colon to separate the biome name and the comma-separated list of equip names. Example: Wonderland:StaffRedTroll,StaffSkeleton;Quietland:StaffRedTroll,StaffSkeleton"));
 
                 playersListPanelButtonText = config("5 - Translations", "Players List Panel Button Text", "Show/Hide list", new ConfigDescription("Button name used to show/hide the players panel list in the minimap."));
                 playersListSizeArrangeButtonText = config("5 - Translations", "Players List Size Arrange Button Text", "Arrange list size", new ConfigDescription("Button name used to arrange the players panel list size in the minimap."));
@@ -206,6 +250,33 @@ namespace PvPBiomeDominions
                 logoutMessage = config("8 - Communication", "Logout Message", "{0} said bye for now.", new ConfigDescription("Message to show in the chat when a player leaves the world."));
                 welcomeInChatMessage = config("8 - Communication", "Welcome In Chat Message", Toggle.On, new ConfigDescription("Decide when the player must send the welcome message automatically in the chat for everyone when logging in."));
 
+                scareEffect = config("9 - Forbidden Rules", "Scare Effect", ScareEffect.Lightning, "Set up the effect when trying doing a forbidden action (default = Lightning)");
+                scareEffectDuration = config("9 - Forbidden Rules", "Scare Effect Duration", 3, "Duration in seconds of the scare effect (default = 3)");
+
+                forbiddenEquipmentAdminExempt = config("9.1 - Forbidden Equipment", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the 'Forbidden equipment' rules.")); 
+                forbiddenEquipmentIgnoreInWards = config("9.1 - Forbidden Equipment", "Ignore In Wards (override biome)", Toggle.Off, new ConfigDescription("If on, biome rule is ignored inside wards."));
+                forbiddenEquipmentRuleInMeadows = config("9.1 - Forbidden Equipment", "Biome 1 - Meadows Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to equip in Meadows."));
+                forbiddenEquipmentRuleInBlackForest = config("9.1 - Forbidden Equipment", "Biome 2 - Black Forest Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to equip in Black Forest."));
+                forbiddenEquipmentRuleInSwamp = config("9.1 - Forbidden Equipment", "Biome 3 - Swamp Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to equip in Swamp."));
+                forbiddenEquipmentRuleInMountain = config("9.1 - Forbidden Equipment", "Biome 4 - Mountain Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to equip in Mountain."));
+                forbiddenEquipmentRuleInPlains = config("9.1 - Forbidden Equipment", "Biome 5 - Plains Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to equip in Plains."));
+                forbiddenEquipmentRuleInMistlands = config("9.1 - Forbidden Equipment", "Biome 6 - Mistlands Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to equip in Mistlands."));
+                forbiddenEquipmentRuleInAshlands = config("9.1 - Forbidden Equipment", "Biome 7 - Ashlands Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to equip in Ashlands."));
+                forbiddenEquipmentRuleInDeepNorth = config("9.1 - Forbidden Equipment", "Biome 8 - Deep North Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to equip in Deep North."));
+                forbiddenEquipmentRuleInOcean = config("9.1 - Forbidden Equipment", "Biome 9 - Ocean Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to equip in Ocean."));
+                
+                forbiddenAttackAdminExempt = config("9.2 - Forbidden Attack", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the 'Forbidden Attack' rules.")); 
+                forbiddenAttackIgnoreInWards = config("9.2 - Forbidden Attack", "Ignore In Wards (override biome)", Toggle.Off, new ConfigDescription("If on, biome rule is ignored inside wards."));
+                forbiddenAttackRuleInMeadows = config("9.2 - Forbidden Attack", "Biome 1 - Meadows Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to use in attacks in Meadows."));
+                forbiddenAttackRuleInBlackForest = config("9.2 - Forbidden Attack", "Biome 2 - Black Forest Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to use in attacks in Black Forest."));
+                forbiddenAttackRuleInSwamp = config("9.2 - Forbidden Attack", "Biome 3 - Swamp Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to use in attacks in Swamp."));
+                forbiddenAttackRuleInMountain = config("9.2 - Forbidden Attack", "Biome 4 - Mountain Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to use in attacks in Mountain."));
+                forbiddenAttackRuleInPlains = config("9.2 - Forbidden Attack", "Biome 5 - Plains Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to use in attacks in Plains."));
+                forbiddenAttackRuleInMistlands = config("9.2 - Forbidden Attack", "Biome 6 - Mistlands Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to use in attacks in Mistlands."));
+                forbiddenAttackRuleInAshlands = config("9.2 - Forbidden Attack", "Biome 7 - Ashlands Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to use in attacks in Ashlands."));
+                forbiddenAttackRuleInDeepNorth = config("9.2 - Forbidden Attack", "Biome 8 - Deep North Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to use in attacks in Deep North."));
+                forbiddenAttackRuleInOcean = config("9.2 - Forbidden Attack", "Biome 9 - Ocean Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to use in attacks in Ocean."));
+                
                 SetupWatcher();
             }
         }

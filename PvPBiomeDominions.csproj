@@ -95,6 +95,8 @@
     <Compile Include="CommunicationManagement\LogoutPatch.cs" />
     <Compile Include="ConfigurationFile.cs" />
     <Compile Include="ControllerUtils.cs" />
+    <Compile Include="ForbiddenManagement\ForbiddenAttackPatch.cs" />
+    <Compile Include="ForbiddenManagement\ForbiddenEquipPatch.cs" />
     <Compile Include="Helpers\EpicMMOSystem_API.cs" />
     <Compile Include="Helpers\GameManager.cs" />
     <Compile Include="Helpers\ImageManager.cs" />
@@ -105,7 +107,8 @@
     <Compile Include="Helpers\WardIsLove\WardIsLovePlugin.cs" />
     <Compile Include="Helpers\WardIsLove\WardMonoscript.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="PositionManagement\DayMessagePatch.cs" />
+    <Compile Include="Others\DayMessagePatch.cs" />
+    <Compile Include="Others\ShipDamage.cs" />
     <Compile Include="PositionManagement\MinimapUpdatePatch.cs" />
     <Compile Include="PositionManagement\PositionPatch.cs" />
     <Compile Include="PositionManagement\UI\PlayerEntry.cs" />
@@ -113,6 +116,7 @@
     <Compile Include="PositionManagement\UI\PlayersListPanel.cs" />
     <Compile Include="PositionManagement\UI\RPC_PlayersListPanel.cs" />
     <Compile Include="PositionManagement\WelcomeMessagePatch.cs" />
+    <Compile Include="ForbiddenManagement\ForbiddenRulesManagement.cs" />
     <Compile Include="PvPBiomeDominions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PvPManagement\MapUpdatePlayerPinsPatch.cs" />
