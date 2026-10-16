@@ -131,34 +131,34 @@ namespace PvPBiomeDominions.PositionManagement.UI
 
             // --- LIST POSITION MANIPULATION ---
             //Horizontal
-            addMapPlayerListButton("MoveListMoreLeft", new Vector2(-125, -20), "<<", KeyCode.Joystick1Button9, false, -5, 0, true, true);
-            addMapPlayerListButton("MoveListLeft", new Vector2(-90, -20), "<", KeyCode.Joystick1Button9, false, -1, 0, true);
-            addMapPlayerListButton("MoveListRight", new Vector2(-55, -20), ">", KeyCode.Joystick1Button9, false, 1, 0, true);
-            addMapPlayerListButton("MoveListMoreRight", new Vector2(-20, -20), ">>", KeyCode.Joystick1Button9, false, 5, 0, true);
+            addMapPlayerListResizeButton("MoveListMoreLeft",  new Vector2(-125, -20), "<<", "-5", KeyCode.Joystick1Button9, false, -5, 0, true, true);
+            addMapPlayerListResizeButton("MoveListLeft",      new Vector2(-90, -20),  "<",  "-1", KeyCode.Joystick1Button9, false, -1, 0, true);
+            addMapPlayerListResizeButton("MoveListRight",     new Vector2(-55, -20),  ">",  "+1", KeyCode.Joystick1Button9, false, 1, 0, true);
+            addMapPlayerListResizeButton("MoveListMoreRight", new Vector2(-20, -20),  ">>", "+5", KeyCode.Joystick1Button9, false, 5, 0, true);
             //Vertical
-            addMapPlayerListButton("MoveListMoreUp", new Vector2(20f, -20), "<<", KeyCode.Joystick1Button9, true, 0, 5, true);
-            addMapPlayerListButton("MoveListUp", new Vector2(55f, -20), "<", KeyCode.Joystick1Button9, true, 0, 1, true);
-            addMapPlayerListButton("MoveListDown", new Vector2(90f, -20), ">", KeyCode.Joystick1Button9, true, 0, -1, true);
-            addMapPlayerListButton("MoveListMoreDown", new Vector2(125f, -20), ">>", KeyCode.Joystick1Button9, true, 0, -5, true);
+            addMapPlayerListResizeButton("MoveListMoreUp",    new Vector2(20f, -20),  "<<", "-5", KeyCode.Joystick1Button9, true, 0, 5, true);
+            addMapPlayerListResizeButton("MoveListUp",        new Vector2(55f, -20),  "<",  "-1", KeyCode.Joystick1Button9, true, 0, 1, true);
+            addMapPlayerListResizeButton("MoveListDown",      new Vector2(90f, -20),  ">",  "+1", KeyCode.Joystick1Button9, true, 0, -1, true);
+            addMapPlayerListResizeButton("MoveListMoreDown",  new Vector2(125f, -20), ">>", "+5", KeyCode.Joystick1Button9, true, 0, -5, true);
             
             // --- LIST SIZE MANIPULATION ---
             //Horizontal
-            addMapPlayerListButton("SizeListMoreLeft", new Vector2(-125, -55), "<<", KeyCode.Joystick1Button10, false, -5, 0, false, true);
-            addMapPlayerListButton("SizeListLeft", new Vector2(-90, -55), "<", KeyCode.Joystick1Button10, false, -1, 0, false);
-            addMapPlayerListButton("SizeListRight", new Vector2(-55, -55), ">", KeyCode.Joystick1Button10, false, 1, 0, false);
-            addMapPlayerListButton("SizeListMoreRight", new Vector2(-20, -55), ">>", KeyCode.Joystick1Button10, false, 5, 0, false);
+            addMapPlayerListResizeButton("SizeListMoreLeft",  new Vector2(-125, -55), "<<", "-5", KeyCode.Joystick1Button10, false, -5, 0, false, true);
+            addMapPlayerListResizeButton("SizeListLeft",      new Vector2(-90, -55),  "<",  "-1", KeyCode.Joystick1Button10, false, -1, 0, false);
+            addMapPlayerListResizeButton("SizeListRight",     new Vector2(-55, -55),  ">",  "+1", KeyCode.Joystick1Button10, false, 1, 0, false);
+            addMapPlayerListResizeButton("SizeListMoreRight", new Vector2(-20, -55),  ">>", "+5", KeyCode.Joystick1Button10, false, 5, 0, false);
             //Vertical
-            addMapPlayerListButton("SizeListMoreUp", new Vector2(20, -55), "<<", KeyCode.Joystick1Button10, true, 0, 5, false);
-            addMapPlayerListButton("SizeListUp", new Vector2(55, -55), "<", KeyCode.Joystick1Button10, true, 0, 1, false);
-            addMapPlayerListButton("SizeListDown", new Vector2(90, -55), ">", KeyCode.Joystick1Button10, true, 0, -1, false);
-            addMapPlayerListButton("SizeListMoreDown", new Vector2(125, -55), ">>", KeyCode.Joystick1Button10, true, 0, -5, false);
+            addMapPlayerListResizeButton("SizeListMoreUp",    new Vector2(20, -55),   "<<", "-5", KeyCode.Joystick1Button10, true, 0, 5, false);
+            addMapPlayerListResizeButton("SizeListUp",        new Vector2(55, -55),   "<",  "-1", KeyCode.Joystick1Button10, true, 0, 1, false);
+            addMapPlayerListResizeButton("SizeListDown",      new Vector2(90, -55),   ">",  "+1", KeyCode.Joystick1Button10, true, 0, -1, false);
+            addMapPlayerListResizeButton("SizeListMoreDown",  new Vector2(125, -55),  ">>", "+5", KeyCode.Joystick1Button10, true, 0, -5, false);
 
             createButtons(minimap);
             
             killsIconSprite = minimap.m_largeRoot.transform.Find("IconPanel2/IconDeath").GetComponent<Image>().sprite;
         }
 
-        private void addMapPlayerListButton(string name, Vector2 anchoredPosition, string text, KeyCode keyCode, bool spinClockwise90, int xChange, int yChange, bool positionBtn, bool hintActive = false)
+        private void addMapPlayerListResizeButton(string name, Vector2 anchoredPosition, string text, string tooltip, KeyCode keyCode, bool spinClockwise90, int xChange, int yChange, bool positionBtn, bool hintActive = false)
         {
             GameObject buttonGO = GameObject.Instantiate(InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton").gameObject, panelRoot.transform, false);
             buttonGO.name = name;
@@ -169,6 +169,12 @@ namespace PvPBiomeDominions.PositionManagement.UI
             ControllerUtils.BindGamePad(buttonGO.transform, keyCode, Vector2.zero, hintActive);
             if (spinClockwise90)
                 buttonGO.GetComponent<RectTransform>().localEulerAngles = new Vector3(0f, 0f, -90f);
+            
+            UITooltip nameGOTooltip = buttonGO.AddComponent<UITooltip>();
+            nameGOTooltip.m_tooltipPrefab = GameObject.Instantiate(
+                InventoryGui.instance.transform.Find("root/Info/Skills").GetComponent<UITooltip>().m_tooltipPrefab);
+            nameGOTooltip.m_text = tooltip;
+            
             Button button = buttonGO.GetComponent<Button>();
             button.onClick = new Button.ButtonClickedEvent();
             if (positionBtn) {
