@@ -118,11 +118,14 @@ namespace PvPBiomeDominions.ForbiddenManagement
         public static void scareEffect()
         {
             ScareEffect effect = ConfigurationFile.scareEffect.Value;
-            SEMan seMan = Player.m_localPlayer.GetSEMan();
-            if (seMan?.GetStatusEffect(effect.ToString().GetHashCode()) == null)
+            if (effect != ScareEffect.None)
             {
-                StatusEffect se = seMan?.AddStatusEffect(effect.ToString().GetHashCode(), resetTime: false);
-                if (se != null) se.m_ttl = ConfigurationFile.scareEffectDuration.Value;
+                SEMan seMan = Player.m_localPlayer.GetSEMan();
+                if (seMan?.GetStatusEffect(effect.ToString().GetHashCode()) == null)
+                {
+                    StatusEffect se = seMan?.AddStatusEffect(effect.ToString().GetHashCode(), resetTime: false);
+                    if (se != null) se.m_ttl = ConfigurationFile.scareEffectDuration.Value;
+                }
             }
         }
     }
