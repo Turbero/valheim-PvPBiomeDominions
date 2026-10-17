@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.8.1
+
+* Fixed issue when equipping/attacking in wards with ignore wards off.
+
 ## 1.8.0
 
 New section "9 - Forbidden Rules" with list of prefab ids per biome:
