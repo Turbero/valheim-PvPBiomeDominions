@@ -4,11 +4,9 @@ using PvPBiomeDominions.Helpers.WardIsLove;
 
 namespace PvPBiomeDominions.ForbiddenManagement
 {
-    //[HarmonyPatch(typeof(Player), "PlayerAttackInput")]
     [HarmonyPatch(typeof(Humanoid), "StartAttack")]
     public class ForbiddenAttackPatch
     {
-        //public static bool Prefix(Player __instance, float dt)
         public static bool Prefix(Humanoid __instance, Character target, bool secondaryAttack)
         {
             if (!ZNetScene.instance) return true;
@@ -27,18 +25,18 @@ namespace PvPBiomeDominions.ForbiddenManagement
             if (isInsideWard || isInsideTerritory)
             {
                 var forbiddenAttackWardIgnoreRule = ConfigurationFile.forbiddenAttackIgnoreInWards.Value;
-                if (forbiddenAttackWardIgnoreRule == ConfigurationFile.Toggle.Off)
-                {
-                    Effects.scareEffect();
-                    return false;
-                }
-
-                return true;
+                if (forbiddenAttackWardIgnoreRule == ConfigurationFile.Toggle.On)
+                    return true;
             }
+
+            ItemDrop.ItemData itemData = __instance.GetCurrentWeapon();
+            // Punch/kick attack
+            if (itemData.m_dropPrefab == null)
+                return true;
 
             // Then check biome rule
             List<string> currentBiomeForbiddenAttackList = ForbiddenAttackManagement.getForbiddenAttackInCurrentBiomeRule();
-            if (currentBiomeForbiddenAttackList.Contains(__instance.GetCurrentWeapon().m_dropPrefab.name))
+            if (currentBiomeForbiddenAttackList.Contains(itemData.m_dropPrefab.name))
             {
                 Effects.scareEffect();
                 return false;

@@ -22,13 +22,8 @@ namespace PvPBiomeDominions.ForbiddenManagement
             if (isInsideWard || isInsideTerritory)
             {
                 var forbiddenEquipmentWardIgnoreRule = ConfigurationFile.forbiddenEquipmentIgnoreInWards.Value;
-                if (forbiddenEquipmentWardIgnoreRule == ConfigurationFile.Toggle.Off)
-                {
-                    Effects.scareEffect();
-                    return false;
-                }
-
-                return true;
+                if (forbiddenEquipmentWardIgnoreRule == ConfigurationFile.Toggle.On)
+                    return true;
             }
             
             // Then check biome rule
