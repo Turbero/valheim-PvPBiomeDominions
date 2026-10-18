@@ -12,6 +12,9 @@ namespace PvPBiomeDominions.ForbiddenManagement
             if (!ZNetScene.instance) return true;
             if (Game.instance && !Player.m_localPlayer) return true;
             
+            //Only for players
+            if (__instance is not Player) return true;
+            
             //Admins exempt rule
             if (ConfigurationFile.forbiddenEquipmentAdminExempt.Value == ConfigurationFile.Toggle.On && ConfigurationFile.ConfigSync.IsAdmin)
                 return true;
