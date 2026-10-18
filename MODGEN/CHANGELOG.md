@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.8.2
+
+* Fix for red messages about equipping rules
+
 ## 1.8.1
 
 * Fixed issue when equipping/attacking in wards with ignore wards off.
