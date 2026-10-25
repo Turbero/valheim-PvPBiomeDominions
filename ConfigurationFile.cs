@@ -9,6 +9,7 @@ using PvPBiomeDominions.TombstoneManagement;
 using ServerSync;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace PvPBiomeDominions
 {
@@ -32,6 +33,7 @@ namespace PvPBiomeDominions
         public static ConfigEntry<bool> debug;
         public static ConfigEntry<Vector2> mapPlayersListPosition;
         public static ConfigEntry<Vector2> mapPlayersListSize;
+        public static ConfigEntry<float> mapPlayersListTransparency;
         public static ConfigEntry<bool> mapPinColoring;
         public static ConfigEntry<int> maxPlayerNamesCharactersInList;
         public static ConfigEntry<Toggle> showMessageWhenLootingYourTombstone;
@@ -171,6 +173,7 @@ namespace PvPBiomeDominions
                 debug = config("1 - General", "DebugMode", false, new ConfigDescription("Enabling/Disabling the debugging in the console (default = false)"), false);
                 mapPlayersListPosition = config("1 - General", "Map Players List Position", new Vector2(-563, 100), new ConfigDescription("Left corner position for the map players list (default: x=-568, y=100)"), false);
                 mapPlayersListSize = config("1 - General", "Map Players List Size", new Vector2(440, 620), new ConfigDescription("Width/Height for the map players list size (default: x=420, y=620)"), false);
+                mapPlayersListTransparency = config("1 - General", "Map Players List Transparency", 0.5f, new ConfigDescription("Background transparency of the map players list (default: 0.5)", new AcceptableValueRange<float>(0, 1)), false);
                 mapPinColoring = config("1 - General", "Map Pins PvP Coloring", true, new ConfigDescription("Enable/disable the pins coloring in the player maps according to their pvp status"), false);
                 maxPlayerNamesCharactersInList = config("1 - General", "Max Player Names Number of Characters In List", 15, new ConfigDescription("Limits the player name shown in the map players list and replace by '...' when too long to avoid overlap with other elements"), false);
                 pvpMinimapPlayersListRefresh = config("1 - General", "Map Players List Refresh", 10, new ConfigDescription("Time in seconds to refresh the players list in the map."));
@@ -316,6 +319,7 @@ namespace PvPBiomeDominions
                 MinimapUpdatePatch.panel.movePanelButton.GetComponentInChildren<TextMeshProUGUI>().text = playersListSizeArrangeButtonText.Value;
                 MinimapUpdatePatch.panel.panelRT.anchoredPosition = mapPlayersListPosition.Value;
                 MinimapUpdatePatch.panel.panelRT.sizeDelta = mapPlayersListSize.Value;
+                MinimapUpdatePatch.panel.panelRoot.GetComponent<Image>().color = new Color(0, 0, 0, mapPlayersListTransparency.Value);
             }
             
             //Refresh PvP Buff text

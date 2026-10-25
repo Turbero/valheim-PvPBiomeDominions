@@ -59,7 +59,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
             panelRT.sizeDelta = ConfigurationFile.mapPlayersListSize.Value;
 
             Image bgImage = panelRoot.GetComponent<Image>();
-            bgImage.color = new Color(0, 0, 0, 0.5f);
+            bgImage.color = new Color(0, 0, 0, ConfigurationFile.mapPlayersListTransparency.Value);
             
             // --- SCROLLRECT ---
             GameObject scrollObj = new GameObject("ScrollView", typeof(RectTransform), typeof(ScrollRect), typeof(Image));
