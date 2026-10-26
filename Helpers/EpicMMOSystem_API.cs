@@ -52,9 +52,12 @@ namespace PvPBiomeDominions.Helpers
         public static bool IsMaxLevel(int level)
         {
             Type type = Type.GetType("EpicMMOSystem.EpicMMOSystem, EpicMMOSystem");
-            FieldInfo field = type?.GetField("maxLevel", BindingFlags.Public | BindingFlags.Static);
-            ConfigEntry<int> entry = field?.GetValue(null) as ConfigEntry<int>;
-            return entry?.Value == level;
+            if (type == null) return false;
+            FieldInfo field = type.GetField("maxLevel", BindingFlags.Public | BindingFlags.Static);
+            if (field == null) return false;
+            ConfigEntry<int> entry = field.GetValue(null) as ConfigEntry<int>;
+            if (entry == null) return false;
+            return entry.Value == level;
         }
 
         public static int GetAttribute(Attribut attribute)
