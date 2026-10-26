@@ -139,6 +139,7 @@ namespace PvPBiomeDominions
         //Equipment
         public static ConfigEntry<Toggle> forbiddenEquipmentAdminExempt;
         public static ConfigEntry<Toggle> forbiddenEquipmentIgnoreInWards;
+        public static ConfigEntry<string> forbiddenEquipmentRuleInAllBiomes;
         public static ConfigEntry<string> forbiddenEquipmentRuleInMeadows;
         public static ConfigEntry<string> forbiddenEquipmentRuleInBlackForest;
         public static ConfigEntry<string> forbiddenEquipmentRuleInSwamp;
@@ -151,6 +152,7 @@ namespace PvPBiomeDominions
         //Attack
         public static ConfigEntry<Toggle> forbiddenAttackAdminExempt; 
         public static ConfigEntry<Toggle> forbiddenAttackIgnoreInWards;
+        public static ConfigEntry<string> forbiddenAttackRuleInAllBiomes;
         public static ConfigEntry<string> forbiddenAttackRuleInMeadows;
         public static ConfigEntry<string> forbiddenAttackRuleInBlackForest;
         public static ConfigEntry<string> forbiddenAttackRuleInSwamp;
@@ -258,6 +260,7 @@ namespace PvPBiomeDominions
 
                 forbiddenEquipmentAdminExempt = config("9.1 - Forbidden Equipment", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the 'Forbidden equipment' rules.")); 
                 forbiddenEquipmentIgnoreInWards = config("9.1 - Forbidden Equipment", "Ignore In Wards (override biome)", Toggle.Off, new ConfigDescription("If on, biome rule is ignored inside wards."));
+                forbiddenEquipmentRuleInAllBiomes = config("9.1 - Forbidden Equipment", "All Biomes Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to equip in any biomes."));
                 forbiddenEquipmentRuleInMeadows = config("9.1 - Forbidden Equipment", "Biome 1 - Meadows Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to equip in Meadows."));
                 forbiddenEquipmentRuleInBlackForest = config("9.1 - Forbidden Equipment", "Biome 2 - Black Forest Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to equip in Black Forest."));
                 forbiddenEquipmentRuleInSwamp = config("9.1 - Forbidden Equipment", "Biome 3 - Swamp Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to equip in Swamp."));
@@ -270,6 +273,7 @@ namespace PvPBiomeDominions
                 
                 forbiddenAttackAdminExempt = config("9.2 - Forbidden Attack", "Admin Exempt", Toggle.On, new ConfigDescription("If on, server admins can bypass the 'Forbidden Attack' rules.")); 
                 forbiddenAttackIgnoreInWards = config("9.2 - Forbidden Attack", "Ignore In Wards (override biome)", Toggle.Off, new ConfigDescription("If on, biome rule is ignored inside wards."));
+                forbiddenAttackRuleInAllBiomes = config("9.2 - Forbidden Attack", "All Biomes Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to use in attacks in any biomes."));
                 forbiddenAttackRuleInMeadows = config("9.2 - Forbidden Attack", "Biome 1 - Meadows Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to use in attacks in Meadows."));
                 forbiddenAttackRuleInBlackForest = config("9.2 - Forbidden Attack", "Biome 2 - Black Forest Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to use in attacks in Black Forest."));
                 forbiddenAttackRuleInSwamp = config("9.2 - Forbidden Attack", "Biome 3 - Swamp Rule", "", new ConfigDescription("Comma-separated list of forbidden prefab ids to use in attacks in Swamp."));

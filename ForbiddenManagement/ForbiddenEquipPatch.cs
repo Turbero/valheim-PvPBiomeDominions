@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using HarmonyLib;
 using PvPBiomeDominions.Helpers.WardIsLove;
+using PvPBiomeDominions.RulesManagement;
 
 namespace PvPBiomeDominions.ForbiddenManagement
 {
@@ -30,14 +31,40 @@ namespace PvPBiomeDominions.ForbiddenManagement
             }
             
             // Then check biome rule
-            List<string> currentBiomeForbiddenEquipmentList = ForbiddenRulesManagement.getForbiddenEquipmentInCurrentBiomeRule();
+            List<string> currentBiomeForbiddenEquipmentList = ForbiddenRuleManagement.getForbiddenEquipmentInCurrentBiomeRule();
             if (currentBiomeForbiddenEquipmentList.Contains(item.m_dropPrefab.name))
             {
                 Effects.scareEffect();
+                Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$npc_dvergrmage_random_private_area_alarm3");
                 return false;
             }
             
             return true;
+        }
+    }
+    
+    [HarmonyPatch(typeof(EnvMan), "UpdateEnvironment")]
+    public static class BiomeChangePatch
+    {
+        private static Heightmap.Biome previousBiome;
+
+        public static void Postfix(long sec, BiomeSector biome)
+        {
+            if (biome.Biome != previousBiome)
+            {
+                Logger.Log($"Biome changed: {previousBiome} -> {biome.Biome}");
+                previousBiome = biome.Biome;
+
+                if (Player.m_localPlayer == null) return;
+                
+                //Force to remove forbidden equipment in new biome
+                List<ItemDrop.ItemData> equipped = Player.m_localPlayer.GetInventory().GetEquippedItems();
+                foreach (var equippedItem in equipped)
+                {
+                    if (!ForbiddenEquipPatch.Prefix(Player.m_localPlayer, equippedItem, false))
+                        Player.m_localPlayer.UnequipItem(equippedItem, false);
+                }
+            }
         }
     }
 }
