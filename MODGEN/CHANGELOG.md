@@ -1,5 +1,12 @@
 ### CHANGELOG
 
+## 1.8.3
+
+* Added new options to block equipping or attacking equipment globally in any biome
+* Forbidden equipment is now removed after changing biomes if any is forbidden in the new biome
+* Added option in .cfg file to regulate transparency of the map players list (default = 0.5, from 0 to 1)
+* Player level with max level reached will be colored in yellow
+
 ## 1.8.2
 
 * Fix for red messages about equipping rules
