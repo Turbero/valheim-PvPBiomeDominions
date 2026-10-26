@@ -1,5 +1,7 @@
 using System;
 using System.Reflection;
+using BepInEx.Configuration;
+
 //using EpicMMOSystem;
 //using UnityEngine.PostProcessing;
 
@@ -10,7 +12,6 @@ namespace PvPBiomeDominions.Helpers
     {
         private static API_State state = API_State.NotReady;
         private static MethodInfo eGetLevel;
-        private static MethodInfo eGetNeedExp;
         private static MethodInfo eAddExp;
         private static MethodInfo eGetAttribute;
         private static MethodInfo eGetAttributeRusty;
@@ -47,18 +48,13 @@ namespace PvPBiomeDominions.Helpers
             if (eGetLevel != null) result = (int)eGetLevel.Invoke(null, null);
             return result;
         }
-
-        public static long GetNeedExp(int addLvl = 0)
-        {
-            int result = 0;
-            Init();
-            if (eGetNeedExp != null) result = (int)eGetNeedExp.Invoke(null, new object[] { addLvl });
-            return result;
-        }
         
         public static bool IsMaxLevel(int level)
         {
-            return GetNeedExp(level) == GetNeedExp(level + 1);
+            Type type = Type.GetType("EpicMMOSystem.EpicMMOSystem, EpicMMOSystem");
+            FieldInfo field = type?.GetField("maxLevel", BindingFlags.Public | BindingFlags.Static);
+            ConfigEntry<int> entry = field?.GetValue(null) as ConfigEntry<int>;
+            return entry?.Value == level;
         }
 
         public static int GetAttribute(Attribut attribute)
@@ -103,11 +99,11 @@ namespace PvPBiomeDominions.Helpers
 
             Type actionsMO = Type.GetType("API.EMMOS_API, EpicMMOSystem");
             eGetLevel = actionsMO?.GetMethod("GetLevel", BindingFlags.Public | BindingFlags.Static);
-            eGetNeedExp = actionsMO?.GetMethod("GetNeedExp", BindingFlags.Public | BindingFlags.Static);
             eAddExp = actionsMO?.GetMethod("AddExp", BindingFlags.Public | BindingFlags.Static);
             eGetAttribute = actionsMO?.GetMethod("GetAttribute", BindingFlags.Public | BindingFlags.Static);
             eGetAttributeRusty = actionsMO?.GetMethod("GetAttribute", BindingFlags.Public | BindingFlags.Static);
             eSetSingleRate = actionsMO?.GetMethod("SetSingleRate", BindingFlags.Public | BindingFlags.Static);
+            
         }
     }
 
