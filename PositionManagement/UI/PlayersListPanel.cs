@@ -547,7 +547,7 @@ namespace PvPBiomeDominions.PositionManagement.UI
                     playerIcon.sprite = Player.m_localPlayer.IsPVPEnabled() ? ImageManager.getSpriteIconVanillaImage() : ImageManager.getSpriteIconPVEImage();
                 
                 // 2) Level
-                levelText.text = $"LVL: {EpicMMOSystem_API.GetLevel()}";
+                levelText.text = $"LVL: {GetLevelText(EpicMMOSystem_API.GetLevel())}";
                 
                 // 3) Guild icon
                 Guilds.Guild guild = Guilds.API.GetOwnGuild();
@@ -584,7 +584,10 @@ namespace PvPBiomeDominions.PositionManagement.UI
                         playerIcon.sprite = cachedPlayerEntry.isPvP ? ImageManager.getSpriteIconVanillaImage() : ImageManager.getSpriteIconPVEImage();
 
                     // 2) Level
-                    levelText.text = "LVL: " + cachedPlayerEntry.GetLevelText();
+                    string cachedLevel = cachedPlayerEntry.GetLevelText();
+                    levelText.text = "LVL: " + cachedLevel == "???"
+                        ? cachedLevel
+                        : GetLevelText(int.Parse(cachedLevel));
                     
                     // 3) Guild icon
                     if (cachedPlayerEntry.guildIconId != -1)
@@ -603,6 +606,13 @@ namespace PvPBiomeDominions.PositionManagement.UI
                     AddPlayerEntryToCachedPlayers(info, levelText, killsValue, killedByValue, playerIcon, imageGuild);
                 }
             }
+        }
+
+        private string GetLevelText(int level)
+        {
+            if (EpicMMOSystem_API.IsMaxLevel(level))
+                return "<color=yellow>"+level+"</color>";
+            return level.ToString();
         }
 
         private void AddPlayerEntryToCachedPlayers(ZNet.PlayerInfo info, TextMeshProUGUI levelText, TextMeshProUGUI killsValue, TextMeshProUGUI killedByValue, Image playerIcon, Image imageGuild)
