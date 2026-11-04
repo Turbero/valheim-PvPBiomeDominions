@@ -585,9 +585,9 @@ namespace PvPBiomeDominions.PositionManagement.UI
 
                     // 2) Level
                     string cachedLevel = cachedPlayerEntry.GetLevelText();
-                    levelText.text = "LVL: " + cachedLevel == "???"
+                    levelText.text = "LVL: " + (cachedLevel == "???"
                         ? cachedLevel
-                        : GetLevelText(int.Parse(cachedLevel));
+                        : GetLevelText(int.Parse(cachedLevel)));
                     
                     // 3) Guild icon
                     if (cachedPlayerEntry.guildIconId != -1)
