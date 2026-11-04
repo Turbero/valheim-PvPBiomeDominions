@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.8.4
+
+* Fixed level tooltip in map players list. Sorry!
+
 ## 1.8.3
 
 * Added new options to block equipping or attacking equipment globally in any biome
