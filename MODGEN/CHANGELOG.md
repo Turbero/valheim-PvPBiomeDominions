@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.8.5
+
+* Fixed log error when opening map and some player level is being calculated (sorry again!)
+
 ## 1.8.4
 
 * Fixed level tooltip in map players list. Sorry!
